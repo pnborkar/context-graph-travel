@@ -123,9 +123,11 @@ export default function Home() {
           <Flex justify="space-between" align="center">
             {/* Logo + Title */}
             <Flex align="center" gap={3}>
+              <Box color="blue.300" flexShrink={0}>
+                <Plane size={40} />
+              </Box>
               <Box>
-                <Heading size={{ base: "sm", md: "md" }} color="blue.300" display="flex" alignItems="center" gap={2}>
-                  <Plane size={18} />
+                <Heading size={{ base: "md", md: "xl" }} color="blue.300">
                   {DOMAIN.name} Context Graph
                 </Heading>
                 <Text color="gray.400" fontSize="xs" display={{ base: "none", md: "block" }}>
