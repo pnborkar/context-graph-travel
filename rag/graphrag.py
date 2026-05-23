@@ -17,20 +17,23 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dataclasses import dataclass, field
-from config import get_driver, EMBEDDING_MODEL
-from sentence_transformers import SentenceTransformer
+from openai import OpenAI
+from config import get_driver, EMBEDDING_MODEL, OPENAI_API_KEY
 
-_embedder = None
+_openai_client: OpenAI | None = None
 
-def get_embedder():
-    global _embedder
-    if _embedder is None:
-        _embedder = SentenceTransformer(EMBEDDING_MODEL)
-    return _embedder
+
+def get_openai_client() -> OpenAI:
+    global _openai_client
+    if _openai_client is None:
+        import config as _cfg
+        _openai_client = OpenAI(api_key=_cfg.OPENAI_API_KEY)
+    return _openai_client
 
 
 def embed(text: str) -> list[float]:
-    return get_embedder().encode(text, normalize_embeddings=True).tolist()
+    resp = get_openai_client().embeddings.create(model=EMBEDDING_MODEL, input=text)
+    return resp.data[0].embedding
 
 
 # ── Data classes for retrieval results ───────────────────────

@@ -189,6 +189,8 @@ async def search_policies(query: str, customer_id: str = "") -> str:
             _rag_config.NEO4J_URI = settings.neo4j_uri
             _rag_config.NEO4J_USER = settings.neo4j_username
             _rag_config.NEO4J_PASSWORD = settings.neo4j_password
+        if settings.openai_api_key:
+            _rag_config.OPENAI_API_KEY = settings.openai_api_key
 
         from rag.graphrag import GraphRAGRetriever
         retriever = GraphRAGRetriever()

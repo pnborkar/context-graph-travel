@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: start dev dev-backend dev-frontend install schema seed reset test-connection clean test test-e2e lint docker-build docker-prod-up docker-prod-down
+.PHONY: start dev dev-backend dev-frontend install schema seed reembed reset test-connection clean test test-e2e lint docker-build docker-prod-up docker-prod-down
 
 # Start both backend and frontend
 start:
@@ -43,6 +43,10 @@ schema:
 # Apply schema and ingest fixtures.json into Neo4j (real data if present, otherwise dummy data)
 seed:
 	cd backend && uv run python scripts/generate_data.py
+
+# Re-embed PolicySection/CarrierAgreement/WeatherMemo nodes using OpenAI (run once after switching embedding model)
+reembed:
+	uv run python rag/reembed.py
 
 # Reset Neo4j data (drop and recreate)
 reset:

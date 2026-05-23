@@ -19,8 +19,9 @@ except ImportError:
 NEO4J_URI      = os.getenv("NEO4J_URI",      "bolt://localhost:7687")
 NEO4J_USER     = os.getenv("NEO4J_USERNAME", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-EMBEDDING_DIMS  = 384
+EMBEDDING_MODEL = "text-embedding-3-small"
+EMBEDDING_DIMS  = 1536
+OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY", "")
 
 
 def get_driver():
