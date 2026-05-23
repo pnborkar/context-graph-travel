@@ -447,7 +447,7 @@ async def handle_message(message: str, session_id: str | None = None) -> dict:
 
     for _iteration in range(max_iterations):
         response = await client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-6",
             max_tokens=4096,
             system=SYSTEM_PROMPT,
             tools=tools,
@@ -514,7 +514,7 @@ async def handle_message_stream(message: str, session_id: str | None = None) -> 
         for _iteration in range(max_iterations):
             full_text_parts: list[str] = []
             async with client.messages.stream(
-                model="claude-sonnet-4-20250514",
+                model="claude-sonnet-4-6",
                 max_tokens=4096,
                 system=SYSTEM_PROMPT,
                 tools=tools,
