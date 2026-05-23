@@ -17,7 +17,7 @@ import {
   Menu,
   Portal,
 } from "@chakra-ui/react";
-import { Menu as MenuIcon, FileText, Network, MessageSquare } from "lucide-react";
+import { Menu as MenuIcon, FileText, Network, MessageSquare, Sun, Moon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { ChatInterface } from "@/components/ChatInterface";
 import { DecisionTracePanel } from "@/components/DecisionTracePanel";
@@ -28,6 +28,26 @@ import { API_BASE, DOMAIN } from "@/lib/config";
 import type { GraphData } from "@/lib/config";
 
 type PanelId = "chat" | "graph" | "details";
+
+function useColorMode() {
+  const [colorMode, setColorMode] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("ccg-color-mode") as "light" | "dark" | null;
+    const initial = stored ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    setColorMode(initial);
+    document.documentElement.dataset.theme = initial;
+  }, []);
+
+  const toggleColorMode = () => {
+    const next = colorMode === "light" ? "dark" : "light";
+    setColorMode(next);
+    localStorage.setItem("ccg-color-mode", next);
+    document.documentElement.dataset.theme = next;
+  };
+
+  return { colorMode, toggleColorMode };
+}
 
 const ContextGraphView = dynamic(
   () => import("@/components/ContextGraphView").then((mod) => mod.ContextGraphView),
@@ -42,6 +62,7 @@ const ContextGraphView = dynamic(
 );
 
 export default function Home() {
+  const { colorMode, toggleColorMode } = useColorMode();
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [activePanel, setActivePanel] = useState<PanelId>("chat");
   const [backendStatus, setBackendStatus] = useState<"ok" | "degraded" | "offline">("offline");
@@ -86,15 +107,15 @@ export default function Home() {
   }, []);
 
   return (
-    <Box minH="100dvh" bg="gray.50">
+    <Box minH="100dvh" bg="bg.canvas">
       <SchemaDrawer open={schemaOpen} onOpenChange={setSchemaOpen} />
 
       {/* Header */}
       <Box
         as="header"
-        bg="white"
+        bg="bg.surface"
         borderBottomWidth="1px"
-        borderColor="gray.200"
+        borderColor="border.default"
         py={{ base: 2, md: 3 }}
         px={{ base: 3, md: 6 }}
       >
@@ -152,6 +173,14 @@ export default function Home() {
                   GitHub
                 </a>
               </Button>
+              <IconButton
+                aria-label="Toggle color mode"
+                variant="ghost"
+                size="sm"
+                onClick={toggleColorMode}
+              >
+                {colorMode === "light" ? <Moon size={16} /> : <Sun size={16} />}
+              </IconButton>
               <Button variant="outline" size="sm" onClick={() => setSchemaOpen(true)}>
                 About & Schema
               </Button>
@@ -180,6 +209,9 @@ export default function Home() {
                 <Portal>
                   <Menu.Positioner>
                     <Menu.Content>
+                      <Menu.Item value="theme" onClick={toggleColorMode}>
+                        {colorMode === "light" ? "Dark mode" : "Light mode"}
+                      </Menu.Item>
                       <Menu.Item value="schema" onClick={() => setSchemaOpen(true)}>
                         About & Schema
                       </Menu.Item>
@@ -202,7 +234,7 @@ export default function Home() {
         <Grid
           templateColumns={{ base: "1fr", lg: "420px 1fr 360px" }}
           gap={{ base: 3, md: 4 }}
-          h={{ base: "auto", lg: "calc(100dvh - 130px)" }}
+          h={{ base: "calc(100dvh - 112px)", lg: "calc(100dvh - 130px)" }}
         >
           {/* Chat panel */}
           <GridItem
@@ -211,17 +243,17 @@ export default function Home() {
             flexDirection="column"
           >
             <Box
-              bg="white"
+              bg="bg.surface"
               borderRadius="xl"
               borderWidth="1px"
-              borderColor="gray.200"
+              borderColor="border.default"
               h="100%"
               display="flex"
               flexDirection="column"
               overflow="hidden"
               shadow="sm"
             >
-              <Box px={4} py={3} borderBottomWidth="1px" borderColor="gray.100" flexShrink={0}>
+              <Box px={4} py={3} borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0}>
                 <Heading size="sm" color="gray.800">AI Assistant</Heading>
                 <Text fontSize="xs" color="gray.500" mt={0.5}>
                   Ask about customers, refunds, policies, and disruptions
@@ -245,17 +277,17 @@ export default function Home() {
             flexDirection="column"
           >
             <Box
-              bg="white"
+              bg="bg.surface"
               borderRadius="xl"
               borderWidth="1px"
-              borderColor="gray.200"
+              borderColor="border.default"
               h="100%"
               display="flex"
               flexDirection="column"
               overflow="hidden"
               shadow="sm"
             >
-              <Box px={4} py={3} borderBottomWidth="1px" borderColor="gray.100" flexShrink={0}>
+              <Box px={4} py={3} borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0}>
                 <Heading size="sm" color="gray.800">Context Graph</Heading>
                 <Text fontSize="xs" color="gray.500" mt={0.5}>
                   Live graph — nodes and relationships used to answer your question
@@ -279,10 +311,10 @@ export default function Home() {
             flexDirection="column"
           >
             <Box
-              bg="white"
+              bg="bg.surface"
               borderRadius="xl"
               borderWidth="1px"
-              borderColor="gray.200"
+              borderColor="border.default"
               h="100%"
               display="flex"
               flexDirection="column"
@@ -290,7 +322,7 @@ export default function Home() {
               shadow="sm"
             >
               <Tabs.Root defaultValue="traces" size="sm" display="flex" flexDirection="column" h="100%">
-                <Box borderBottomWidth="1px" borderColor="gray.100" flexShrink={0} px={4} pt={3} pb={0}>
+                <Box borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} px={4} pt={3} pb={0}>
                   <HStack justify="space-between" mb={2}>
                     <Heading size="sm" color="gray.800">Decision Traces</Heading>
                   </HStack>
@@ -318,8 +350,8 @@ export default function Home() {
         py={2}
         px={4}
         borderTop="1px solid"
-        borderColor="gray.200"
-        bg="white"
+        borderColor="border.default"
+        bg="bg.surface"
         position="fixed"
         bottom={0}
         left={0}

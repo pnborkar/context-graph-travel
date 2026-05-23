@@ -4,8 +4,8 @@ const config = defineConfig({
   cssVarsPrefix: "ccg",
   globalCss: {
     "html, body": {
-      bg: "gray.50",
-      color: "gray.900",
+      bg: "bg.canvas",
+      color: "fg",
       lineHeight: "1.6",
     },
   },
