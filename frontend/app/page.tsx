@@ -123,21 +123,6 @@ export default function Home() {
           <Flex justify="space-between" align="center">
             {/* Logo + Title */}
             <Flex align="center" gap={3}>
-              <a href="https://neo4j.com" target="_blank" rel="noopener noreferrer">
-                <Box width={{ base: "32px", md: "38px" }} height={{ base: "32px", md: "38px" }} flexShrink={0}>
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <circle cx="50" cy="50" r="48" fill="#018BFF" />
-                    <g fill="white">
-                      <circle cx="50" cy="30" r="8" />
-                      <circle cx="30" cy="65" r="8" />
-                      <circle cx="70" cy="65" r="8" />
-                      <line x1="50" y1="38" x2="33" y2="58" stroke="white" strokeWidth="3" />
-                      <line x1="50" y1="38" x2="67" y2="58" stroke="white" strokeWidth="3" />
-                      <line x1="38" y1="65" x2="62" y2="65" stroke="white" strokeWidth="3" />
-                    </g>
-                  </svg>
-                </Box>
-              </a>
               <Box>
                 <Heading size={{ base: "sm", md: "md" }} color="blue.300" display="flex" alignItems="center" gap={2}>
                   <Plane size={18} />
