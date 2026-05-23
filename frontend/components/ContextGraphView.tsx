@@ -448,7 +448,8 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         zIndex={10}
         bg="bg.surface"
         px={3}
-        py={1.5}
+        pt={2.5}
+        pb={2}
         gap={1.5}
         flexWrap="wrap"
         borderBottomWidth="1px"

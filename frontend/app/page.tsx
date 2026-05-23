@@ -287,12 +287,6 @@ export default function Home() {
               overflow="hidden"
               shadow="sm"
             >
-              <Box px={4} py={3} borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0}>
-                <Heading size="sm" color="gray.800">Context Graph</Heading>
-                <Text fontSize="xs" color="gray.500" mt={0.5}>
-                  Live graph — nodes and relationships used to answer your question
-                </Text>
-              </Box>
               <Box flex="1" minH={0}>
                 <ErrorBoundary fallbackMessage="Graph visualization error">
                   <ContextGraphView

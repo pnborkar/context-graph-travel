@@ -454,7 +454,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
   const allPrompts = DEMO_SCENARIOS.flatMap((s) => s.prompts);
 
   return (
-    <Flex direction="column" h="100%">
+    <Flex direction="column" h="100%" minH={0}>
       <HStack px={4} py={3} borderBottom="1px solid" borderColor="gray.200" justifyContent="space-between">
         <Heading size="sm">Chat</Heading>
         {messages.length > 0 && (
@@ -502,7 +502,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
       )}
 
       {/* Messages */}
-      <VStack flex={1} overflow="auto" px={4} py={2} gap={3} align="stretch"
+      <VStack flex={1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch"
         display={messages.length === 0 && !loading ? "none" : "flex"}
       >
         {messages.map((msg) => (
