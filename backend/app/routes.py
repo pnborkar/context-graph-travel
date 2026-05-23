@@ -130,6 +130,8 @@ async def chat_stream(request: ChatRequest):
     collector.set_event_queue(event_queue)
 
     async def run_agent():
+        # Emit immediately so the proxy sees activity before the Anthropic API call
+        event_queue.put_nowait({"event": "thinking", "data": {"status": "starting"}})
         try:
             if handle_message_stream is not None:
                 await handle_message_stream(request.message, session_id)
@@ -157,7 +159,7 @@ async def chat_stream(request: ChatRequest):
         task = asyncio.create_task(run_agent())
         # Emit session_id as first event
         yield f"event: session_id\ndata: {json.dumps({'session_id': session_id})}\n\n"
-        ping_interval = 15.0   # Send keepalive comment every 15s to prevent proxy timeouts
+        ping_interval = 5.0    # Send keepalive comment every 5s to prevent proxy timeouts
         idle_timeout = 120.0   # Give up after 120s with no events
         overall_timeout = 300.0
         loop = asyncio.get_event_loop()
