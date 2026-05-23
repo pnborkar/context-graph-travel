@@ -1,0 +1,2141 @@
+{
+  "domain": "hospitality",
+  "entities": {
+    "Person": [
+      {
+        "name": "Maria Rodriguez",
+        "email": "maria.rodriguez@grandpalace.com",
+        "role": "General Manager",
+        "description": "Experienced hospitality professional with 15 years in luxury hotel management"
+      },
+      {
+        "name": "James Thompson",
+        "email": "j.thompson@seasideresort.com",
+        "role": "Director of Operations",
+        "description": "Operations specialist focused on guest experience optimization and staff development"
+      },
+      {
+        "name": "Priya Patel",
+        "email": "priya.patel@citycentral.com",
+        "role": "Revenue Manager",
+        "description": "Data-driven revenue optimization expert with expertise in dynamic pricing strategies"
+      },
+      {
+        "name": "Ahmed Hassan",
+        "email": "ahmed.hassan@mountainview.com",
+        "role": "Guest Relations Manager",
+        "description": "Customer service professional specializing in luxury guest experiences and VIP services"
+      },
+      {
+        "name": "Sophie Larsson",
+        "email": "sophie.larsson@nordichaven.com",
+        "role": "Housekeeping Manager",
+        "description": "Detail-oriented housekeeping supervisor with expertise in sustainability practices"
+      }
+    ],
+    "Organization": [
+      {
+        "name": "Marriott International",
+        "description": "Global hospitality company operating luxury and premium hotel brands worldwide",
+        "industry": "Hospitality"
+      },
+      {
+        "name": "RevPAR Solutions",
+        "description": "Revenue management consulting firm specializing in hotel pricing optimization",
+        "industry": "Hospitality Technology"
+      },
+      {
+        "name": "Guest Experience Analytics",
+        "description": "Data analytics company providing guest satisfaction insights for the hospitality sector",
+        "industry": "Business Intelligence"
+      },
+      {
+        "name": "Sustainable Hospitality Group",
+        "description": "Consulting organization focused on environmental sustainability in hotel operations",
+        "industry": "Environmental Consulting"
+      },
+      {
+        "name": "Luxury Linens Co.",
+        "description": "Premium textile supplier specializing in high-end hotel bedding and amenities",
+        "industry": "Hospitality Supply"
+      }
+    ],
+    "Location": [
+      {
+        "name": "Times Square District",
+        "address": "Broadway & 42nd Street, New York, NY 10036",
+        "latitude": 40.7589,
+        "longitude": -73.9851
+      },
+      {
+        "name": "Santa Monica Beach",
+        "address": "1600 Ocean Front Walk, Santa Monica, CA 90401",
+        "latitude": 34.0195,
+        "longitude": -118.4912
+      },
+      {
+        "name": "Dubai Marina",
+        "address": "Dubai Marina, Dubai, UAE",
+        "latitude": 25.0657,
+        "longitude": 55.1413
+      },
+      {
+        "name": "Shibuya Crossing",
+        "address": "2-2-1 Shibuya, Tokyo 150-0002, Japan",
+        "latitude": 35.6598,
+        "longitude": 139.7006
+      },
+      {
+        "name": "Champs-\u00c9lys\u00e9es",
+        "address": "Avenue des Champs-\u00c9lys\u00e9es, 75008 Paris, France",
+        "latitude": 48.8698,
+        "longitude": 2.3076
+      }
+    ],
+    "Event": [
+      {
+        "name": "Annual Hotel Industry Conference",
+        "date": "2024-03-15T09:00:00Z",
+        "description": "Premier hospitality industry gathering focusing on innovation and guest experience trends"
+      },
+      {
+        "name": "Revenue Management Workshop",
+        "date": "2024-02-28T14:00:00Z",
+        "description": "Advanced training session on dynamic pricing strategies and market analysis"
+      },
+      {
+        "name": "Guest Satisfaction Survey Launch",
+        "date": "2024-01-10T10:00:00Z",
+        "description": "Quarterly guest feedback initiative deployment across all hotel properties"
+      },
+      {
+        "name": "Sustainability Certification Audit",
+        "date": "2024-04-05T08:30:00Z",
+        "description": "Third-party environmental compliance assessment and certification review"
+      },
+      {
+        "name": "Staff Training Retreat",
+        "date": "2024-05-20T09:00:00Z",
+        "description": "Comprehensive customer service and operational excellence training program"
+      }
+    ],
+    "Object": [
+      {
+        "name": "Property Management System",
+        "description": "Integrated hotel operations software managing reservations, billing, and guest services"
+      },
+      {
+        "name": "Keycard Access System",
+        "description": "Electronic door lock system with master key capabilities and security logging"
+      },
+      {
+        "name": "Guest WiFi Network",
+        "description": "High-speed internet infrastructure providing complimentary wireless access throughout property"
+      },
+      {
+        "name": "Revenue Management Dashboard",
+        "description": "Real-time analytics platform tracking ADR, occupancy rates, and market positioning"
+      },
+      {
+        "name": "Guest Communication Platform",
+        "description": "Mobile app enabling guest services requests, room controls, and hotel information access"
+      }
+    ],
+    "Hotel": [
+      {
+        "hotel_id": "HTL_001_NYC",
+        "name": "The Grand Palace Manhattan",
+        "brand": "Luxury Collection",
+        "hotel_class": "luxury",
+        "star_rating": 5.0,
+        "total_rooms": 342,
+        "address": "768 Fifth Avenue",
+        "city": "New York",
+        "country": "United States"
+      },
+      {
+        "hotel_id": "HTL_002_LAX",
+        "name": "Seaside Resort & Spa",
+        "brand": "Coastal Resorts",
+        "hotel_class": "upper_upscale",
+        "star_rating": 4.5,
+        "total_rooms": 198,
+        "address": "1500 Pacific Coast Highway",
+        "city": "Los Angeles",
+        "country": "United States"
+      },
+      {
+        "hotel_id": "HTL_003_DXB",
+        "name": "Marina Bay Towers",
+        "brand": "International Grand",
+        "hotel_class": "luxury",
+        "star_rating": 5.0,
+        "total_rooms": 456,
+        "address": "Dubai Marina Walk",
+        "city": "Dubai",
+        "country": "United Arab Emirates"
+      },
+      {
+        "hotel_id": "HTL_004_TYO",
+        "name": "Tokyo Central Business Hotel",
+        "brand": "Metropolitan Hotels",
+        "hotel_class": "upscale",
+        "star_rating": 4.0,
+        "total_rooms": 289,
+        "address": "3-1-1 Shibuya",
+        "city": "Tokyo",
+        "country": "Japan"
+      },
+      {
+        "hotel_id": "HTL_005_PAR",
+        "name": "Champs-\u00c9lys\u00e9es Boutique",
+        "brand": "Boutique Collection",
+        "hotel_class": "upper_upscale",
+        "star_rating": 4.5,
+        "total_rooms": 87,
+        "address": "123 Avenue des Champs-\u00c9lys\u00e9es",
+        "city": "Paris",
+        "country": "France"
+      },
+      {
+        "hotel_id": "HTL_006_LON",
+        "name": "Thames View Hotel",
+        "brand": "Thames Hotels",
+        "hotel_class": "upscale",
+        "star_rating": 4.0,
+        "total_rooms": 156,
+        "address": "45 Victoria Embankment",
+        "city": "London",
+        "country": "United Kingdom"
+      },
+      {
+        "hotel_id": "HTL_007_SYD",
+        "name": "Harbour Bridge Lodge",
+        "brand": "Australian Hospitality",
+        "hotel_class": "midscale",
+        "star_rating": 3.5,
+        "total_rooms": 124,
+        "address": "78 Circular Quay",
+        "city": "Sydney",
+        "country": "Australia"
+      },
+      {
+        "hotel_id": "HTL_008_SIN",
+        "name": "Garden City Suites",
+        "brand": "Asian Premier",
+        "hotel_class": "luxury",
+        "star_rating": 5.0,
+        "total_rooms": 234,
+        "address": "Marina Bay Sands Avenue",
+        "city": "Singapore",
+        "country": "Singapore"
+      },
+      {
+        "hotel_id": "HTL_009_MIA",
+        "name": "South Beach Resort",
+        "brand": "Tropical Escapes",
+        "hotel_class": "upper_upscale",
+        "star_rating": 4.5,
+        "total_rooms": 312,
+        "address": "1234 Ocean Drive",
+        "city": "Miami",
+        "country": "United States"
+      },
+      {
+        "hotel_id": "HTL_010_TOR",
+        "name": "Downtown Executive Inn",
+        "brand": "Business Select",
+        "hotel_class": "economy",
+        "star_rating": 2.5,
+        "total_rooms": 98,
+        "address": "567 King Street West",
+        "city": "Toronto",
+        "country": "Canada"
+      }
+    ],
+    "Room": [
+      {
+        "room_id": "RM_HTL001_0512",
+        "room_number": "512",
+        "room_type": "deluxe",
+        "floor": 5,
+        "max_occupancy": 2,
+        "base_rate": 450.0,
+        "status": "available",
+        "view": "city",
+        "name": "Room 1"
+      },
+      {
+        "room_id": "RM_HTL002_1208",
+        "room_number": "1208",
+        "room_type": "suite",
+        "floor": 12,
+        "max_occupancy": 4,
+        "base_rate": 750.0,
+        "status": "occupied",
+        "view": "ocean",
+        "name": "Room 2"
+      },
+      {
+        "room_id": "RM_HTL003_2501",
+        "room_number": "2501",
+        "room_type": "penthouse",
+        "floor": 25,
+        "max_occupancy": 6,
+        "base_rate": 1200.0,
+        "status": "available",
+        "view": "city",
+        "name": "Room 3"
+      },
+      {
+        "room_id": "RM_HTL001_0315",
+        "room_number": "315",
+        "room_type": "standard",
+        "floor": 3,
+        "max_occupancy": 2,
+        "base_rate": 320.0,
+        "status": "cleaning",
+        "view": "garden",
+        "name": "Room 4"
+      },
+      {
+        "room_id": "RM_HTL004_0827",
+        "room_number": "827",
+        "room_type": "executive",
+        "floor": 8,
+        "max_occupancy": 2,
+        "base_rate": 380.0,
+        "status": "occupied",
+        "view": "city",
+        "name": "Room 5"
+      },
+      {
+        "room_id": "RM_HTL002_0104",
+        "room_number": "104",
+        "room_type": "accessible",
+        "floor": 1,
+        "max_occupancy": 2,
+        "base_rate": 290.0,
+        "status": "available",
+        "view": "pool",
+        "name": "Room 6"
+      },
+      {
+        "room_id": "RM_HTL005_0623",
+        "room_number": "623",
+        "room_type": "connecting",
+        "floor": 6,
+        "max_occupancy": 4,
+        "base_rate": 520.0,
+        "status": "maintenance",
+        "view": "garden",
+        "name": "Room 7"
+      },
+      {
+        "room_id": "RM_HTL003_1845",
+        "room_number": "1845",
+        "room_type": "deluxe",
+        "floor": 18,
+        "max_occupancy": 3,
+        "base_rate": 680.0,
+        "status": "available",
+        "view": "ocean",
+        "name": "Room 8"
+      },
+      {
+        "room_id": "RM_HTL006_0912",
+        "room_number": "912",
+        "room_type": "suite",
+        "floor": 9,
+        "max_occupancy": 4,
+        "base_rate": 640.0,
+        "status": "occupied",
+        "view": "mountain",
+        "name": "Room 9"
+      },
+      {
+        "room_id": "RM_HTL001_0709",
+        "room_number": "709",
+        "room_type": "standard",
+        "floor": 7,
+        "max_occupancy": 2,
+        "base_rate": 340.0,
+        "status": "out_of_order",
+        "view": "interior",
+        "name": "Room 10"
+      }
+    ],
+    "Reservation": [
+      {
+        "reservation_id": "RES_2024_001234",
+        "check_in": "2024-02-15",
+        "check_out": "2024-02-18",
+        "total_amount": 1350.0,
+        "reservation_status": "confirmed",
+        "channel": "direct",
+        "special_requests": "Late checkout, high floor room",
+        "num_guests": 2,
+        "name": "Reservation 1"
+      },
+      {
+        "reservation_id": "RES_2024_002847",
+        "check_in": "2024-03-01",
+        "check_out": "2024-03-05",
+        "total_amount": 3000.0,
+        "reservation_status": "checked_in",
+        "channel": "ota",
+        "special_requests": "Ocean view, champagne on arrival",
+        "num_guests": 2,
+        "name": "Reservation 2"
+      },
+      {
+        "reservation_id": "RES_2024_003691",
+        "check_in": "2024-01-28",
+        "check_out": "2024-01-30",
+        "total_amount": 680.0,
+        "reservation_status": "checked_out",
+        "channel": "corporate",
+        "special_requests": "Business center access, early breakfast",
+        "num_guests": 1,
+        "name": "Reservation 3"
+      },
+      {
+        "reservation_id": "RES_2024_004523",
+        "check_in": "2024-02-20",
+        "check_out": "2024-02-22",
+        "total_amount": 1280.0,
+        "reservation_status": "cancelled",
+        "channel": "group",
+        "special_requests": "Group check-in, meeting room access",
+        "num_guests": 4,
+        "name": "Reservation 4"
+      },
+      {
+        "reservation_id": "RES_2024_005718",
+        "check_in": "2024-01-25",
+        "check_out": "2024-01-26",
+        "total_amount": 450.0,
+        "reservation_status": "no_show",
+        "channel": "walk_in",
+        "special_requests": "None",
+        "num_guests": 1,
+        "name": "Reservation 5"
+      },
+      {
+        "reservation_id": "RES_2024_006892",
+        "check_in": "2024-03-10",
+        "check_out": "2024-03-15",
+        "total_amount": 2250.0,
+        "reservation_status": "confirmed",
+        "channel": "loyalty",
+        "special_requests": "Room upgrade, spa appointment",
+        "num_guests": 2,
+        "name": "Reservation 6"
+      },
+      {
+        "reservation_id": "RES_2024_007435",
+        "check_in": "2024-02-08",
+        "check_out": "2024-02-12",
+        "total_amount": 1920.0,
+        "reservation_status": "checked_in",
+        "channel": "direct",
+        "special_requests": "Connecting rooms, baby crib",
+        "num_guests": 4,
+        "name": "Reservation 7"
+      },
+      {
+        "reservation_id": "RES_2024_008164",
+        "check_in": "2024-04-01",
+        "check_out": "2024-04-03",
+        "total_amount": 760.0,
+        "reservation_status": "confirmed",
+        "channel": "ota",
+        "special_requests": "Quiet room, gym access",
+        "num_guests": 1,
+        "name": "Reservation 8"
+      }
+    ],
+    "Guest": [
+      {
+        "guest_id": "GST_001_8749",
+        "name": "Elena Kowalski",
+        "email": "elena.kowalski@gmail.com",
+        "phone": "+1-555-0123",
+        "loyalty_tier": "platinum",
+        "guest_type": "business",
+        "total_stays": 47,
+        "lifetime_value": 28500.0
+      },
+      {
+        "guest_id": "GST_002_6215",
+        "name": "Marcus Johnson",
+        "email": "mjohnson@techcorp.com",
+        "phone": "+1-555-0287",
+        "loyalty_tier": "gold",
+        "guest_type": "business",
+        "total_stays": 23,
+        "lifetime_value": 15600.0
+      },
+      {
+        "guest_id": "GST_003_9432",
+        "name": "Yuki Tanaka",
+        "email": "yuki.tanaka@email.co.jp",
+        "phone": "+81-3-1234-5678",
+        "loyalty_tier": "silver",
+        "guest_type": "leisure",
+        "total_stays": 8,
+        "lifetime_value": 4200.0
+      },
+      {
+        "guest_id": "GST_004_7518",
+        "name": "Fatima Al-Rashid",
+        "email": "fatima.rashid@outlook.com",
+        "phone": "+971-50-123-4567",
+        "loyalty_tier": "ambassador",
+        "guest_type": "vip",
+        "total_stays": 89,
+        "lifetime_value": 156000.0
+      },
+      {
+        "guest_id": "GST_005_3641",
+        "name": "Jean-Pierre Dubois",
+        "email": "jpdubois@france.fr",
+        "phone": "+33-1-45-67-89-01",
+        "loyalty_tier": "member",
+        "guest_type": "leisure",
+        "total_stays": 3,
+        "lifetime_value": 1250.0
+      },
+      {
+        "guest_id": "GST_006_5927",
+        "name": "Sarah Mitchell",
+        "email": "sarah.mitchell@lawfirm.com",
+        "phone": "+1-555-0394",
+        "loyalty_tier": "gold",
+        "guest_type": "business",
+        "total_stays": 31,
+        "lifetime_value": 19800.0
+      },
+      {
+        "guest_id": "GST_007_8163",
+        "name": "Carlos Rodriguez",
+        "email": "carlos.rodriguez@vacation.com",
+        "phone": "+1-555-0756",
+        "loyalty_tier": "silver",
+        "guest_type": "group",
+        "total_stays": 12,
+        "lifetime_value": 7200.0
+      },
+      {
+        "guest_id": "GST_008_4582",
+        "name": "Priya Sharma",
+        "email": "priya.sharma@mumbai.in",
+        "phone": "+91-22-9876-5432",
+        "loyalty_tier": "platinum",
+        "guest_type": "long_stay",
+        "total_stays": 18,
+        "lifetime_value": 42000.0
+      },
+      {
+        "guest_id": "GST_009_2794",
+        "name": "Olivia Thompson",
+        "email": "olivia.t@designer.au",
+        "phone": "+61-2-9876-5432",
+        "loyalty_tier": "member",
+        "guest_type": "leisure",
+        "total_stays": 6,
+        "lifetime_value": 2800.0
+      },
+      {
+        "guest_id": "GST_010_6385",
+        "name": "Ahmed Hassan",
+        "email": "a.hassan@business.eg",
+        "phone": "+20-2-1234-5678",
+        "loyalty_tier": "gold",
+        "guest_type": "business",
+        "total_stays": 28,
+        "lifetime_value": 17500.0
+      }
+    ],
+    "Service": [
+      {
+        "service_id": "SVC_001_RS",
+        "name": "24-Hour Room Service",
+        "service_type": "room_service",
+        "price": 25.0,
+        "department": "Food & Beverage",
+        "available_hours": "24/7",
+        "satisfaction_score": 4.3
+      },
+      {
+        "service_id": "SVC_002_HK",
+        "name": "Express Housekeeping",
+        "service_type": "housekeeping",
+        "price": 50.0,
+        "department": "Housekeeping",
+        "available_hours": "06:00-22:00",
+        "satisfaction_score": 4.6
+      },
+      {
+        "service_id": "SVC_003_CC",
+        "name": "Concierge Services",
+        "service_type": "concierge",
+        "price": 0.0,
+        "department": "Guest Services",
+        "available_hours": "07:00-23:00",
+        "satisfaction_score": 4.8
+      },
+      {
+        "service_id": "SVC_004_SP",
+        "name": "Luxury Spa Treatment",
+        "service_type": "spa",
+        "price": 180.0,
+        "department": "Spa & Wellness",
+        "available_hours": "08:00-20:00",
+        "satisfaction_score": 4.7
+      },
+      {
+        "service_id": "SVC_005_DN",
+        "name": "Fine Dining Restaurant",
+        "service_type": "dining",
+        "price": 85.0,
+        "department": "Food & Beverage",
+        "available_hours": "18:00-23:00",
+        "satisfaction_score": 4.5
+      },
+      {
+        "service_id": "SVC_006_LD",
+        "name": "Express Laundry",
+        "service_type": "laundry",
+        "price": 30.0,
+        "department": "Housekeeping",
+        "available_hours": "07:00-19:00",
+        "satisfaction_score": 4.2
+      },
+      {
+        "service_id": "SVC_007_TR",
+        "name": "Airport Transfer",
+        "service_type": "transport",
+        "price": 65.0,
+        "department": "Guest Services",
+        "available_hours": "24/7",
+        "satisfaction_score": 4.4
+      },
+      {
+        "service_id": "SVC_008_MN",
+        "name": "Room Maintenance",
+        "service_type": "maintenance",
+        "price": 0.0,
+        "department": "Engineering",
+        "available_hours": "08:00-17:00",
+        "satisfaction_score": 4.1
+      },
+      {
+        "service_id": "SVC_009_SB",
+        "name": "Poolside Service",
+        "service_type": "room_service",
+        "price": 15.0,
+        "department": "Food & Beverage",
+        "available_hours": "10:00-18:00",
+        "satisfaction_score": 4.3
+      },
+      {
+        "service_id": "SVC_010_BF",
+        "name": "Continental Breakfast",
+        "service_type": "dining",
+        "price": 28.0,
+        "department": "Food & Beverage",
+        "available_hours": "06:30-10:30",
+        "satisfaction_score": 4.0
+      }
+    ],
+    "Staff": [
+      {
+        "staff_id": "STF_001_GM",
+        "name": "Roberto Martinez",
+        "role": "general_manager",
+        "department": "management",
+        "hire_date": "2019-03-15",
+        "shift": "rotating",
+        "performance_rating": 4.8
+      },
+      {
+        "staff_id": "STF_002_FD",
+        "name": "Lisa Chang",
+        "role": "front_desk",
+        "department": "front_office",
+        "hire_date": "2021-07-22",
+        "shift": "morning",
+        "performance_rating": 4.5
+      },
+      {
+        "staff_id": "STF_003_HK",
+        "name": "Maria Santos",
+        "role": "housekeeping",
+        "department": "housekeeping",
+        "hire_date": "2020-01-10",
+        "shift": "morning",
+        "performance_rating": 4.7
+      },
+      {
+        "staff_id": "STF_004_CC",
+        "name": "James Wilson",
+        "role": "concierge",
+        "department": "front_office",
+        "hire_date": "2022-05-08",
+        "shift": "afternoon",
+        "performance_rating": 4.6
+      },
+      {
+        "staff_id": "STF_005_CH",
+        "name": "Antoine Dubois",
+        "role": "chef",
+        "department": "food_beverage",
+        "hire_date": "2018-11-30",
+        "shift": "afternoon",
+        "performance_rating": 4.9
+      },
+      {
+        "staff_id": "STF_006_SV",
+        "name": "Karina Petrov",
+        "role": "server",
+        "department": "food_beverage",
+        "hire_date": "2022-09-14",
+        "shift": "night",
+        "performance_rating": 4.3
+      },
+      {
+        "staff_id": "STF_007_MT",
+        "name": "David Kim",
+        "role": "maintenance",
+        "department": "engineering",
+        "hire_date": "2020-06-25",
+        "shift": "morning",
+        "performance_rating": 4.4
+      },
+      {
+        "staff_id": "STF_008_SP",
+        "name": "Ananya Gupta",
+        "role": "spa_therapist",
+        "department": "spa",
+        "hire_date": "2021-12-03",
+        "shift": "rotating",
+        "performance_rating": 4.8
+      },
+      {
+        "staff_id": "STF_009_FD",
+        "name": "Michael O'Brien",
+        "role": "front_desk",
+        "department": "front_office",
+        "hire_date": "2023-02-18",
+        "shift": "night",
+        "performance_rating": 4.1
+      },
+      {
+        "staff_id": "STF_010_HK",
+        "name": "Fatou Diallo",
+        "role": "housekeeping",
+        "department": "housekeeping",
+        "hire_date": "2021-04-12",
+        "shift": "afternoon",
+        "performance_rating": 4.5
+      }
+    ]
+  },
+  "relationships": [
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "Maria Rodriguez",
+      "target_label": "Organization",
+      "target_name": "Luxury Linens Co."
+    },
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "James Thompson",
+      "target_label": "Organization",
+      "target_name": "RevPAR Solutions"
+    },
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "James Thompson",
+      "target_label": "Organization",
+      "target_name": "Guest Experience Analytics"
+    },
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "Priya Patel",
+      "target_label": "Organization",
+      "target_name": "Sustainable Hospitality Group"
+    },
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "Priya Patel",
+      "target_label": "Organization",
+      "target_name": "Luxury Linens Co."
+    },
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Organization",
+      "target_name": "Luxury Linens Co."
+    },
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Organization",
+      "target_name": "Sustainable Hospitality Group"
+    },
+    {
+      "type": "WORKS_FOR",
+      "source_label": "Person",
+      "source_name": "Sophie Larsson",
+      "target_label": "Organization",
+      "target_name": "Sustainable Hospitality Group"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "Marriott International",
+      "target_label": "Location",
+      "target_name": "Times Square District"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "Marriott International",
+      "target_label": "Location",
+      "target_name": "Champs-\u00c9lys\u00e9es"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "RevPAR Solutions",
+      "target_label": "Location",
+      "target_name": "Dubai Marina"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "RevPAR Solutions",
+      "target_label": "Location",
+      "target_name": "Shibuya Crossing"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "RevPAR Solutions",
+      "target_label": "Location",
+      "target_name": "Santa Monica Beach"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "Guest Experience Analytics",
+      "target_label": "Location",
+      "target_name": "Times Square District"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "Sustainable Hospitality Group",
+      "target_label": "Location",
+      "target_name": "Shibuya Crossing"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "Sustainable Hospitality Group",
+      "target_label": "Location",
+      "target_name": "Dubai Marina"
+    },
+    {
+      "type": "LOCATED_AT",
+      "source_label": "Organization",
+      "source_name": "Luxury Linens Co.",
+      "target_label": "Location",
+      "target_name": "Times Square District"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "Maria Rodriguez",
+      "target_label": "Event",
+      "target_name": "Annual Hotel Industry Conference"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "Maria Rodriguez",
+      "target_label": "Event",
+      "target_name": "Sustainability Certification Audit"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "James Thompson",
+      "target_label": "Event",
+      "target_name": "Staff Training Retreat"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "James Thompson",
+      "target_label": "Event",
+      "target_name": "Sustainability Certification Audit"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "Priya Patel",
+      "target_label": "Event",
+      "target_name": "Staff Training Retreat"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Event",
+      "target_name": "Staff Training Retreat"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Event",
+      "target_name": "Guest Satisfaction Survey Launch"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Event",
+      "target_name": "Revenue Management Workshop"
+    },
+    {
+      "type": "PARTICIPATED_IN",
+      "source_label": "Person",
+      "source_name": "Sophie Larsson",
+      "target_label": "Event",
+      "target_name": "Staff Training Retreat"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Elena Kowalski",
+      "target_label": "Hotel",
+      "target_name": "The Grand Palace Manhattan"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Elena Kowalski",
+      "target_label": "Hotel",
+      "target_name": "Garden City Suites"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Marcus Johnson",
+      "target_label": "Hotel",
+      "target_name": "Harbour Bridge Lodge"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Hotel",
+      "target_name": "Garden City Suites"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Hotel",
+      "target_name": "Champs-\u00c9lys\u00e9es Boutique"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Hotel",
+      "target_name": "Thames View Hotel"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Hotel",
+      "target_name": "Garden City Suites"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Hotel",
+      "target_name": "Seaside Resort & Spa"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Jean-Pierre Dubois",
+      "target_label": "Hotel",
+      "target_name": "Tokyo Central Business Hotel"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Jean-Pierre Dubois",
+      "target_label": "Hotel",
+      "target_name": "Marina Bay Towers"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Sarah Mitchell",
+      "target_label": "Hotel",
+      "target_name": "Seaside Resort & Spa"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Carlos Rodriguez",
+      "target_label": "Hotel",
+      "target_name": "Seaside Resort & Spa"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Priya Sharma",
+      "target_label": "Hotel",
+      "target_name": "Garden City Suites"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "STAYED_AT",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Hotel",
+      "target_name": "Tokyo Central Business Hotel"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Elena Kowalski",
+      "target_label": "Reservation",
+      "target_name": "Reservation 4"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Marcus Johnson",
+      "target_label": "Reservation",
+      "target_name": "Reservation 4"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Marcus Johnson",
+      "target_label": "Reservation",
+      "target_name": "Reservation 3"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Marcus Johnson",
+      "target_label": "Reservation",
+      "target_name": "Reservation 7"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Reservation",
+      "target_name": "Reservation 1"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Reservation",
+      "target_name": "Reservation 8"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Reservation",
+      "target_name": "Reservation 6"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Reservation",
+      "target_name": "Reservation 1"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Reservation",
+      "target_name": "Reservation 5"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Jean-Pierre Dubois",
+      "target_label": "Reservation",
+      "target_name": "Reservation 2"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Jean-Pierre Dubois",
+      "target_label": "Reservation",
+      "target_name": "Reservation 7"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Jean-Pierre Dubois",
+      "target_label": "Reservation",
+      "target_name": "Reservation 4"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Sarah Mitchell",
+      "target_label": "Reservation",
+      "target_name": "Reservation 7"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Carlos Rodriguez",
+      "target_label": "Reservation",
+      "target_name": "Reservation 2"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Priya Sharma",
+      "target_label": "Reservation",
+      "target_name": "Reservation 8"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Reservation",
+      "target_name": "Reservation 8"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Reservation",
+      "target_name": "Reservation 6"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Reservation",
+      "target_name": "Reservation 7"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Reservation",
+      "target_name": "Reservation 6"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Reservation",
+      "target_name": "Reservation 3"
+    },
+    {
+      "type": "RESERVED",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Reservation",
+      "target_name": "Reservation 7"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Elena Kowalski",
+      "target_label": "Service",
+      "target_name": "Express Laundry"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Marcus Johnson",
+      "target_label": "Service",
+      "target_name": "Poolside Service"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Service",
+      "target_name": "Express Laundry"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Service",
+      "target_name": "Room Maintenance"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Service",
+      "target_name": "Concierge Services"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Service",
+      "target_name": "24-Hour Room Service"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Service",
+      "target_name": "Airport Transfer"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Service",
+      "target_name": "Express Housekeeping"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Jean-Pierre Dubois",
+      "target_label": "Service",
+      "target_name": "Luxury Spa Treatment"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Sarah Mitchell",
+      "target_label": "Service",
+      "target_name": "Express Laundry"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Sarah Mitchell",
+      "target_label": "Service",
+      "target_name": "Fine Dining Restaurant"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Carlos Rodriguez",
+      "target_label": "Service",
+      "target_name": "Concierge Services"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Priya Sharma",
+      "target_label": "Service",
+      "target_name": "Continental Breakfast"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Priya Sharma",
+      "target_label": "Service",
+      "target_name": "Express Housekeeping"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Service",
+      "target_name": "Express Laundry"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Service",
+      "target_name": "Luxury Spa Treatment"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Service",
+      "target_name": "Express Housekeeping"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Service",
+      "target_name": "Concierge Services"
+    },
+    {
+      "type": "SERVED_BY",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Service",
+      "target_name": "Fine Dining Restaurant"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Elena Kowalski",
+      "target_label": "Hotel",
+      "target_name": "South Beach Resort"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Marcus Johnson",
+      "target_label": "Hotel",
+      "target_name": "The Grand Palace Manhattan"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Marcus Johnson",
+      "target_label": "Hotel",
+      "target_name": "Marina Bay Towers"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Hotel",
+      "target_name": "The Grand Palace Manhattan"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Yuki Tanaka",
+      "target_label": "Hotel",
+      "target_name": "South Beach Resort"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Hotel",
+      "target_name": "Garden City Suites"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Hotel",
+      "target_name": "Champs-\u00c9lys\u00e9es Boutique"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Fatima Al-Rashid",
+      "target_label": "Hotel",
+      "target_name": "Harbour Bridge Lodge"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Jean-Pierre Dubois",
+      "target_label": "Hotel",
+      "target_name": "Thames View Hotel"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Sarah Mitchell",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Carlos Rodriguez",
+      "target_label": "Hotel",
+      "target_name": "The Grand Palace Manhattan"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Carlos Rodriguez",
+      "target_label": "Hotel",
+      "target_name": "Harbour Bridge Lodge"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Carlos Rodriguez",
+      "target_label": "Hotel",
+      "target_name": "Marina Bay Towers"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Priya Sharma",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Priya Sharma",
+      "target_label": "Hotel",
+      "target_name": "Thames View Hotel"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Hotel",
+      "target_name": "Tokyo Central Business Hotel"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Olivia Thompson",
+      "target_label": "Hotel",
+      "target_name": "South Beach Resort"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Hotel",
+      "target_name": "Thames View Hotel"
+    },
+    {
+      "type": "RATED",
+      "source_label": "Guest",
+      "source_name": "Ahmed Hassan",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 1",
+      "target_label": "Room",
+      "target_name": "Room 10"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 2",
+      "target_label": "Room",
+      "target_name": "Room 7"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 2",
+      "target_label": "Room",
+      "target_name": "Room 1"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 2",
+      "target_label": "Room",
+      "target_name": "Room 8"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 3",
+      "target_label": "Room",
+      "target_name": "Room 2"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 4",
+      "target_label": "Room",
+      "target_name": "Room 9"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 5",
+      "target_label": "Room",
+      "target_name": "Room 10"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 5",
+      "target_label": "Room",
+      "target_name": "Room 3"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 6",
+      "target_label": "Room",
+      "target_name": "Room 8"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 6",
+      "target_label": "Room",
+      "target_name": "Room 5"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 6",
+      "target_label": "Room",
+      "target_name": "Room 4"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 7",
+      "target_label": "Room",
+      "target_name": "Room 1"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 7",
+      "target_label": "Room",
+      "target_name": "Room 9"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 7",
+      "target_label": "Room",
+      "target_name": "Room 6"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 8",
+      "target_label": "Room",
+      "target_name": "Room 5"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 8",
+      "target_label": "Room",
+      "target_name": "Room 10"
+    },
+    {
+      "type": "ASSIGNED_TO",
+      "source_label": "Reservation",
+      "source_name": "Reservation 8",
+      "target_label": "Room",
+      "target_name": "Room 9"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "The Grand Palace Manhattan",
+      "target_label": "Staff",
+      "target_name": "Lisa Chang"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "The Grand Palace Manhattan",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Seaside Resort & Spa",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Marina Bay Towers",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Marina Bay Towers",
+      "target_label": "Staff",
+      "target_name": "Michael O'Brien"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Tokyo Central Business Hotel",
+      "target_label": "Staff",
+      "target_name": "Ananya Gupta"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Champs-\u00c9lys\u00e9es Boutique",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Thames View Hotel",
+      "target_label": "Staff",
+      "target_name": "Ananya Gupta"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Thames View Hotel",
+      "target_label": "Staff",
+      "target_name": "Maria Santos"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Harbour Bridge Lodge",
+      "target_label": "Staff",
+      "target_name": "Lisa Chang"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Harbour Bridge Lodge",
+      "target_label": "Staff",
+      "target_name": "Karina Petrov"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Harbour Bridge Lodge",
+      "target_label": "Staff",
+      "target_name": "James Wilson"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Garden City Suites",
+      "target_label": "Staff",
+      "target_name": "Karina Petrov"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Garden City Suites",
+      "target_label": "Staff",
+      "target_name": "Fatou Diallo"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "South Beach Resort",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "South Beach Resort",
+      "target_label": "Staff",
+      "target_name": "Roberto Martinez"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "South Beach Resort",
+      "target_label": "Staff",
+      "target_name": "James Wilson"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Downtown Executive Inn",
+      "target_label": "Staff",
+      "target_name": "James Wilson"
+    },
+    {
+      "type": "MANAGED_BY",
+      "source_label": "Hotel",
+      "source_name": "Downtown Executive Inn",
+      "target_label": "Staff",
+      "target_name": "Ananya Gupta"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "24-Hour Room Service",
+      "target_label": "Staff",
+      "target_name": "Maria Santos"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Express Housekeeping",
+      "target_label": "Staff",
+      "target_name": "Michael O'Brien"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Concierge Services",
+      "target_label": "Staff",
+      "target_name": "Michael O'Brien"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Concierge Services",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Luxury Spa Treatment",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Luxury Spa Treatment",
+      "target_label": "Staff",
+      "target_name": "Roberto Martinez"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Fine Dining Restaurant",
+      "target_label": "Staff",
+      "target_name": "Roberto Martinez"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Express Laundry",
+      "target_label": "Staff",
+      "target_name": "Ananya Gupta"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Airport Transfer",
+      "target_label": "Staff",
+      "target_name": "Karina Petrov"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Airport Transfer",
+      "target_label": "Staff",
+      "target_name": "Antoine Dubois"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Room Maintenance",
+      "target_label": "Staff",
+      "target_name": "David Kim"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Room Maintenance",
+      "target_label": "Staff",
+      "target_name": "Lisa Chang"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Room Maintenance",
+      "target_label": "Staff",
+      "target_name": "Michael O'Brien"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Poolside Service",
+      "target_label": "Staff",
+      "target_name": "Michael O'Brien"
+    },
+    {
+      "type": "DELIVERED_BY",
+      "source_label": "Service",
+      "source_name": "Continental Breakfast",
+      "target_label": "Staff",
+      "target_name": "James Wilson"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 1",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 1",
+      "target_label": "Hotel",
+      "target_name": "Harbour Bridge Lodge"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 2",
+      "target_label": "Hotel",
+      "target_name": "Harbour Bridge Lodge"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 3",
+      "target_label": "Hotel",
+      "target_name": "Tokyo Central Business Hotel"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 4",
+      "target_label": "Hotel",
+      "target_name": "Downtown Executive Inn"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 5",
+      "target_label": "Hotel",
+      "target_name": "Tokyo Central Business Hotel"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 5",
+      "target_label": "Hotel",
+      "target_name": "Thames View Hotel"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 5",
+      "target_label": "Hotel",
+      "target_name": "Champs-\u00c9lys\u00e9es Boutique"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 6",
+      "target_label": "Hotel",
+      "target_name": "Garden City Suites"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 7",
+      "target_label": "Hotel",
+      "target_name": "Tokyo Central Business Hotel"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 7",
+      "target_label": "Hotel",
+      "target_name": "Marina Bay Towers"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 8",
+      "target_label": "Hotel",
+      "target_name": "Seaside Resort & Spa"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 9",
+      "target_label": "Hotel",
+      "target_name": "South Beach Resort"
+    },
+    {
+      "type": "LOCATED_IN",
+      "source_label": "Room",
+      "source_name": "Room 10",
+      "target_label": "Hotel",
+      "target_name": "Champs-\u00c9lys\u00e9es Boutique"
+    }
+  ],
+  "documents": [
+    {
+      "template_id": "reservation_confirmation",
+      "template_name": "Reservation Confirmation",
+      "title": "Reservation Confirmation - The Grand Palace Manhattan",
+      "content": "Dear Ms. Elena Kowalski,\n\nThank you for choosing The Grand Palace Manhattan for your upcoming stay. We are delighted to confirm your reservation.\n\nRESERVATION DETAILS:\nConfirmation Number: RES-001-2024\nGuest Name: Elena Kowalski\nCheck-in: March 15, 2024 (3:00 PM)\nCheck-out: March 18, 2024 (12:00 PM)\nRoom Type: Executive Suite (Room 1205)\nTotal Amount: $1,847.00 (including taxes and fees)\n\nYour Executive Suite features panoramic city views, premium bedding, complimentary WiFi, and access to our exclusive Executive Lounge with continental breakfast and evening cocktails.\n\nHOTEL AMENITIES:\n- 24-hour concierge service\n- Rooftop spa and fitness center\n- Fine dining restaurant \"Manhattan Heights\"\n- Business center and meeting facilities\n- Valet parking ($45/night)\n\nIMPORTANT POLICIES:\n- Check-in requires valid photo ID and credit card\n- Cancellation must be made 48 hours prior to arrival\n- Pet policy: Small pets welcome ($150 fee)\n- Non-smoking property\n\nDIRECTIONS:\nLocated at 350 Fifth Avenue, we are steps from Empire State Building and Bryant Park. From JFK Airport, take the AirTrain to Jamaica, then LIRR to Penn Station (35 minutes). The hotel is a 5-minute taxi ride from Penn Station.\n\nFor any special requests or assistance, please contact our guest services at (212) 555-0100 or reservations@grandpalacemanhattan.com.\n\nWe look forward to welcoming you to The Grand Palace Manhattan.\n\nWarm regards,\nGuest Relations Team\nThe Grand Palace Manhattan"
+    },
+    {
+      "template_id": "reservation_confirmation",
+      "template_name": "Reservation Confirmation",
+      "title": "Reservation Confirmation - Seaside Resort & Spa",
+      "content": "Dear Mr. Marcus Johnson,\n\nWelcome to paradise! Your reservation at Seaside Resort & Spa has been confirmed, and we cannot wait to host you for an unforgettable oceanfront experience.\n\nRESERVATION CONFIRMATION:\nReservation ID: SSR-789-2024\nGuest: Marcus Johnson\nArrival: April 22, 2024 (4:00 PM)\nDeparture: April 26, 2024 (11:00 AM)\nAccommodation: Ocean View Deluxe King (Room 308)\nTotal Investment: $2,156.00 (all taxes included)\n\nYour Ocean View Deluxe King room offers breathtaking sunrise views, private balcony, marble bathroom with soaking tub, and complimentary beach access with premium lounge chairs.\n\nRESORT AMENITIES & EXPERIENCES:\n- Award-winning Serenity Spa with signature treatments\n- Three distinctive restaurants featuring fresh seafood\n- Two swimming pools including adults-only infinity pool\n- Complimentary water sports: kayaking, snorkeling, paddleboarding\n- Tennis court and fitness pavilion\n- Nightly entertainment and live music\n\nRESORT POLICIES:\n- Resort fee of $35/night includes WiFi, parking, and beach amenities\n- Spa reservations recommended 48 hours in advance\n- All-inclusive dining packages available upon request\n- Flexible cancellation up to 72 hours before arrival\n\nGETTING HERE:\nWe're located at 1200 Coastal Highway, 25 minutes from Regional Airport. Complimentary shuttle service available with 24-hour advance notice. Self-parking is complimentary for all guests.\n\nPre-arrival spa bookings receive 15% discount. Contact our spa concierge at spa@seasideresort.com.\n\nSun, sand, and serenity await!\n\nBest regards,\nHospitality Team\nSeaside Resort & Spa"
+    },
+    {
+      "template_id": "reservation_confirmation",
+      "template_name": "Reservation Confirmation",
+      "title": "Reservation Confirmation - Marina Bay Towers",
+      "content": "Dear Ms. Yuki Tanaka,\n\nGreetings from Marina Bay Towers! We are thrilled to confirm your upcoming reservation at Singapore's premier luxury destination.\n\nCONFIRMATION DETAILS:\nBooking Reference: MBT-445-2024\nGuest Name: Yuki Tanaka\nCheck-in Date: May 8, 2024 (3:00 PM)\nCheck-out Date: May 12, 2024 (12:00 PM)\nRoom Assignment: Premium Harbor View Suite (Room 4012)\nTotal Charges: $1,623.00 (inclusive of 10% service charge and GST)\n\nYour Premium Harbor View Suite showcases spectacular marina vistas, contemporary Asian-inspired d\u00e9cor, rain shower, and complimentary minibar refreshed daily.\n\nTOWER AMENITIES:\n- Infinity pool on 57th floor with city panoramas\n- World-class spa featuring traditional Asian therapies\n- Five signature restaurants including Michelin-starred \"Elevation\"\n- Sky Garden observation deck\n- 24/7 butler service for suite guests\n- Complimentary airport transfer via luxury sedan\n\nHOTEL POLICIES:\n- Express check-in available through mobile app\n- Cancellation permitted until 6 PM day prior to arrival\n- Currency: Singapore Dollars (SGD) - USD accepted\n- Smoking permitted in designated outdoor terraces only\n\nTRAVEL INFORMATION:\nMarina Bay Towers is centrally located in Singapore's financial district, 20 minutes from Changi Airport via EWL MRT line. Complimentary shuttle to Orchard Road shopping district operates hourly.\n\nFor restaurant reservations or tour bookings, please reach our concierge at concierge@marinabaytowers.sg or +65 6789 1234.\n\nWe eagerly anticipate your arrival in our vertical oasis.\n\nSincerely,\nGuest Experience Team\nMarina Bay Towers"
+    },
+    {
+      "template_id": "reservation_confirmation",
+      "template_name": "Reservation Confirmation",
+      "title": "Reservation Confirmation - Tokyo Central Business Hotel",
+      "content": "Dear Ms. Fatima Al-Rashid,\n\nThank you for selecting Tokyo Central Business Hotel for your business travel needs. Your reservation has been successfully confirmed with all requested specifications.\n\nRESERVATION SUMMARY:\nConfirmation Code: TCB-662-2024\nGuest: Fatima Al-Rashid\nArrival: June 3, 2024 (2:00 PM)\nDeparture: June 7, 2024 (11:00 AM)\nRoom Type: Business Executive Single (Room 1523)\nTotal Cost: \u00a598,400 (approximately $656 USD)\n\nYour Business Executive room features ergonomic workspace, high-speed internet, international power outlets, premium coffee station, and express laundry service.\n\nBUSINESS-FOCUSED AMENITIES:\n- 24-hour business center with printing and translation services\n- Executive lounge with breakfast buffet and evening networking hour\n- Fully equipped conference rooms available for hourly rental\n- Airport limousine service every 30 minutes\n- Same-day dry cleaning and shirt pressing\n- Multilingual concierge staff\n\nHOTEL POLICIES:\n- Mobile key available through Tokyo Central app\n- Late checkout until 2 PM for Executive room guests\n- Cancellation deadline: 6 PM one day before arrival\n- Luggage storage available for early arrival/late departure\n\nLOCATION & TRANSPORTATION:\nStrategically positioned in Marunouchi district, we're 2 minutes walk from Tokyo Station and direct access to Narita Express. Major corporate offices, government buildings, and Imperial Palace are within walking distance.\n\nFor meeting room reservations or transportation arrangements, contact our business services at business@tokyocentral.co.jp or call +81-3-5555-8800.\n\nWe look forward to supporting your successful business endeavors in Tokyo.\n\nRespectfully,\nBusiness Services Team\nTokyo Central Business Hotel"
+    },
+    {
+      "template_id": "reservation_confirmation",
+      "template_name": "Reservation Confirmation",
+      "title": "Reservation Confirmation - Champs-\u00c9lys\u00e9es Boutique",
+      "content": "Cher Monsieur Jean-Pierre Dubois,\n\nC'est avec grand plaisir que nous confirmons votre r\u00e9servation au Champs-\u00c9lys\u00e9es Boutique, votre refuge parisien de luxe.\n\nD\u00c9TAILS DE LA R\u00c9SERVATION:\nNum\u00e9ro de confirmation: CEB-334-2024\nClient: Jean-Pierre Dubois\nArriv\u00e9e: 18 juillet 2024 (15h00)\nD\u00e9part: 22 juillet 2024 (12h00)\nChambre: Suite Parisienne Deluxe (Chambre 507)\nMontant total: \u20ac1,456.00 (taxes de s\u00e9jour incluses)\n\nVotre Suite Parisienne Deluxe offre une vue imprenable sur les Champs-\u00c9lys\u00e9es, mobilier d'\u00e9poque fran\u00e7ais authentique, salle de bain en marbre de Carrare, et service de majordome personnalis\u00e9.\n\nSERVICES DE L'H\u00d4TEL:\n- Concierge expert en exp\u00e9riences parisiennes exclusives\n- Restaurant gastronomique \"Le Jardin Secret\" (\u00e9toile Michelin)\n- Cave \u00e0 vins avec s\u00e9lection de grands crus fran\u00e7ais\n- Spa intimiste avec soins signature\n- Salon priv\u00e9 avec chemin\u00e9e et biblioth\u00e8que\n- Service de voiturier et chauffeur priv\u00e9\n\nPOLITIQUES DE L'\u00c9TABLISSEMENT:\n- Enregistrement express pour les suites d\u00e8s 14h00\n- Annulation gratuite jusqu'\u00e0 48h avant l'arriv\u00e9e\n- Animaux de compagnie bienvenus (suppl\u00e9ment \u20ac85/nuit)\n- \u00c9tablissement non-fumeur (terrasse fumeurs disponible)\n\nACC\u00c8S:\nSitu\u00e9 au c\u0153ur du 8\u00e8me arrondissement, nous sommes \u00e0 2 minutes \u00e0 pied du m\u00e9tro George V (ligne 1) et 35 minutes de Charles de Gaulle via RER B + correspondance. Service navette a\u00e9roport disponible sur demande (\u20ac95).\n\nPour r\u00e9servations restaurant ou billets spectacles, contactez notre conciergerie: concierge@champselyseesboutique.fr ou +33 1 4755 8900.\n\nAu plaisir de vous accueillir dans l'art de vivre parisien.\n\nCordialement,\nL'\u00e9quipe d'accueil\nChamps-\u00c9lys\u00e9es Boutique"
+    },
+    {
+      "template_id": "guest_review",
+      "template_name": "Guest Review Summary",
+      "title": "Guest Review Summary - The Grand Palace Manhattan Q3 2024",
+      "content": "Overall satisfaction for The Grand Palace Manhattan reached 4.2/5 stars this quarter, reflecting a 0.3-point improvement from Q2. Guests consistently praised our 24-Hour Room Service, with 94% rating it excellent or very good. Elena Kowalski noted in her review that 'the midnight dining options exceeded expectations with prompt delivery and restaurant-quality presentation.' Service highlights include our Concierge Services team, earning particular recognition for securing Broadway tickets and dinner reservations. The Fine Dining Restaurant maintained its stellar reputation, with guests appreciating the seasonal menu updates and sommelier recommendations. Room quality feedback shows strong performance in cleanliness (4.6/5) and amenities (4.4/5), though some guests mentioned noise from street-level traffic in lower-floor rooms. Common complaints centered on Wi-Fi connectivity in corner suites and occasional delays during peak check-in hours. Competitive positioning remains strong against midtown luxury hotels, with guests frequently citing our central location and personalized service as key differentiators. Marcus Johnson's review highlighted how our staff 'remembered preferences from previous stays, creating a truly personalized experience.' Areas for improvement include expediting the check-in process during conferences and enhancing soundproofing in street-facing rooms. Guest loyalty program participation increased 18% quarter-over-quarter, indicating strong retention potential."
+    },
+    {
+      "template_id": "guest_review",
+      "template_name": "Guest Review Summary",
+      "title": "Guest Review Summary - Seaside Resort & Spa Q3 2024",
+      "content": "Seaside Resort & Spa achieved a remarkable 4.7/5 overall satisfaction rating this quarter, driven primarily by exceptional Luxury Spa Treatment services and oceanfront accommodations. Yuki Tanaka praised the 'transformative wellness experience and breathtaking sunrise views from the premium suites.' Our spa services received universal acclaim, with 98% of guests rating treatments as excellent, particularly the signature seaweed wraps and hot stone massages. Express Housekeeping maintained efficiency standards while guests were at beach activities, earning special mention for attention to detail and eco-friendly practices. Room quality scores averaged 4.8/5, with guests consistently highlighting ocean views, spacious balconies, and luxury linens. The beachfront location remains our strongest competitive advantage, with guests noting superior beach access compared to nearby resorts. Fatima Al-Rashid emphasized how 'the private beach area and attentive beach service staff created an exclusive paradise experience.' Common complaints were minimal but included occasional restaurant wait times during sunset hours and requests for more vegetarian dining options. Our Fine Dining Restaurant's seafood-focused menu received particular praise, though some guests suggested expanding breakfast hours. Competitive positioning strengthened against regional luxury resorts, with guests citing our comprehensive wellness programs and pristine beach facilities as primary reasons for choosing our property over alternatives. Environmental sustainability initiatives also resonated well with eco-conscious travelers."
+    },
+    {
+      "template_id": "guest_review",
+      "template_name": "Guest Review Summary",
+      "title": "Guest Review Summary - Marina Bay Towers Q3 2024",
+      "content": "Marina Bay Towers maintained a solid 4.1/5 satisfaction rating this quarter, with business travelers particularly appreciating our strategic location and professional amenities. Jean-Pierre Dubois highlighted the 'exceptional harbor views and seamless business center facilities that enhanced productivity during his extended stay.' Our Concierge Services team excelled in corporate guest support, arranging transportation, meeting spaces, and local business connections. The 24-Hour Room Service proved invaluable for international guests managing different time zones, with 89% rating late-night dining options as excellent. Room quality feedback showed strong performance in business amenities (4.5/5) and workspace design (4.4/5), though some guests requested updated bathroom fixtures in standard rooms. Marina views from premium floors received consistent praise, with guests noting the calming effect of waterfront scenery. Common complaints included limited parking availability during peak business seasons and occasional elevator wait times during conference periods. Express Housekeeping efficiently accommodated extended-stay business travelers, with flexible scheduling receiving positive mentions. Our competitive positioning against other business hotels strengthened due to superior meeting facilities and harbor-side location. Marcus Johnson noted how 'the combination of professional services and scenic location made business travel enjoyable rather than merely functional.' Areas for improvement include expanding parking capacity and implementing express elevator service during high-occupancy periods. Corporate group bookings increased 25% quarter-over-quarter, demonstrating strong business market appeal."
+    },
+    {
+      "template_id": "guest_review",
+      "template_name": "Guest Review Summary",
+      "title": "Guest Review Summary - Tokyo Central Business Hotel Q3 2024",
+      "content": "Tokyo Central Business Hotel achieved a 4.0/5 satisfaction rating this quarter, excelling in location convenience and cultural immersion services. Our Concierge Services team received outstanding feedback for curating authentic local experiences and providing detailed neighborhood guidance. Elena Kowalski praised how 'staff helped navigate cultural nuances and recommended hidden gems that typical tourists never discover.' The hotel's proximity to major business districts and transportation hubs consistently earned high marks, with 95% of guests rating location as excellent. Room quality maintained Japanese hospitality standards with 4.3/5 ratings, featuring traditional design elements and modern amenities. Guests particularly appreciated the compact yet efficient room layouts and city skyline views from upper floors. The Fine Dining Restaurant's fusion of international and Japanese cuisine received mixed but generally positive feedback, with guests enjoying seasonal kaiseki options. Common complaints centered on limited English-language television channels and smaller room sizes compared to Western standards, though many guests noted this aligned with Tokyo norms. Our 24-Hour Room Service adapted well to diverse international preferences while maintaining authentic Japanese options. Competitive positioning remained strong in the central business district, with Fatima Al-Rashid noting 'unmatched accessibility to both traditional temples and modern business centers.' Express Housekeeping demonstrated exceptional efficiency in the compact urban environment. International business traveler satisfaction increased, particularly among guests seeking authentic Japanese hospitality experiences rather than standardized international hotel formats."
+    },
+    {
+      "template_id": "guest_review",
+      "template_name": "Guest Review Summary",
+      "title": "Guest Review Summary - Champs-\u00c9lys\u00e9es Boutique Q3 2024",
+      "content": "Champs-\u00c9lys\u00e9es Boutique earned a distinguished 4.5/5 satisfaction rating this quarter, with guests consistently praising our intimate luxury experience and prime Parisian location. Yuki Tanaka described the property as 'capturing the essence of Parisian elegance with personalized service that larger hotels cannot match.' Our boutique approach to hospitality resonated strongly, with 96% of guests appreciating the personalized attention from our small but highly trained staff. The Fine Dining Restaurant's collaboration with local artisan suppliers received exceptional reviews, particularly the wine selection curated by Jean-Pierre Dubois during his sommelier consultation visits. Room quality achieved 4.6/5 ratings, with guests highlighting unique French d\u00e9cor, luxury linens, and meticulously restored period features. The location advantage proved decisive, with guests praising walking access to luxury shopping, museums, and iconic landmarks. Concierge Services excelled in securing exclusive experiences, from private museum tours to reservations at Michelin-starred restaurants. Common complaints were minimal but included occasional noise from the bustling avenue and limited elevator capacity during peak hours. Marcus Johnson noted how 'the authentic Parisian atmosphere and knowledgeable staff created an immersive cultural experience.' Our competitive positioning strengthened against both luxury chains and independent boutiques, with guests citing our balance of authentic charm and modern amenities. Express Housekeeping maintained boutique standards while respecting guest privacy. Repeat guest percentage increased 22%, indicating strong emotional connection with our unique Parisian hospitality approach."
+    },
+    {
+      "template_id": "service_request",
+      "template_name": "Service Request Log",
+      "title": "Service Request Log - Room 3 - Express Housekeeping",
+      "content": "SERVICE REQUEST LOG\n\nGuest Name: Yuki Tanaka\nRoom Number: Room 3\nDate/Time Submitted: March 15, 2024 - 2:45 PM\nService Requested: Express Housekeeping\nService Type: Housekeeping\nPriority Level: High\n\nREQUEST DETAILS:\nGuest reported spilled wine on carpet and requested immediate cleaning assistance. Ms. Tanaka mentioned having an important business meeting in the room at 4:30 PM and needed the area cleaned and dried before guests arrived. Additionally requested fresh towels and room tidying.\n\nSTAFF ASSIGNMENT:\nAssigned to: Maria Santos (Head Housekeeper)\nNotification Time: 2:47 PM\nResponse Time: 3:02 PM (15 minutes)\n\nACTION TAKEN:\nMaria Santos arrived with carpet cleaning equipment and supplies. Applied specialized wine stain removal solution and used portable steam cleaner. Replaced affected carpet area with quick-dry treatment. Provided fresh towel set, straightened furniture, and performed general room tidying. Ensured room was guest-ready with proper ventilation for drying.\n\nRESOLUTION:\nService completed at 3:45 PM - total resolution time 60 minutes. Stain completely removed, carpet dried and restored to original condition. Room prepared to hotel standards for guest's business meeting. Ms. Tanaka expressed satisfaction with prompt service and professional results. No additional charges applied due to expedited service level included in premium package.\n\nFOLLOW-UP:\nScheduled courtesy check at 6:00 PM to ensure continued guest satisfaction. Room inspection confirmed successful stain removal and proper carpet restoration.\n\nStatus: RESOLVED\nGuest Satisfaction: Excellent\nCompleted by: Maria Santos\nSupervisor Approval: Lisa Chang"
+    },
+    {
+      "template_id": "service_request",
+      "template_name": "Service Request Log",
+      "title": "Service Request Log - Room 1 - 24-Hour Room Service",
+      "content": "SERVICE REQUEST LOG\n\nGuest Name: Elena Kowalski\nRoom Number: Room 1\nDate/Time Submitted: March 16, 2024 - 11:30 PM\nService Requested: 24-Hour Room Service\nService Type: Food & Beverage\nPriority Level: Standard\n\nREQUEST DETAILS:\nGuest called requesting late-night dining service. Ordered: Caesar salad with grilled chicken, pan-seared salmon with roasted vegetables, chocolate lava cake, and a bottle of Sauvignon Blanc. Ms. Kowalski mentioned celebrating a business milestone and requested elegant presentation with champagne service setup.\n\nSTAFF ASSIGNMENT:\nOrder taken by: James Wilson (Night Supervisor)\nKitchen notification: 11:32 PM\nDelivery assigned to: Roberto Martinez\nEstimated preparation time: 35 minutes\n\nACTION TAKEN:\nKitchen prepared fresh meal items according to guest specifications. Roberto Martinez arranged formal room service presentation with linen tablecloth, proper silverware, and champagne flutes. Coordinated with sommelier for wine selection and proper serving temperature. Delivered order with congratulatory card from management.\n\nDELIVERY DETAILS:\nDelivered at: 12:10 AM\nTotal service time: 40 minutes\nPresentation included: Formal table setting, wine service, celebration amenities\n\nRESOLUTION:\nService completed successfully. Ms. Kowalski expressed delight with meal quality and presentation. Particularly praised the salmon preparation and professional service delivery despite late hour. Requested breakfast room service for 8:00 AM following morning, which was scheduled accordingly.\n\nADDITIONAL NOTES:\nGuest loyalty program member - applied 10% discount. Left generous gratuity for kitchen and service staff. Added special occasion note to guest profile for future reference.\n\nStatus: RESOLVED\nGuest Satisfaction: Excellent\nCompleted by: Roberto Martinez\nSupervisor Approval: James Wilson"
+    },
+    {
+      "template_id": "service_request",
+      "template_name": "Service Request Log",
+      "title": "Service Request Log - Room 5 - Concierge Services",
+      "content": "SERVICE REQUEST LOG\n\nGuest Name: Jean-Pierre Dubois\nRoom Number: Room 5\nDate/Time Submitted: March 17, 2024 - 9:15 AM\nService Requested: Concierge Services\nService Type: Guest Services\nPriority Level: High\n\nREQUEST DETAILS:\nMr. Dubois requested comprehensive city tour arrangements for family of four including himself, spouse, and two teenagers. Specifically requested: private transportation, English-speaking guide, museum reservations, lunch recommendations, and evening theater tickets. Emphasized preference for cultural and historical attractions with educational value.\n\nSTAFF ASSIGNMENT:\nAssigned to: Antoine Dubois (Senior Concierge)\nInitial consultation: 9:20 AM\nResearch and booking time allocated: 2 hours\n\nACTION TAKEN:\nAntoine coordinated with preferred tour operators and secured luxury van with professional guide fluent in French and English. Arranged VIP access to Metropolitan Museum and Natural History Museum with skip-the-line privileges. Secured reservations at highly-rated family restaurant featuring local cuisine. Obtained premium orchestra seats for evening Broadway performance.\n\nBOOKING CONFIRMATIONS:\n- Private tour guide and vehicle: 10:00 AM - 6:00 PM\n- Museum fast-track entries: 10:30 AM and 2:00 PM\n- Lunch reservation: 12:30 PM (party of 4)\n- Theater tickets: 8:00 PM performance\n\nRESOLUTION:\nAll arrangements confirmed and vouchers prepared by 11:30 AM. Provided detailed itinerary with contact numbers, maps, and emergency information. Antoine personally escorted family to lobby for tour departure and introduced them to guide. Arranged late checkout to accommodate post-theater return.\n\nFOLLOW-UP:\nScheduled check-in call at 2:00 PM to ensure smooth tour progression. Evening confirmation received that all services exceeded expectations.\n\nStatus: RESOLVED\nGuest Satisfaction: Outstanding\nCompleted by: Antoine Dubois\nSupervisor Approval: James Wilson"
+    },
+    {
+      "template_id": "service_request",
+      "template_name": "Service Request Log",
+      "title": "Service Request Log - Room 2 - Luxury Spa Treatment",
+      "content": "SERVICE REQUEST LOG\n\nGuest Name: Marcus Johnson\nRoom Number: Room 2\nDate/Time Submitted: March 18, 2024 - 1:20 PM\nService Requested: Luxury Spa Treatment\nService Type: Wellness & Spa\nPriority Level: Standard\n\nREQUEST DETAILS:\nMr. Johnson requested couples massage appointment for himself and partner, specifying deep tissue therapy for stress relief following extended business travel. Requested premium spa package including aromatherapy, hot stone treatment, and access to private relaxation suite. Preferred late afternoon appointment with post-treatment refreshments.\n\nSTAFF ASSIGNMENT:\nCoordinated by: Lisa Chang (Guest Relations Manager)\nSpa consultation: 1:30 PM\nTreatment scheduled: 4:00 PM - 6:00 PM\nTherapists assigned: Maria Santos and Roberto Martinez\n\nACTION TAKEN:\nLisa coordinated with spa facility to secure private couples suite with enhanced amenities. Arranged 90-minute deep tissue massage with hot stone therapy and custom aromatherapy blend. Prepared private relaxation area with healthy refreshments, herbal teas, and fruit selections. Ensured towel service and robes were available in guest's room size preferences.\n\nTREATMENT EXECUTION:\nService commenced punctually at 4:00 PM. Both therapists provided synchronized treatments focusing on tension relief and relaxation. Hot stone therapy applied to target stress points identified during consultation. Custom lavender and eucalyptus aromatherapy enhanced treatment effectiveness.\n\nRESOLUTION:\nTreatment completed at 6:00 PM with 30-minute relaxation period in private suite. Both guests expressed exceptional satisfaction with service quality and professionalism. Mr. Johnson specifically praised therapists' expertise in addressing chronic shoulder tension. Booked follow-up appointment for next visit.\n\nADDITIONAL SERVICES:\nProvided take-home aromatherapy samples and spa product recommendations. Arranged transportation back to room with continued spa music and ambiance.\n\nStatus: RESOLVED\nGuest Satisfaction: Exceptional\nCompleted by: Lisa Chang\nTherapist Team: Maria Santos, Roberto Martinez"
+    },
+    {
+      "template_id": "service_request",
+      "template_name": "Service Request Log",
+      "title": "Service Request Log - Room 4 - Fine Dining Restaurant",
+      "content": "SERVICE REQUEST LOG\n\nGuest Name: Fatima Al-Rashid\nRoom Number: Room 4\nDate/Time Submitted: March 19, 2024 - 6:45 PM\nService Requested: Fine Dining Restaurant\nService Type: Dining Reservation\nPriority Level: High\n\nREQUEST DETAILS:\nMs. Al-Rashid requested immediate dinner reservation for party of six celebrating her daughter's graduation. Required accommodations for dietary restrictions including vegetarian, gluten-free, and halal requirements. Requested private dining area with view, special dessert presentation, and wine pairing recommendations. Short notice due to flight delays affecting celebration timing.\n\nSTAFF ASSIGNMENT:\nHandled by: James Wilson (Restaurant Manager)\nReservation coordinator: Antoine Dubois\nChef consultation: 7:00 PM\nSeating time: 8:00 PM\n\nACTION TAKEN:\nJames immediately secured premier private dining room with city skyline view. Coordinated with executive chef to modify tasting menu accommodating all dietary restrictions while maintaining culinary excellence. Arranged special graduation cake with personalized message and coordinated wine selections from sommelier for non-restricted guests.\n\nMENU ADAPTATIONS:\n- Created separate halal protein options\n- Developed gluten-free alternatives for all courses\n- Enhanced vegetarian selections with seasonal ingredients\n- Arranged mocktail pairings for dietary-compliant guests\n\nSPECIAL ARRANGEMENTS:\nDecorated private dining area with congratulatory elements. Coordinated with pastry chef for custom graduation cake with university colors and personalized message. Arranged for photographer to capture celebration moments upon guest request.\n\nRESOLUTION:\nSeating accomplished on schedule at 8:00 PM. Six-course adapted menu received outstanding reviews from all guests. Ms. Al-Rashid expressed gratitude for exceptional accommodation of complex dietary needs on short notice. Graduation celebration exceeded expectations with seamless service throughout three-hour dining experience.\n\nFINAL NOTES:\nReceived standing ovation from table for service excellence. Added detailed dietary preference notes to guest profile for future visits.\n\nStatus: RESOLVED\nGuest Satisfaction: Outstanding\nCompleted by: James Wilson\nSupport staff: Antoine Dubois"
+    },
+    {
+      "template_id": "staff_schedule",
+      "template_name": "Staff Schedule",
+      "title": "Housekeeping Department Schedule - The Grand Palace Manhattan - Week of March 18-24, 2024",
+      "content": "HOUSEKEEPING DEPARTMENT STAFF SCHEDULE\n\nWeek of March 18-24, 2024\nDepartment Manager: Maria Santos\n\nMONDAY-FRIDAY SHIFTS:\nMaria Santos - Supervisor - 6:00 AM - 2:00 PM (All Days)\nLisa Chang - Senior Housekeeper - 7:00 AM - 3:00 PM (Mon, Wed, Fri)\nJames Wilson - Housekeeper - 8:00 AM - 4:00 PM (Mon-Thu)\nAntoine Dubois - Evening Housekeeping - 2:00 PM - 10:00 PM (Tue-Sat)\n\nWEEKEND COVERAGE:\nSaturday: Maria Santos (6:00 AM - 2:00 PM), Lisa Chang (8:00 AM - 4:00 PM)\nSunday: Antoine Dubois (9:00 AM - 5:00 PM), James Wilson (10:00 AM - 6:00 PM)\n\nSPECIAL EVENT COVERAGE:\nTuesday, March 19 - Corporate Conference (200+ attendees)\n- All staff report 30 minutes early\n- Additional Express Housekeeping service required for meeting rooms\n- Maria Santos to coordinate with Events team at 5:30 AM\n\nFriday, March 22 - VIP Guest Arrival (Penthouse Suite)\n- Lisa Chang assigned to VIP floor exclusively\n- Premium amenity setup required by 2:00 PM\n\nSTAFFING NOTES:\n- James Wilson attending housekeeping certification training Thursday afternoon - coverage arranged with part-time staff\n- Laundry equipment maintenance scheduled Wednesday 1:00-3:00 PM\n- Spring cleaning initiative begins Monday - focus on guest room deep cleaning rotation\n- All staff must complete safety protocol refresher by March 22\n\nMINIMUM COVERAGE REQUIREMENTS:\n- Weekdays: 3 staff minimum during peak hours (8:00 AM - 2:00 PM)\n- Weekends: 2 staff minimum\n- Emergency on-call: Antoine Dubois (primary), Lisa Chang (secondary)\n\nContact Maria Santos (ext. 2156) for schedule changes or emergencies."
+    },
+    {
+      "template_id": "staff_schedule",
+      "template_name": "Staff Schedule",
+      "title": "Front Desk Operations Schedule - Seaside Resort & Spa - Week of March 25-31, 2024",
+      "content": "FRONT DESK OPERATIONS SCHEDULE\n\nWeek of March 25-31, 2024\nFront Office Manager: Roberto Martinez\n\nDAILY SHIFT ASSIGNMENTS:\nRoberto Martinez - Morning Supervisor - 6:00 AM - 2:00 PM (Mon-Fri)\nLisa Chang - Day Shift Lead - 8:00 AM - 4:00 PM (Mon, Tue, Thu, Fri)\nJames Wilson - Evening Supervisor - 2:00 PM - 10:00 PM (Wed-Sun)\nMaria Santos - Night Audit - 10:00 PM - 6:00 AM (Sun-Thu)\nAntoine Dubois - Weekend Day Lead - 7:00 AM - 3:00 PM (Sat-Sun)\n\nCONCIERGE SERVICES COVERAGE:\nMon-Fri: Lisa Chang (primary), Roberto Martinez (backup)\nWeekends: Antoine Dubois (primary), James Wilson (backup)\n\nSPECIAL EVENTS & REQUIREMENTS:\nSaturday, March 30 - Resort Wedding Event (150 guests)\n- Extended check-in hours: 6:00 AM - 12:00 AM\n- All staff on property during peak arrival (2:00 PM - 6:00 PM)\n- Roberto Martinez coordinating with wedding planner\n\nSunday, March 31 - Spring Break Checkout Peak\n- Early morning coverage begins 5:00 AM (Maria Santos extended shift)\n- Express checkout stations fully staffed\n- Luggage assistance coordination required\n\nOPERATIONAL NOTES:\n- New property management system training: James Wilson (Tuesday 10:00 AM)\n- Guest satisfaction scores review meeting: Friday 3:00 PM (Roberto Martinez, Lisa Chang)\n- Spring promotional packages launch Monday - all staff briefed on new rates\n- VIP guest services protocols refresher required for weekend team\n\nCOVERAGE REQUIREMENTS:\n- Minimum 2 desk agents during business hours\n- 24-hour coverage maintained\n- Concierge Services available 7:00 AM - 9:00 PM daily\n- Backup coverage: Cross-trained housekeeping staff available for peak periods\n\nEmergency contact: Roberto Martinez (mobile: 555-0198)"
+    },
+    {
+      "template_id": "staff_schedule",
+      "template_name": "Staff Schedule",
+      "title": "Restaurant & Dining Services Schedule - Marina Bay Towers - Week of April 1-7, 2024",
+      "content": "FINE DINING RESTAURANT STAFF SCHEDULE\n\nWeek of April 1-7, 2024\nRestaurant Manager: Antoine Dubois\n\nKITCHEN STAFF:\nAntoine Dubois - Head Chef/Manager - 2:00 PM - 11:00 PM (Tue-Sat)\nRoberto Martinez - Sous Chef - 10:00 AM - 7:00 PM (Mon-Fri)\nJames Wilson - Line Cook - 3:00 PM - 11:00 PM (Wed-Sun)\nMaria Santos - Prep Cook - 7:00 AM - 3:00 PM (Mon-Fri)\n\nFRONT OF HOUSE:\nLisa Chang - Dining Room Supervisor - 4:00 PM - 12:00 AM (Mon-Sat)\nRoberto Martinez - Server/Sommelier - 5:00 PM - 12:00 AM (Fri-Sun)\nJames Wilson - Server (Brunch) - 9:00 AM - 3:00 PM (Sat-Sun)\n\nSPECIAL EVENT SCHEDULING:\nWednesday, April 3 - Wine Tasting Dinner (40 covers)\n- Antoine Dubois and Roberto Martinez collaborative menu\n- Service begins 6:30 PM, prep starts 12:00 PM\n- Lisa Chang coordinating reservations and service flow\n\nSaturday, April 6 - Hotel Anniversary Gala\n- Full team scheduled: 12:00 PM - 2:00 AM\n- Special anniversary menu prepared by Antoine Dubois\n- Additional temporary staff arranged (3 servers, 2 kitchen assistants)\n\nOPERATIONAL REQUIREMENTS:\n- Weekend brunch service: Saturday-Sunday 9:00 AM - 3:00 PM\n- Dinner service: Tuesday-Sunday 5:30 PM - 10:30 PM\n- Private dining room availability: Wednesday-Saturday\n- 24-Hour Room Service coordination with main kitchen\n\nSTAFFING NOTES:\n- Maria Santos completing food safety recertification Thursday\n- New seasonal menu launch Monday - all staff tasting at 2:00 PM\n- Inventory management training for Roberto Martinez (Tuesday morning)\n- Wine inventory audit scheduled for Sunday morning\n\nCOVERAGE STANDARDS:\n- Minimum 2 kitchen staff during service hours\n- Supervisor presence required during all dinner service\n- Room service coordination available 24/7\n\nContact Antoine Dubois (ext. 3421) for scheduling adjustments."
+    },
+    {
+      "template_id": "staff_schedule",
+      "template_name": "Staff Schedule",
+      "title": "Guest Services & Concierge Schedule - Tokyo Central Business Hotel - Week of April 8-14, 2024",
+      "content": "GUEST SERVICES & CONCIERGE DEPARTMENT SCHEDULE\n\nWeek of April 8-14, 2024\nGuest Services Manager: Lisa Chang\n\nCONCIERGE SERVICES TEAM:\nLisa Chang - Senior Concierge - 7:00 AM - 4:00 PM (Mon-Fri)\nRoberto Martinez - Evening Concierge - 2:00 PM - 10:00 PM (Mon-Fri)\nAntoine Dubois - Weekend Concierge - 8:00 AM - 6:00 PM (Sat-Sun)\nJames Wilson - Guest Relations - 9:00 AM - 5:00 PM (Tue-Sat)\n\nSPECIALTY SERVICES COVERAGE:\nBusiness Services: Lisa Chang (primary), James Wilson (backup)\nTransportation Coordination: Roberto Martinez (all shifts)\nTour & Entertainment Bookings: Antoine Dubois (weekends), Lisa Chang (weekdays)\nVIP Guest Services: Lisa Chang (primary), Roberto Martinez (evening coverage)\n\nSPECIAL EVENTS & REQUIREMENTS:\nTuesday, April 9 - International Business Summit\n- Extended concierge hours: 5:00 AM - 11:00 PM\n- Multi-language support required (Lisa Chang - Japanese, Roberto Martinez - Spanish)\n- Airport shuttle coordination every 30 minutes\n\nThursday, April 11 - Cherry Blossom Festival Tours\n- Antoine Dubois managing group bookings (advance assignment)\n- Premium tour packages available - all staff briefed on options\n- Photography service partnerships coordinated\n\nFriday, April 12 - Corporate Client VIP Arrivals\n- Red-carpet service protocol - James Wilson leading\n- Personalized welcome amenities prepared\n- Executive lounge access coordination required\n\nSERVICE STANDARDS:\n- Concierge Services available 16 hours daily (weekdays), 10 hours (weekends)\n- Response time: Guest requests acknowledged within 2 minutes\n- Follow-up required on all restaurant reservations and tour bookings\n- Daily briefing: 6:45 AM (morning shift), 1:45 PM (evening transition)\n\nTRAINING & DEVELOPMENT:\n- Cultural sensitivity workshop: Wednesday 2:00 PM (all staff)\n- New restaurant partnerships presentation: Monday 10:00 AM\n- Technology updates: Property app features (James Wilson leading)\n\nEmergency contact rotation: Lisa Chang (Mon-Wed), Roberto Martinez (Thu-Sun)"
+    },
+    {
+      "template_id": "staff_schedule",
+      "template_name": "Staff Schedule",
+      "title": "Luxury Spa Treatment Staff Schedule - Champs-\u00c9lys\u00e9es Boutique - Week of April 15-21, 2024",
+      "content": "LUXURY SPA TREATMENT DEPARTMENT SCHEDULE\n\nWeek of April 15-21, 2024\nSpa Director: Maria Santos\n\nTREATMENT STAFF ASSIGNMENTS:\nMaria Santos - Senior Therapist/Director - 9:00 AM - 6:00 PM (Mon-Fri)\nAntoine Dubois - Massage Therapist - 10:00 AM - 7:00 PM (Tue-Sat)\nLisa Chang - Facial Specialist - 11:00 AM - 8:00 PM (Wed-Sun)\nJames Wilson - Body Treatment Specialist - 12:00 PM - 8:00 PM (Thu-Mon)\nRoberto Martinez - Weekend Supervisor - 9:00 AM - 5:00 PM (Sat-Sun)\n\nSPECIALIZED SERVICES SCHEDULE:\nCouple's Treatment Suites: Antoine Dubois & Lisa Chang (Fri-Sun)\nVIP Private Spa Experiences: Maria Santos (by appointment)\nPrenatal & Wellness Therapies: Lisa Chang (Mon, Wed, Fri)\nDeep Tissue & Sports Massage: James Wilson (daily availability)\nSignature Parisian Treatments: Antoine Dubois (Tue-Thu)\n\nSPECIAL EVENTS & BOOKINGS:\nWednesday, April 17 - Bridal Party Spa Day (6 guests)\n- Full team participation 1:00 PM - 6:00 PM\n- Champagne service coordination with restaurant\n- Maria Santos overseeing luxury package execution\n\nSaturday, April 20 - Mother's Day Promotional Event\n- Extended hours: 8:00 AM - 9:00 PM\n- All treatment rooms operational\n- Special gift package presentations coordinated\n- Roberto Martinez managing weekend operations\n\nOPERATIONAL REQUIREMENTS:\n- Treatment rooms available: 10:00 AM - 8:00 PM (Mon-Fri), 9:00 AM - 9:00 PM (Weekends)\n- Consultation appointments: 30 minutes before first treatments\n- Room turnover standard: 15 minutes between guests\n- Product inventory management: Maria Santos (Monday mornings)\n\nSTAFF DEVELOPMENT:\n- New aromatherapy technique training: Tuesday 8:00 AM (Lisa Chang, Antoine Dubois)\n- Luxury customer service refresher: Friday 9:00 AM (all staff)\n- Equipment maintenance certification: James Wilson (Thursday afternoon)\n\nCOVERAGE STANDARDS:\n- Minimum 2 therapists during business hours\n- Supervisor presence required during peak periods\n- Emergency coverage: Cross-trained hotel staff available\n- Guest privacy protocols: Mandatory for all treatments\n\nContact Maria Santos (spa direct: 555-0267) for appointments and scheduling changes."
+    },
+    {
+      "template_id": "revenue_report",
+      "template_name": "Revenue Report",
+      "title": "The Grand Palace Manhattan - Q3 2024 Revenue Report",
+      "content": "REVENUE PERFORMANCE SUMMARY\n\nThe Grand Palace Manhattan achieved exceptional financial performance in Q3 2024, generating $12.8 million in total revenue, representing a 15.2% increase year-over-year. Room revenue accounted for $9.4 million, driven by strong occupancy rates averaging 87.3% throughout the quarter.\n\nROOM REVENUE BY TYPE\nDeluxe King rooms generated the highest revenue at $3.8 million (40.4% of room revenue), with an average daily rate (ADR) of $485. Executive Suites contributed $2.9 million (30.9%), maintaining premium positioning with an ADR of $1,250. Standard Queens produced $2.7 million (28.7%) with consistent occupancy of 91.2%.\n\nKEY PERFORMANCE METRICS\n\u2022 Average Daily Rate (ADR): $398 (+8.3% YoY)\n\u2022 Revenue per Available Room (RevPAR): $347 (+12.8% YoY)\n\u2022 Occupancy Rate: 87.3% (+3.2% YoY)\n\nANCILLARY REVENUE PERFORMANCE\nNon-room revenue totaled $3.4 million, with Fine Dining Restaurant leading at $1.6 million. Luxury Spa Treatment services generated $897,000, while 24-Hour Room Service contributed $623,000. Concierge Services and Express Housekeeping combined for $280,000.\n\nCHANNEL MIX ANALYSIS\nDirect bookings via hotel website represented 42% of reservations, generating highest profit margins. OTA partnerships contributed 38%, with corporate contracts accounting for 20%. The shift toward direct bookings reduced commission costs by $145,000 compared to Q2.\n\nOUTLOOK\nQ4 projections indicate continued strength with advance bookings 23% higher than previous year, supported by upcoming holiday packages and enhanced amenities."
+    },
+    {
+      "template_id": "revenue_report",
+      "template_name": "Revenue Report",
+      "title": "Seaside Resort & Spa - Monthly Revenue Analysis October 2024",
+      "content": "MONTHLY REVENUE OVERVIEW\n\nSeaside Resort & Spa recorded outstanding October performance with $4.2 million in total revenue, marking the strongest October in property history. Despite transitioning into shoulder season, strategic pricing and package offerings maintained robust financial results.\n\nACCOMMODATION REVENUE BREAKDOWN\nOceanview Suites dominated revenue generation at $1.8 million (52% of room revenue), achieving 93% occupancy with an ADR of $650. Garden View rooms contributed $1.1 million with 89% occupancy at $420 ADR. Beachfront Villas, though limited inventory, generated $650,000 with premium rates averaging $1,850 per night.\n\nPERFORMANCE INDICATORS\n\u2022 Total Room Revenue: $3.5 million\n\u2022 Overall Occupancy: 78.4%\n\u2022 Average Daily Rate: $578\n\u2022 Revenue per Available Room: $453\n\u2022 Guest Satisfaction Score: 4.7/5.0\n\nSERVICE REVENUE HIGHLIGHTS\nAncillary services contributed $700,000, with Luxury Spa Treatment leading at $285,000 due to fall wellness promotions. The Fine Dining Restaurant generated $198,000, while 24-Hour Room Service added $127,000. Concierge Services facilitated $90,000 in local experience bookings.\n\nBOOKING CHANNEL PERFORMANCE\nDirect reservations represented 48% of total bookings, yielding highest profitability. Travel advisor partnerships contributed 31%, while online travel agencies accounted for 21%. The resort's mobile app drove 18% of direct bookings, showing strong digital engagement.\n\nSTRATEGIC INSIGHTS\nWeekend packages combining spa services and dining credits achieved 97% booking rates. Corporate retreat bookings increased 34% month-over-month, indicating successful B2B marketing initiatives."
+    },
+    {
+      "template_id": "revenue_report",
+      "template_name": "Revenue Report",
+      "title": "Marina Bay Towers - Annual Revenue Report 2024",
+      "content": "ANNUAL PERFORMANCE SUMMARY\n\nMarina Bay Towers concluded 2024 with remarkable financial achievement, generating $28.6 million in total revenue and exceeding budget projections by 11.4%. The property successfully navigated market challenges while maintaining premium positioning in the luxury segment.\n\nROOM CATEGORY ANALYSIS\nPenthouse Suites led revenue generation with $8.9 million (41% of room revenue), maintaining exclusive appeal with limited availability and premium pricing averaging $2,100 ADR. Executive Floors contributed $7.2 million, while Standard Harbor View rooms generated $5.4 million through consistent high-volume occupancy.\n\nANNUAL KEY METRICS\n\u2022 Total Room Revenue: $21.7 million\n\u2022 Average Occupancy Rate: 84.6%\n\u2022 Annual ADR: $695\n\u2022 RevPAR: $588\n\u2022 Guest Retention Rate: 67%\n\nDIVERSIFIED REVENUE STREAMS\nAncillary services contributed $6.9 million annually, demonstrating successful revenue diversification. Fine Dining Restaurant operations generated $2.8 million, while Luxury Spa Treatment services produced $1.9 million. 24-Hour Room Service added $1.4 million, with Concierge Services and Express Housekeeping combining for $800,000.\n\nDISTRIBUTION CHANNEL EFFECTIVENESS\nDirect bookings represented 45% of total reservations, generating highest profit margins and reducing dependency on third-party commissions. Corporate accounts contributed 35%, while OTA partnerships accounted for 20%. The loyalty program drove 38% of repeat bookings.\n\nFUTURE STRATEGY\n2025 initiatives focus on sustainable luxury positioning, enhanced digital guest experiences, and expanded corporate partnerships. Projected revenue growth of 8-12% based on market expansion and premium service enhancement."
+    },
+    {
+      "template_id": "revenue_report",
+      "template_name": "Revenue Report",
+      "title": "Tokyo Central Business Hotel - Q4 2024 Performance Review",
+      "content": "QUARTERLY BUSINESS PERFORMANCE\n\nTokyo Central Business Hotel achieved solid Q4 2024 results with $6.8 million total revenue, demonstrating resilience in the competitive Tokyo market. Strong corporate demand and strategic pricing optimization drove consistent performance despite seasonal fluctuations.\n\nROOM REVENUE COMPOSITION\nBusiness Class rooms generated $2.9 million (54% of room revenue), serving core corporate clientele with 89% occupancy and $420 ADR. Executive Suites contributed $1.6 million through premium business traveler demand. Standard rooms produced $1.0 million, maintaining steady occupancy for cost-conscious business travelers.\n\nOPERATIONAL METRICS\n\u2022 Quarterly Room Revenue: $5.4 million\n\u2022 Average Occupancy: 82.7%\n\u2022 Average Daily Rate: \u00a562,400 ($420)\n\u2022 RevPAR: \u00a551,600 ($347)\n\u2022 Corporate Account Penetration: 78%\n\nBUSINESS SERVICE REVENUE\nSupplemental revenue totaled $1.4 million, with 24-Hour Room Service leading at $520,000 due to business traveler convenience needs. Concierge Services generated $380,000 through corporate event coordination and transportation arrangements. Express Housekeeping added $290,000 in premium service fees.\n\nCORPORATE BOOKING ANALYSIS\nCorporate contracts represented 78% of total bookings, providing revenue stability and predictable cash flow. Direct corporate bookings yielded 68% of reservations, while managed corporate travel agencies contributed 32%. Weekend leisure travel increased 15% quarter-over-quarter.\n\nSTRATEGIC POSITIONING\nThe hotel maintained competitive advantage through proximity to financial districts and premium business amenities. Technology infrastructure investments supported growing demand for hybrid meeting capabilities and enhanced connectivity services."
+    },
+    {
+      "template_id": "revenue_report",
+      "template_name": "Revenue Report",
+      "title": "Champs-\u00c9lys\u00e9es Boutique - September 2024 Revenue Analysis",
+      "content": "BOUTIQUE HOTEL PERFORMANCE REVIEW\n\nChamps-\u00c9lys\u00e9es Boutique delivered exceptional September results with \u20ac2.8 million in total revenue, capitalizing on peak Paris tourism and Fashion Week events. The property's unique positioning attracted discerning travelers seeking luxury and cultural immersion.\n\nROOM CATEGORY PERFORMANCE\nSignature Suites commanded premium positioning with \u20ac1.2 million revenue (55% of room total), achieving 91% occupancy at \u20ac850 ADR. Deluxe rooms contributed \u20ac745,000 with consistent demand from international travelers. Classic rooms generated \u20ac435,000, providing accessible luxury entry point.\n\nBOUTIQUE METRICS\n\u2022 Total Room Revenue: \u20ac2.38 million\n\u2022 Occupancy Rate: 94.2%\n\u2022 Average Daily Rate: \u20ac685\n\u2022 RevPAR: \u20ac645\n\u2022 International Guest Percentage: 87%\n\nCULTURAL EXPERIENCE REVENUE\nSpecialty services generated \u20ac420,000, with Concierge Services leading at \u20ac185,000 through exclusive cultural experiences and restaurant reservations. Fine Dining Restaurant contributed \u20ac128,000, showcasing French culinary excellence. Luxury Spa Treatment added \u20ac107,000 with European wellness traditions.\n\nGUEST ORIGIN ANALYSIS\nNorth American guests represented 42% of bookings with highest spending patterns. European travelers contributed 38%, while Asian markets accounted for 20%. Luxury travel agents channeled 45% of bookings, while direct reservations represented 35% through the hotel's curated digital presence.\n\nSEASONAL STRATEGY\nFashion Week partnerships increased average length of stay to 3.2 nights. Cultural packages combining museum access and dining experiences achieved 89% attachment rates. The property's art gallery collaboration generated additional \u20ac35,000 in commission revenue from exclusive exhibitions."
+    }
+  ],
+  "traces": [
+    {
+      "id": "room_upgrade",
+      "task": "Decide whether to upgrade Marcus Johnson to a deluxe room",
+      "steps": [
+        {
+          "thought": "Check guest loyalty status and stay history",
+          "action": "Query guest profile, loyalty tier, total stays, and lifetime value",
+          "observation": "Marcus Johnson is a Gold tier loyalty member with 23 stays over the past 3 years, generating $18,450 in lifetime value, and his profile shows a preference for quiet rooms and late checkout."
+        },
+        {
+          "thought": "Assess room availability and upgrade cost",
+          "action": "Check availability of upgrade room types and revenue displacement",
+          "observation": "The suite upgrade would result in $85 revenue displacement as it's our last available premium room during this 89% occupancy period, but Marcus has specifically requested ocean view accommodations twice in past stays."
+        },
+        {
+          "thought": "Evaluate potential guest satisfaction and loyalty impact",
+          "action": "Review guest preferences and past feedback",
+          "observation": "Guest feedback shows Marcus consistently rates his stays 4-5 stars and has mentioned in previous surveys that room upgrades significantly enhance his experience, plus he's celebrating his wedding anniversary this stay."
+        }
+      ],
+      "outcome": "Approved the suite upgrade for Marcus Johnson given his strong loyalty status, anniversary celebration, and high guest satisfaction potential, with the revenue displacement justified by long-term relationship value."
+    },
+    {
+      "id": "rate_optimization",
+      "task": "Optimize room rates for The Grand Palace Manhattan for the upcoming week",
+      "steps": [
+        {
+          "thought": "Analyze current occupancy and booking pace",
+          "action": "Query reservations and room availability for the period",
+          "observation": "Current occupancy stands at 72% for the target week with 180 rooms still available, while booking pace is 15% ahead of last week's comparable period. The reservations system shows strong demand for Monday-Wednesday with lighter bookings Thursday-Friday."
+        },
+        {
+          "thought": "Review historical performance for comparable periods",
+          "action": "Compare with same week in previous years and recent trends",
+          "observation": "Historical data reveals this week typically achieves 85% occupancy at an ADR of $485, but last year saw a 12% rate premium due to a major trade show at the Javits Center. Recent 4-week trending shows ADR growing 8% year-over-year with stable occupancy levels."
+        },
+        {
+          "thought": "Consider channel mix and segment demand",
+          "action": "Analyze booking channel distribution and guest type mix",
+          "observation": "Direct bookings account for 45% of reservations at highest rates, while OTA channels represent 35% at discounted rates and corporate contracts fill 20% of inventory. Business travelers dominate weekdays (70%) while leisure guests increase to 60% on weekends."
+        },
+        {
+          "thought": "Calculate optimal rate by room type",
+          "action": "Model revenue at different rate points and occupancy levels",
+          "observation": "Revenue optimization modeling indicates peak profitability at $520 ADR for suites and $465 for standard rooms, projecting 82% occupancy and $425,000 total room revenue. Rate elasticity analysis shows minimal demand sensitivity within a $25 range of current pricing."
+        }
+      ],
+      "outcome": "Implement dynamic pricing with base rates of $465 for standard rooms and $520 for suites, while maintaining rate parity across channels and offering limited-time 48-hour advance purchase discounts to capture remaining weekend inventory."
+    },
+    {
+      "id": "service_recovery",
+      "task": "Address service failure for Sarah Mitchell at South Beach Resort",
+      "steps": [
+        {
+          "thought": "Understand the service issue and its impact on the guest",
+          "action": "Review service request log and guest complaint details",
+          "observation": "Service request log shows Sarah Mitchell experienced a 3-hour air conditioning outage in her oceanview suite on day 2 of her 5-night stay, with room temperature reaching 82\u00b0F during peak afternoon hours. Guest complained that housekeeping was delayed in providing portable fans and front desk staff seemed dismissive of the urgency."
+        },
+        {
+          "thought": "Assess guest value and relationship history",
+          "action": "Query loyalty tier, lifetime value, and past interactions",
+          "observation": "Sarah Mitchell is a Platinum Elite member with $18,500 in lifetime value across 12 stays over the past 3 years, maintaining an average spend of $450 per night. Her guest history shows no previous complaints and consistently high satisfaction scores, with this being her first negative experience at the property."
+        },
+        {
+          "thought": "Determine appropriate recovery action",
+          "action": "Match recovery option to issue severity and guest profile",
+          "observation": "Given the significant discomfort caused to a high-value loyal guest and the staff's inadequate initial response, a comprehensive recovery package is warranted including room upgrade, dining credits, and service training follow-up. The failure severity combined with her exemplary guest profile justifies exceeding standard compensation guidelines to preserve the relationship."
+        }
+      ],
+      "outcome": "Approved immediate upgrade to Presidential Suite for remaining nights, $300 resort credit, complimentary spa treatment, and personal apology from General Manager with commitment to staff retraining."
+    }
+  ]
+}

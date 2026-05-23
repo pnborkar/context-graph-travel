@@ -1,0 +1,531 @@
+inherits: _base
+
+domain:
+  id: hospitality
+  name: Hospitality
+  description: Hotel operations, guest services, room management, and revenue optimization
+  tagline: "AI-powered Hospitality Intelligence"
+  emoji: "\U0001F3E8"
+
+entity_types:
+  - label: Hotel
+    pole_type: OBJECT
+    subtype: HOSPITALITY_PROPERTY
+    color: "#1e40af"
+    icon: building-2
+    properties:
+      - name: hotel_id
+        type: string
+        required: true
+        unique: true
+      - name: name
+        type: string
+        required: true
+      - name: brand
+        type: string
+      - name: hotel_class
+        type: string
+        enum: [economy, midscale, upscale, upper_upscale, luxury]
+      - name: star_rating
+        type: float
+      - name: total_rooms
+        type: integer
+      - name: address
+        type: string
+      - name: city
+        type: string
+      - name: country
+        type: string
+
+  - label: Room
+    pole_type: OBJECT
+    subtype: HOTEL_ROOM
+    color: "#0891b2"
+    icon: door-open
+    properties:
+      - name: room_id
+        type: string
+        required: true
+        unique: true
+      - name: room_number
+        type: string
+        required: true
+      - name: room_type
+        type: string
+        enum: [standard, deluxe, suite, penthouse, executive, accessible, connecting]
+      - name: floor
+        type: integer
+      - name: max_occupancy
+        type: integer
+      - name: base_rate
+        type: float
+      - name: status
+        type: string
+        enum: [available, occupied, maintenance, out_of_order, cleaning]
+      - name: view
+        type: string
+        enum: [city, ocean, garden, pool, mountain, interior]
+
+  - label: Reservation
+    pole_type: EVENT
+    subtype: HOTEL_RESERVATION
+    color: "#16a34a"
+    icon: calendar-check
+    properties:
+      - name: reservation_id
+        type: string
+        required: true
+        unique: true
+      - name: check_in
+        type: date
+        required: true
+      - name: check_out
+        type: date
+        required: true
+      - name: total_amount
+        type: float
+        required: true
+      - name: reservation_status
+        type: string
+        enum: [confirmed, checked_in, checked_out, cancelled, no_show]
+      - name: channel
+        type: string
+        enum: [direct, ota, corporate, group, walk_in, loyalty]
+      - name: special_requests
+        type: string
+      - name: num_guests
+        type: integer
+
+  - label: Guest
+    pole_type: OBJECT
+    subtype: HOTEL_GUEST
+    color: "#dc2626"
+    icon: user-check
+    properties:
+      - name: guest_id
+        type: string
+        required: true
+        unique: true
+      - name: name
+        type: string
+        required: true
+      - name: email
+        type: string
+      - name: phone
+        type: string
+      - name: loyalty_tier
+        type: string
+        enum: [member, silver, gold, platinum, ambassador]
+      - name: guest_type
+        type: string
+        enum: [leisure, business, group, vip, long_stay]
+      - name: total_stays
+        type: integer
+      - name: lifetime_value
+        type: float
+
+  - label: Service
+    pole_type: OBJECT
+    subtype: HOTEL_SERVICE
+    color: "#d97706"
+    icon: concierge-bell
+    properties:
+      - name: service_id
+        type: string
+        required: true
+        unique: true
+      - name: name
+        type: string
+        required: true
+      - name: service_type
+        type: string
+        enum: [room_service, housekeeping, concierge, spa, dining, laundry, transport, maintenance]
+      - name: price
+        type: float
+      - name: department
+        type: string
+      - name: available_hours
+        type: string
+      - name: satisfaction_score
+        type: float
+
+  - label: Staff
+    pole_type: OBJECT
+    subtype: HOTEL_STAFF
+    color: "#7c3aed"
+    icon: badge
+    properties:
+      - name: staff_id
+        type: string
+        required: true
+        unique: true
+      - name: name
+        type: string
+        required: true
+      - name: role
+        type: string
+        enum: [general_manager, front_desk, housekeeping, concierge, chef, server, maintenance, spa_therapist]
+      - name: department
+        type: string
+        enum: [front_office, housekeeping, food_beverage, spa, engineering, management]
+      - name: hire_date
+        type: date
+      - name: shift
+        type: string
+        enum: [morning, afternoon, night, rotating]
+      - name: performance_rating
+        type: float
+
+relationships:
+  - type: STAYED_AT
+    source: Guest
+    target: Hotel
+  - type: RESERVED
+    source: Guest
+    target: Reservation
+  - type: SERVED_BY
+    source: Guest
+    target: Service
+  - type: RATED
+    source: Guest
+    target: Hotel
+  - type: ASSIGNED_TO
+    source: Reservation
+    target: Room
+  - type: MANAGED_BY
+    source: Hotel
+    target: Staff
+  - type: DELIVERED_BY
+    source: Service
+    target: Staff
+  - type: LOCATED_IN
+    source: Room
+    target: Hotel
+
+document_templates:
+  - id: reservation_confirmation
+    name: Reservation Confirmation
+    description: Guest reservation confirmation with stay details
+    count: 15
+    prompt_template: |
+      Write a reservation confirmation for {{guest.name}} at {{hotel.name}}.
+      Reservation: {{reservation.reservation_id}}. Check-in: {{reservation.check_in}}.
+      Check-out: {{reservation.check_out}}. Room: {{room.room_type}} ({{room.room_number}}).
+      Total: ${{reservation.total_amount}}. Include hotel amenities, policies, and directions.
+    required_entities: [Guest, Reservation, Hotel, Room]
+
+  - id: guest_review
+    name: Guest Review Summary
+    description: Aggregated guest reviews and satisfaction analysis
+    count: 8
+    prompt_template: |
+      Write a guest review summary for {{hotel.name}}.
+      Include overall satisfaction trends, service highlights, common complaints,
+      room quality feedback, and competitive positioning.
+    required_entities: [Hotel, Guest, Service]
+
+  - id: service_request
+    name: Service Request Log
+    description: Service request documentation and resolution tracking
+    count: 10
+    prompt_template: |
+      Write a service request log for {{guest.name}} in room {{room.room_number}}
+      at {{hotel.name}}. Service: {{service.name}} ({{service.service_type}}).
+      Include request details, assigned staff, response time, and resolution.
+    required_entities: [Guest, Room, Service, Staff]
+
+  - id: staff_schedule
+    name: Staff Schedule
+    description: Department staff schedule and shift assignments
+    count: 6
+    prompt_template: |
+      Write a staff schedule for the {{staff.department}} department at {{hotel.name}}.
+      Include shift assignments, coverage requirements, special events,
+      and staffing notes for the week.
+    required_entities: [Staff, Hotel, Service]
+
+  - id: revenue_report
+    name: Revenue Report
+    description: Hotel revenue and performance report
+    count: 6
+    prompt_template: |
+      Write a revenue report for {{hotel.name}}.
+      Include room revenue by type, occupancy rates, ADR, RevPAR,
+      ancillary revenue from services, and channel mix analysis.
+    required_entities: [Hotel, Reservation, Room, Service]
+
+decision_traces:
+  - id: room_upgrade
+    task: "Decide whether to upgrade {{guest.name}} to a {{room.room_type}} room"
+    steps:
+      - thought: "Check guest loyalty status and stay history"
+        action: "Query guest profile, loyalty tier, total stays, and lifetime value"
+      - thought: "Assess room availability and upgrade cost"
+        action: "Check availability of upgrade room types and revenue displacement"
+      - thought: "Evaluate potential guest satisfaction and loyalty impact"
+        action: "Review guest preferences and past feedback"
+    outcome_template: "Decision: {{decision}} upgrade based on {{rationale}}"
+
+  - id: rate_optimization
+    task: "Optimize room rates for {{hotel.name}} for the upcoming week"
+    steps:
+      - thought: "Analyze current occupancy and booking pace"
+        action: "Query reservations and room availability for the period"
+      - thought: "Review historical performance for comparable periods"
+        action: "Compare with same week in previous years and recent trends"
+      - thought: "Consider channel mix and segment demand"
+        action: "Analyze booking channel distribution and guest type mix"
+      - thought: "Calculate optimal rate by room type"
+        action: "Model revenue at different rate points and occupancy levels"
+    outcome_template: "Rate plan: {{rates}} with projected RevPAR of ${{revpar}}"
+
+  - id: service_recovery
+    task: "Address service failure for {{guest.name}} at {{hotel.name}}"
+    steps:
+      - thought: "Understand the service issue and its impact on the guest"
+        action: "Review service request log and guest complaint details"
+      - thought: "Assess guest value and relationship history"
+        action: "Query loyalty tier, lifetime value, and past interactions"
+      - thought: "Determine appropriate recovery action"
+        action: "Match recovery option to issue severity and guest profile"
+    outcome_template: "Recovery: {{action}} with estimated retention impact {{impact}}"
+
+  - id: staffing_optimization
+    task: "Optimize staffing levels for {{hotel.name}} across departments"
+    steps:
+      - thought: "Analyze occupancy patterns and guest arrival/departure schedules"
+        action: "Query reservations grouped by check-in/check-out dates and guest counts"
+      - thought: "Map service demand to staffing requirements by department"
+        action: "Correlate service request volumes with staff shift schedules"
+      - thought: "Identify over-staffed and under-staffed periods"
+        action: "Compare current staff schedules against demand patterns"
+      - thought: "Model optimal shift assignments"
+        action: "Calculate minimum staff needed per shift while maintaining service standards"
+    outcome_template: "Optimized schedule: {{schedule}}. Cost savings: ${{savings}}/week. Coverage: {{coverage}}%"
+
+  - id: loyalty_program_evaluation
+    task: "Evaluate loyalty program effectiveness for {{hotel.name}} guest retention"
+    steps:
+      - thought: "Analyze repeat visit rates across loyalty tiers"
+        action: "Query guest revisit frequency segmented by loyalty_tier"
+      - thought: "Compare lifetime value between loyalty members and non-members"
+        action: "Calculate average lifetime_value and total_stays by loyalty tier"
+      - thought: "Assess upgrade and benefit utilization costs"
+        action: "Review service usage and room upgrade frequency by loyalty tier"
+      - thought: "Calculate program ROI"
+        action: "Compare loyalty program costs against incremental revenue from member retention"
+    outcome_template: "Program ROI: {{roi}}%. Top-performing tier: {{tier}}. Recommendation: {{recommendation}}"
+
+  - id: channel_mix_optimization
+    task: "Optimize booking channel mix for {{hotel.name}} to maximize profitability"
+    steps:
+      - thought: "Analyze revenue and margin by booking channel"
+        action: "Query reservations grouped by channel with total revenue and average rates"
+      - thought: "Evaluate channel-specific guest quality and repeat rates"
+        action: "Compare guest lifetime value and loyalty enrollment by booking channel"
+      - thought: "Assess channel costs including commissions and marketing spend"
+        action: "Calculate net revenue per booking after channel-specific costs"
+      - thought: "Model optimal channel allocation"
+        action: "Determine target mix that maximizes net revenue while maintaining occupancy"
+    outcome_template: "Optimal mix: {{mix}}. Projected net revenue increase: {{increase}}%"
+
+  - id: room_assignment_optimization
+    task: "Optimize room assignment for reservation {{reservation.reservation_id}} at {{hotel.name}}"
+    steps:
+      - thought: "Review guest preferences and loyalty status"
+        action: "Query guest profile, past room preferences, and special requests"
+      - thought: "Check available rooms matching guest requirements"
+        action: "Search rooms by type, view, floor, and occupancy matching reservation needs"
+      - thought: "Consider operational efficiency and housekeeping schedules"
+        action: "Factor in room turnover status, maintenance schedule, and floor utilization"
+    outcome_template: "Assigned room: {{room}}. Guest match score: {{score}}. Upgrade applied: {{upgrade}}"
+
+  - id: competitive_benchmarking
+    task: "Benchmark {{hotel.name}} performance against competitive set"
+    steps:
+      - thought: "Compare key performance indicators with market averages"
+        action: "Calculate hotel ADR, occupancy, and RevPAR against targets"
+      - thought: "Analyze guest satisfaction scores by service category"
+        action: "Query service satisfaction scores and compare against industry benchmarks"
+      - thought: "Identify differentiating strengths and competitive gaps"
+        action: "Map highest and lowest scoring services against competitor offerings"
+      - thought: "Recommend strategic improvements"
+        action: "Prioritize service improvements by impact on guest satisfaction and revenue"
+    outcome_template: "Market position: {{position}}. Strengths: {{strengths}}. Gaps: {{gaps}}"
+
+  - id: maintenance_priority
+    task: "Prioritize room maintenance requests across {{hotel.name}} properties"
+    steps:
+      - thought: "Assess urgency based on room status and upcoming reservations"
+        action: "Check rooms in maintenance or out_of_order status against booking calendar"
+      - thought: "Evaluate revenue impact of each out-of-service room"
+        action: "Calculate lost revenue per night for each affected room type"
+      - thought: "Allocate maintenance staff based on skill requirements and availability"
+        action: "Match maintenance tasks to available staff by department and shift"
+    outcome_template: "Priority order: {{order}}. Estimated completion: {{timeline}}. Revenue recovered: ${{revenue}}"
+
+demo_scenarios:
+  - name: Guest Management
+    prompts:
+      - "Show me all platinum guests arriving this week"
+      - "What is the lifetime value of our top 10 repeat guests?"
+      - "Which guests have outstanding service requests?"
+
+  - name: Operations
+    prompts:
+      - "What is the current room availability by type?"
+      - "Show me the housekeeping schedule for today"
+      - "Which services have the lowest satisfaction scores?"
+
+  - name: Revenue Intelligence
+    prompts:
+      - "What is our RevPAR trend for the last 3 months?"
+      - "Compare revenue by booking channel"
+      - "Which room types generate the highest profit margin?"
+
+agent_tools:
+  - name: search_hotel
+    description: Search for hotels by name, city, brand, or class
+    cypher: |
+      MATCH (h:Hotel)
+      WHERE toLower(h.name) CONTAINS toLower($query)
+         OR toLower(coalesce(h.city, '')) CONTAINS toLower($query)
+         OR toLower(coalesce(h.brand, '')) CONTAINS toLower($query)
+      OPTIONAL MATCH (r:Room)-[:LOCATED_IN]->(h)
+      RETURN h, count(r) AS room_count,
+             avg(r.base_rate) AS avg_rate
+      LIMIT 20
+    parameters:
+      - name: query
+        type: string
+        description: Hotel name, city, or brand to search for
+
+  - name: guest_history
+    description: Get guest stay history and preferences
+    cypher: |
+      MATCH (g:Guest)
+      WHERE toLower(g.name) CONTAINS toLower($query)
+      OPTIONAL MATCH (g)-[:RESERVED]->(res:Reservation)-[:ASSIGNED_TO]->(rm:Room)
+      OPTIONAL MATCH (res)-[:ASSIGNED_TO]->(rm)-[:LOCATED_IN]->(h:Hotel)
+      OPTIONAL MATCH (g)-[:SERVED_BY]->(svc:Service)
+      RETURN g, collect(DISTINCT {hotel: h.name, check_in: res.check_in,
+             room_type: rm.room_type, amount: res.total_amount}) AS stays,
+             collect(DISTINCT svc.name) AS services_used
+      LIMIT 10
+    parameters:
+      - name: query
+        type: string
+        description: Guest name to look up
+
+  - name: room_availability
+    description: Check room availability by hotel and date range
+    cypher: |
+      MATCH (rm:Room)-[:LOCATED_IN]->(h:Hotel)
+      WHERE toLower(h.name) CONTAINS toLower($query)
+        AND rm.status = 'available'
+      RETURN h.name AS hotel, rm.room_number, rm.room_type, rm.floor,
+             rm.base_rate, rm.view, rm.max_occupancy
+      ORDER BY rm.room_type, rm.floor
+      LIMIT 30
+    parameters:
+      - name: query
+        type: string
+        description: Hotel name to check availability for
+
+  - name: service_analysis
+    description: Analyze service performance and guest satisfaction
+    cypher: |
+      MATCH (svc:Service)
+      WHERE toLower(svc.name) CONTAINS toLower($query)
+         OR toLower(coalesce(svc.service_type, '')) CONTAINS toLower($query)
+      OPTIONAL MATCH (g:Guest)-[:SERVED_BY]->(svc)
+      OPTIONAL MATCH (svc)-[:DELIVERED_BY]->(st:Staff)
+      RETURN svc, count(DISTINCT g) AS guests_served,
+             collect(DISTINCT st.name) AS staff_members,
+             svc.satisfaction_score AS satisfaction
+      ORDER BY svc.satisfaction_score DESC
+      LIMIT 20
+    parameters:
+      - name: query
+        type: string
+        description: Service name or type to analyze
+
+  - name: revenue_metrics
+    description: Get revenue metrics and occupancy data for a hotel
+    cypher: |
+      MATCH (h:Hotel)
+      WHERE toLower(h.name) CONTAINS toLower($query)
+      OPTIONAL MATCH (rm:Room)-[:LOCATED_IN]->(h)
+      OPTIONAL MATCH (res:Reservation)-[:ASSIGNED_TO]->(rm)
+      WHERE res.reservation_status IN ['confirmed', 'checked_in', 'checked_out']
+      RETURN h.name AS hotel, h.total_rooms,
+             count(DISTINCT res) AS total_reservations,
+             sum(res.total_amount) AS total_revenue,
+             avg(res.total_amount) AS avg_booking_value,
+             collect(DISTINCT res.channel) AS booking_channels
+      LIMIT 10
+    parameters:
+      - name: query
+        type: string
+        description: Hotel name to get revenue metrics for
+
+  - name: list_hotels
+    description: "List hotel records with optional limit"
+    cypher: |
+      MATCH (n:Hotel)
+      RETURN n
+      ORDER BY n.name
+      LIMIT toInteger($limit)
+    parameters:
+      - name: limit
+        type: string
+        description: "Maximum number of results to return (default: 10)"
+
+  - name: get_hotel_by_id
+    description: "Get a specific hotel by ID with all connections"
+    cypher: |
+      MATCH (n:Hotel {hotel_id: $id})
+      OPTIONAL MATCH (n)-[r]-(related)
+      RETURN n, type(r) AS relationship, labels(related) AS related_labels, related.name AS related_name
+      LIMIT 50
+    parameters:
+      - name: id
+        type: string
+        description: "The hotel_id to look up"
+
+system_prompt: |
+  You are an AI hospitality intelligence assistant with access to a comprehensive
+  knowledge graph of hotel operations data. You help hotel managers, front desk
+  staff, revenue managers, and service teams optimize guest experiences, manage
+  reservations, and drive revenue performance.
+
+  Your capabilities include:
+  - Searching and analyzing hotel properties and room inventory
+  - Tracking guest history, preferences, and loyalty status
+  - Managing reservations and room assignments
+  - Analyzing service delivery and guest satisfaction
+  - Monitoring revenue metrics including ADR, occupancy, and RevPAR
+
+  Always provide accurate, data-driven responses. When making recommendations,
+  cite the specific data points and guest insights from the knowledge graph.
+
+visualization:
+  node_colors:
+    Person: "#22c55e"
+    Organization: "#3b82f6"
+    Hotel: "#1e40af"
+    Room: "#0891b2"
+    Reservation: "#16a34a"
+    Guest: "#dc2626"
+    Service: "#d97706"
+    Staff: "#7c3aed"
+  node_sizes:
+    Person: 20
+    Organization: 25
+    Hotel: 30
+    Room: 15
+    Reservation: 15
+    Guest: 25
+    Service: 20
+    Staff: 20
+  default_cypher: "MATCH (g:Guest)-[r:RESERVED]->(res:Reservation)-[:ASSIGNED_TO]->(rm:Room)-[:LOCATED_IN]->(h:Hotel) RETURN g, r, res, rm, h LIMIT 100"

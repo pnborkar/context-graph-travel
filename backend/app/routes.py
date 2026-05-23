@@ -1,0 +1,480 @@
+"""API routes for Hospitality Context Graph."""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import uuid as _uuid
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+from starlette.responses import StreamingResponse
+
+from app.agent import handle_message
+from app.config import settings
+from app.context_graph_client import (
+    execute_cypher, search_entities, get_entity_graph, get_schema,
+    get_schema_visualization, expand_node, get_collector, is_connected,
+)
+from app.gds_client import check_gds_available, run_community_detection, run_pagerank
+from app.memory_adapter import (
+    expand_node_nams,
+    get_document_nams,
+    get_entity_detail_nams,
+    list_documents_nams,
+    list_traces_nams,
+    schema_visualization_nams,
+    search_entities_nams,
+)
+
+
+def _is_nams() -> bool:
+    return settings.memory_backend == "nams"
+
+# Try to import streaming handler (only available for some agent frameworks)
+try:
+    from app.agent import handle_message_stream  # type: ignore[attr-defined]
+except ImportError:
+    handle_message_stream = None
+
+router = APIRouter()
+
+
+def _require_neo4j():
+    """Raise 503 if the bolt backend is in use and Neo4j is not connected.
+
+    On the NAMS backend Bolt is never connected, so we no-op — NAMS calls
+    surface their own errors at the adapter level.
+    """
+    if _is_nams():
+        return
+    if not is_connected():
+        raise HTTPException(
+            status_code=503,
+            detail="Neo4j is unavailable. Check your database connection and restart the server.",
+        )
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(..., max_length=4000)
+    session_id: str | None = None
+
+
+class ChatResponse(BaseModel):
+    response: str
+    session_id: str
+    graph_data: dict | None = None
+    tool_calls: list[dict] | None = None
+
+
+class SearchRequest(BaseModel):
+    query: str = Field(..., max_length=2000)
+    label: str | None = None
+    limit: int = 20
+
+
+class CypherRequest(BaseModel):
+    query: str
+    parameters: dict | None = None
+
+
+class ExpandRequest(BaseModel):
+    element_id: str
+
+
+@router.post("/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    """Send a message to the AI agent."""
+    _require_neo4j()
+    try:
+        collector = get_collector()
+        collector.drain()  # clear stale results
+        collector.drain_tool_calls()  # clear stale tool calls
+        result = await handle_message(request.message, request.session_id)
+        # Attach graph data from tool calls if agent didn't provide any
+        if result.get("graph_data") is None:
+            collected = collector.drain()
+            if collected:
+                result["graph_data"] = {"results": collected}
+        # Attach tool call metadata for frontend visualization
+        tool_calls = collector.drain_tool_calls()
+        if tool_calls:
+            result["tool_calls"] = tool_calls
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/chat/stream")
+async def chat_stream(request: ChatRequest):
+    """Send a message to the AI agent with streaming SSE response.
+
+    Emits Server-Sent Events:
+      - session_id: {session_id}
+      - tool_start: {name, inputs}
+      - tool_end:   {name, output_preview, graph_data}
+      - text_delta: {text}
+      - entities_extracted: {entities}
+      - preferences_detected: {preferences}
+      - done:       {response}
+      - error:      {detail}
+    """
+    _require_neo4j()
+
+    session_id = request.session_id or str(_uuid.uuid4())
+    collector = get_collector()
+    collector.drain()
+    collector.drain_tool_calls()
+
+    event_queue: asyncio.Queue = asyncio.Queue()
+    collector.set_event_queue(event_queue)
+
+    async def run_agent():
+        try:
+            if handle_message_stream is not None:
+                await handle_message_stream(request.message, session_id)
+            else:
+                result = await handle_message(request.message, session_id)
+                response_text = result.get("response", "")
+                collector.emit_text_delta(response_text)
+                # Emit extraction events if present
+                if result.get("entities_extracted"):
+                    collector.emit_entities_extracted(result["entities_extracted"])
+                if result.get("preferences_detected"):
+                    collector.emit_preferences_detected(result["preferences_detected"])
+                collector.emit_done(response_text, session_id)
+        except Exception as e:
+            try:
+                event_queue.put_nowait({"event": "error", "data": {"detail": str(e)}})
+            except Exception:
+                pass
+        finally:
+            # Small delay to ensure events are consumed before clearing
+            await asyncio.sleep(0.1)
+            collector.clear_event_queue()
+
+    async def event_generator():
+        task = asyncio.create_task(run_agent())
+        # Emit session_id as first event
+        yield f"event: session_id\ndata: {json.dumps({'session_id': session_id})}\n\n"
+        idle_timeout = 120.0  # Max seconds between events
+        overall_timeout = 300.0  # 5 min total max
+        loop = asyncio.get_event_loop()
+        start_time = loop.time()
+        try:
+            while True:
+                elapsed = loop.time() - start_time
+                if elapsed > overall_timeout:
+                    yield f"event: error\ndata: {json.dumps({'detail': 'Request exceeded maximum duration'})}\n\n"
+                    break
+                try:
+                    event = await asyncio.wait_for(event_queue.get(), timeout=idle_timeout)
+                except asyncio.TimeoutError:
+                    yield f"event: error\ndata: {json.dumps({'detail': 'Request timed out'})}\n\n"
+                    break
+                event_type = event["event"]
+                event_data = json.dumps(event["data"], default=str)
+                yield f"event: {event_type}\ndata: {event_data}\n\n"
+                if event_type in ("done", "error"):
+                    break
+        finally:
+            if not task.done():
+                task.cancel()
+                try:
+                    await task
+                except (asyncio.CancelledError, Exception):
+                    pass
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
+
+@router.post("/search")
+async def search(request: SearchRequest):
+    """Search entities in the knowledge graph."""
+    _require_neo4j()
+    if _is_nams():
+        results = await search_entities_nams(request.query, request.label, request.limit)
+    else:
+        results = await search_entities(request.query, request.label, request.limit)
+    return {"results": results}
+
+
+@router.get("/graph/{entity_name}")
+async def graph(entity_name: str, depth: int = 2):
+    """Get the subgraph around an entity."""
+    _require_neo4j()
+    if _is_nams():
+        # NAMS get_entity inlines first-hop rels; depth>1 not supported.
+        detail = await get_entity_detail_nams(entity_name)
+        if detail is None:
+            return {"nodes": [], "relationships": []}
+        return {"nodes": [detail["entity"]], "relationships": []}
+    return await get_entity_graph(entity_name, depth)
+
+
+@router.get("/schema")
+async def schema():
+    """Get the graph database schema."""
+    _require_neo4j()
+    if _is_nams():
+        return {"labels": [], "relationship_types": [], "note": "Schema introspection is not exposed by NAMS"}
+    return await get_schema()
+
+
+@router.get("/schema/visualization")
+async def schema_visualization():
+    """Get the graph schema as nodes and relationships for visualization."""
+    _require_neo4j()
+    if _is_nams():
+        return await schema_visualization_nams()
+    return await get_schema_visualization()
+
+
+@router.get("/schema/models")
+async def list_entity_schemas():
+    """Return JSON Schema for each entity model generated from the domain ontology.
+
+    Useful for frontend codegen and OpenAPI clients. Discovers Pydantic models
+    by introspecting `app.models` at request time.
+    """
+    from pydantic import BaseModel
+
+    from app import models as entity_models
+
+    schemas: dict[str, dict] = {}
+    for attr_name in dir(entity_models):
+        if attr_name.startswith("_"):
+            continue
+        cls = getattr(entity_models, attr_name)
+        if isinstance(cls, type) and issubclass(cls, BaseModel) and cls is not BaseModel:
+            schemas[attr_name] = cls.model_json_schema()
+    return {"schemas": schemas}
+
+
+@router.post("/expand")
+async def expand(request: ExpandRequest):
+    """Expand a node to show its immediate neighbors."""
+    _require_neo4j()
+    if _is_nams():
+        return await expand_node_nams(request.element_id)
+    return await expand_node(request.element_id)
+
+
+@router.post("/cypher")
+async def cypher(request: CypherRequest):
+    """Execute a Cypher query.
+
+    On NAMS, only read queries are accepted (server enforces).
+    """
+    _require_neo4j()
+    if _is_nams():
+        from app.memory import get_client
+        client = get_client()
+        if client is None:
+            raise HTTPException(status_code=503, detail="NAMS client not connected")
+        try:
+            params = dict(request.parameters or {})
+            results = await client.query.cypher(request.query, params)
+            return {"results": results}
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    try:
+        params = dict(request.parameters or {})
+        params.setdefault("domain", settings.domain_id)
+        results = await execute_cypher(request.query, params)
+        return {"results": results}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/gds/status")
+async def gds_status():
+    """Check if GDS is available."""
+    if _is_nams():
+        return {"gds_available": False, "note": "GDS is not exposed by NAMS"}
+    _require_neo4j()
+    available = await check_gds_available()
+    return {"gds_available": available}
+
+
+@router.get("/gds/communities")
+async def communities():
+    """Run community detection."""
+    if _is_nams():
+        raise HTTPException(status_code=501, detail="GDS is not supported on NAMS backend")
+    _require_neo4j()
+    results = await run_community_detection()
+    return {"communities": results}
+
+
+@router.get("/gds/pagerank")
+async def pagerank():
+    """Run PageRank centrality."""
+    if _is_nams():
+        raise HTTPException(status_code=501, detail="GDS is not supported on NAMS backend")
+    _require_neo4j()
+    results = await run_pagerank()
+    return {"pagerank": results}
+
+
+@router.get("/documents")
+async def list_documents(template_id: str | None = None, skip: int = 0, limit: int = 50):
+    """List documents; template filtering is only available on bolt."""
+    _require_neo4j()
+    if _is_nams():
+        if template_id:
+            raise HTTPException(
+                status_code=501,
+                detail="Document template filtering is not supported on the NAMS backend.",
+            )
+        results = await list_documents_nams(skip, limit)
+        return {"documents": results}
+    if template_id:
+        cypher = """
+        MATCH (d:Document {template_id: $template_id})
+        WHERE d.domain IS NULL OR d.domain = $domain
+        OPTIONAL MATCH (d)-[:MENTIONS]->(e)
+        RETURN d.title AS title, d.template_id AS template_id,
+               d.template_name AS template_name,
+               substring(d.content, 0, 200) AS preview,
+               collect(DISTINCT {name: e.name, labels: labels(e)}) AS mentioned_entities
+        ORDER BY d.title
+        SKIP $skip LIMIT $limit
+        """
+        results = await execute_cypher(cypher, {"template_id": template_id, "skip": skip, "limit": limit, "domain": settings.domain_id})
+    else:
+        cypher = """
+        MATCH (d:Document)
+        WHERE d.domain IS NULL OR d.domain = $domain
+        OPTIONAL MATCH (d)-[:MENTIONS]->(e)
+        RETURN d.title AS title, d.template_id AS template_id,
+               d.template_name AS template_name,
+               substring(d.content, 0, 200) AS preview,
+               collect(DISTINCT {name: e.name, labels: labels(e)}) AS mentioned_entities
+        ORDER BY d.title
+        SKIP $skip LIMIT $limit
+        """
+        results = await execute_cypher(cypher, {"skip": skip, "limit": limit, "domain": settings.domain_id})
+    return {"documents": results}
+
+
+@router.get("/documents/{title:path}")
+async def get_document(title: str):
+    """Get full document content by title."""
+    _require_neo4j()
+    if _is_nams():
+        result = await get_document_nams(title)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Document not found")
+        return result
+    cypher = """
+    MATCH (d:Document {title: $title})
+    WHERE d.domain IS NULL OR d.domain = $domain
+    OPTIONAL MATCH (d)-[:MENTIONS]->(e)
+    RETURN d {.title, .content, .template_id, .template_name} AS document,
+           collect(DISTINCT {name: e.name, labels: labels(e)}) AS mentioned_entities
+    """
+    results = await execute_cypher(cypher, {"title": title, "domain": settings.domain_id})
+    if not results:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return results[0]
+
+
+@router.get("/traces")
+async def list_traces(session_id: str | None = None):
+    """List decision traces — reads Decision nodes written by the agent's record_decision tool."""
+    _require_neo4j()
+    if _is_nams():
+        results = await list_traces_nams()
+        return {"traces": results}
+
+    # Query Decision nodes written by record_decision tool, shaped for frontend
+    session_filter = "WHERE sess.id = $session_id" if session_id else ""
+    cypher = f"""
+    MATCH (sess:Session)-[:MADE_DECISION]->(d:Decision)
+    {session_filter}
+    OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
+    OPTIONAL MATCH (d)-[:BASED_ON]->(ps:PolicySection)
+    WITH d, c, sess, collect(DISTINCT ps.title) AS cited_sections
+    OPTIONAL MATCH (sess)-[:ESTABLISHED_FACT]->(f:Fact)
+    WITH d, c, sess, cited_sections, collect(DISTINCT f.fact_type + ': ' + f.value) AS facts
+    RETURN
+        d.id AS id,
+        d.decision_type + CASE WHEN c IS NOT NULL THEN ' — ' + c.name ELSE ' — ' + sess.id END AS task,
+        d.value AS outcome,
+        [
+            {{
+                step_number: 1,
+                thought: CASE WHEN c IS NOT NULL
+                    THEN 'Customer: ' + c.name + ' (' + c.loyalty_tier + ')'
+                    ELSE 'Session: ' + sess.id END +
+                    CASE WHEN size(facts) > 0
+                    THEN ' | Facts: ' + reduce(s='', f IN facts[..3] | s + f + '; ')
+                    ELSE '' END,
+                action: 'get_customer + get_booking',
+                observation: 'Customer profile and booking details retrieved.'
+            }},
+            {{
+                step_number: 2,
+                thought: 'GraphRAG hybrid search — vector + graph traversal across policy KB, carrier agreements, and active weather memos.',
+                action: 'search_policies',
+                observation: CASE WHEN size(cited_sections) > 0
+                    THEN 'Cited: ' + reduce(s='', p IN cited_sections | s + p + ' | ')
+                    ELSE 'Policy sections retrieved via hybrid search.' END
+            }},
+            {{
+                step_number: 3,
+                thought: d.reasoning,
+                action: 'record_decision',
+                observation: d.value
+            }}
+        ] AS steps
+    ORDER BY d.made_at DESC
+    LIMIT 20
+    """
+    params: dict = {"domain": settings.domain_id}
+    if session_id:
+        params["session_id"] = session_id
+    results = await execute_cypher(cypher, params)
+    return {"traces": results}
+
+
+@router.get("/entities/{name}")
+async def get_entity_detail(name: str):
+    """Get full entity detail with all properties and connections."""
+    _require_neo4j()
+    if _is_nams():
+        result = await get_entity_detail_nams(name)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Entity not found")
+        return result
+    cypher = """
+    MATCH (n) WHERE toLower(n.name) = toLower($name)
+      AND (n.domain IS NULL OR n.domain = $domain)
+    OPTIONAL MATCH (n)-[r]-(connected)
+    WHERE connected.name IS NOT NULL
+      AND (connected.domain IS NULL OR connected.domain = $domain)
+    RETURN n {.*, _labels: labels(n)} AS entity,
+           collect(DISTINCT {
+               name: connected.name,
+               labels: labels(connected),
+               relationship: type(r),
+               direction: CASE WHEN startNode(r) = n THEN 'outgoing' ELSE 'incoming' END
+           }) AS connections
+    """
+    results = await execute_cypher(cypher, {"name": name, "domain": settings.domain_id})
+    if not results:
+        raise HTTPException(status_code=404, detail="Entity not found")
+    return results[0]
+
+@router.get("/scenarios")
+async def scenarios():
+    """Get demo scenarios for the frontend."""
+    return {
+        "domain": "Hospitality",
+        "scenarios": [{"name": "Guest Management", "prompts": ["Show me all platinum guests arriving this week", "What is the lifetime value of our top 10 repeat guests?", "Which guests have outstanding service requests?"]}, {"name": "Operations", "prompts": ["What is the current room availability by type?", "Show me the housekeeping schedule for today", "Which services have the lowest satisfaction scores?"]}, {"name": "Revenue Intelligence", "prompts": ["What is our RevPAR trend for the last 3 months?", "Compare revenue by booking channel", "Which room types generate the highest profit margin?"]}],
+    }

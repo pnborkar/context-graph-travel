@@ -1,0 +1,611 @@
+import { test, expect } from "@playwright/test";
+
+const BASE_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const API_URL = process.env.API_URL || "http://localhost:8000";
+
+// Timeout for LLM responses — these can be slow
+const CHAT_TIMEOUT = 120_000;
+
+test.describe("Hospitality Context Graph", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(BASE_URL);
+  });
+
+  // --------------------------------------------------------------------------
+  // Basic page load
+  // --------------------------------------------------------------------------
+
+  test("page loads with header and chat panel", async ({ page }) => {
+    // Header with domain name
+    await expect(page.getByRole("heading", { name: /Hospitality/i })).toBeVisible();
+
+    // Chat heading
+    await expect(page.getByRole("heading", { name: /chat/i })).toBeVisible();
+
+    // Chat input
+    await expect(page.getByPlaceholder(/ask about/i)).toBeVisible();
+  });
+
+  test("demo scenario badges are visible", async ({ page }) => {
+    // Should show demo scenario section
+    await expect(page.getByText(/try these/i)).toBeVisible();
+
+    // Should have clickable badges
+    const badges = page.locator("[role='group'] span[data-scope='badge'], .chakra-badge").filter({ hasText: /.{10,}/ });
+    const count = await badges.count();
+    expect(count).toBeGreaterThan(0);
+  });
+
+  // --------------------------------------------------------------------------
+  // Backend health
+  // --------------------------------------------------------------------------
+
+  test("backend health check returns ok or degraded", async ({ request }) => {
+    const res = await request.get(`${API_URL}/health`);
+    expect(res.ok()).toBeTruthy();
+    const body = await res.json();
+    expect(["ok", "degraded"]).toContain(body.status);
+    expect(body.domain).toBe("hospitality");
+  });
+
+  test("connection status indicator visible", async ({ page }) => {
+    // The header contains a colored status dot
+    const dot = page.locator("[title*='Backend']");
+    await expect(dot).toBeVisible({ timeout: 10_000 });
+  });
+
+  // --------------------------------------------------------------------------
+  // Schema visualization
+  // --------------------------------------------------------------------------
+
+  test("graph loads schema view on startup", async ({ page }) => {
+    // The graph panel shows "Schema view" text
+    await expect(page.getByText(/schema view/i)).toBeVisible({ timeout: 15_000 });
+
+    // Legend badges should be visible
+    const legend = page.locator("[class*='badge']").filter({ hasText: /^[A-Z]/ });
+    await expect(legend.first()).toBeVisible({ timeout: 10_000 });
+  });
+
+  // --------------------------------------------------------------------------
+  // Chat interaction with demo prompts
+  // --------------------------------------------------------------------------
+
+  test("demo prompt: Guest Management — sends and gets response", async ({ page }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    // Type the prompt
+    const input = page.getByPlaceholder(/ask about/i);
+    await input.fill("Show me all platinum guests arriving this week");
+    await page.getByRole("button", { name: /send/i }).click();
+
+    // Should show user message
+    await expect(page.getByText("Show me all platinum guests arriving this week").first()).toBeVisible();
+
+    // Should show loading state (thinking or tool calls)
+    await expect(
+      page.getByText(/thinking|running|generating/i).first()
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Wait for assistant response (not an error)
+    const assistantResponse = page.locator(".markdown-content").last();
+    await expect(assistantResponse).toBeVisible({ timeout: CHAT_TIMEOUT });
+
+    // Response should have meaningful content (not empty, not just an error)
+    const text = await assistantResponse.textContent();
+    expect(text).toBeTruthy();
+    expect(text!.length).toBeGreaterThan(20);
+
+    // Should NOT be an error message
+    expect(text!.toLowerCase()).not.toContain("cannot reach the backend");
+  });
+
+  test("demo prompt: Operations — sends and gets response", async ({ page }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    // Type the prompt
+    const input = page.getByPlaceholder(/ask about/i);
+    await input.fill("What is the current room availability by type?");
+    await page.getByRole("button", { name: /send/i }).click();
+
+    // Should show user message
+    await expect(page.getByText("What is the current room availability by type?").first()).toBeVisible();
+
+    // Should show loading state (thinking or tool calls)
+    await expect(
+      page.getByText(/thinking|running|generating/i).first()
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Wait for assistant response (not an error)
+    const assistantResponse = page.locator(".markdown-content").last();
+    await expect(assistantResponse).toBeVisible({ timeout: CHAT_TIMEOUT });
+
+    // Response should have meaningful content (not empty, not just an error)
+    const text = await assistantResponse.textContent();
+    expect(text).toBeTruthy();
+    expect(text!.length).toBeGreaterThan(20);
+
+    // Should NOT be an error message
+    expect(text!.toLowerCase()).not.toContain("cannot reach the backend");
+  });
+
+  test("demo prompt: Revenue Intelligence — sends and gets response", async ({ page }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    // Type the prompt
+    const input = page.getByPlaceholder(/ask about/i);
+    await input.fill("What is our RevPAR trend for the last 3 months?");
+    await page.getByRole("button", { name: /send/i }).click();
+
+    // Should show user message
+    await expect(page.getByText("What is our RevPAR trend for the last 3 months?").first()).toBeVisible();
+
+    // Should show loading state (thinking or tool calls)
+    await expect(
+      page.getByText(/thinking|running|generating/i).first()
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Wait for assistant response (not an error)
+    const assistantResponse = page.locator(".markdown-content").last();
+    await expect(assistantResponse).toBeVisible({ timeout: CHAT_TIMEOUT });
+
+    // Response should have meaningful content (not empty, not just an error)
+    const text = await assistantResponse.textContent();
+    expect(text).toBeTruthy();
+    expect(text!.length).toBeGreaterThan(20);
+
+    // Should NOT be an error message
+    expect(text!.toLowerCase()).not.toContain("cannot reach the backend");
+  });
+
+  // --------------------------------------------------------------------------
+  // Demo badge click flow
+  // --------------------------------------------------------------------------
+
+  test("clicking a demo badge sends the prompt", async ({ page }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    // Find and click the first demo badge
+    const badge = page.locator(".chakra-badge[title]").first();
+    const promptText = await badge.getAttribute("title");
+    expect(promptText).toBeTruthy();
+
+    await badge.click();
+
+    // Should show user message with the badge prompt
+    await expect(page.getByText(promptText!).first()).toBeVisible({ timeout: 5_000 });
+
+    // Should eventually get an assistant response
+    const assistantResponse = page.locator(".markdown-content").last();
+    await expect(assistantResponse).toBeVisible({ timeout: CHAT_TIMEOUT });
+  });
+
+  // --------------------------------------------------------------------------
+  // Tool call visualization
+  // --------------------------------------------------------------------------
+
+  test("tool calls show timeline with status indicators", async ({ page }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    // Send a prompt that should trigger tool calls
+    const input = page.getByPlaceholder(/ask about/i);
+    await input.fill("Show me all platinum guests arriving this week");
+    await page.getByRole("button", { name: /send/i }).click();
+
+    // Wait for at least one tool call badge to appear
+    const toolBadge = page.locator("[data-scope='badge']").filter({ hasText: /execute_cypher|get_schema|search_hotel/ });
+    await expect(toolBadge.first()).toBeVisible({ timeout: 30_000 });
+  });
+
+  // --------------------------------------------------------------------------
+  // Graph updates from chat
+  // --------------------------------------------------------------------------
+
+  test("graph visualization updates after agent query", async ({ page }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    // The graph starts in schema view
+    await expect(page.getByText(/schema view/i)).toBeVisible({ timeout: 15_000 });
+
+    // Send a query that should return graph data
+    const input = page.getByPlaceholder(/ask about/i);
+    await input.fill("Show me all platinum guests arriving this week");
+    await page.getByRole("button", { name: /send/i }).click();
+
+    // Wait for the graph to switch from schema to data view
+    // (the text changes from "Schema view" to entity relationships)
+    await expect(page.getByText(/entity relationships/i)).toBeVisible({ timeout: CHAT_TIMEOUT });
+  });
+
+  // --------------------------------------------------------------------------
+  // New conversation
+  // --------------------------------------------------------------------------
+
+  test("new conversation button resets chat", async ({ page }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    // Send a message first
+    const input = page.getByPlaceholder(/ask about/i);
+    await input.fill("Hello");
+    await page.getByRole("button", { name: /send/i }).click();
+
+    // Wait for response
+    await expect(page.locator(".markdown-content").last()).toBeVisible({ timeout: CHAT_TIMEOUT });
+
+    // Click "New" button
+    await page.getByRole("button", { name: /new/i }).click();
+
+    // Demo scenarios should be visible again
+    await expect(page.getByText(/try these/i)).toBeVisible();
+  });
+
+  // --------------------------------------------------------------------------
+  // Mobile navigation (viewport 375px)
+  // --------------------------------------------------------------------------
+
+  test("mobile: bottom tab bar switches panels", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(BASE_URL);
+
+    // Chat should be visible by default
+    await expect(page.getByPlaceholder(/ask about/i)).toBeVisible();
+
+    // Bottom tab bar should be visible
+    const graphTab = page.getByRole("button", { name: /graph panel/i });
+    await expect(graphTab).toBeVisible();
+
+    // Click graph tab
+    await graphTab.click();
+
+    // Graph content should now be visible
+    await expect(page.getByText(/schema view|knowledge graph/i).first()).toBeVisible({ timeout: 10_000 });
+
+    // Click details tab
+    const detailsTab = page.getByRole("button", { name: /details panel/i });
+    await detailsTab.click();
+
+    // Traces/Documents tabs should be visible
+    await expect(page.getByText(/traces/i).first()).toBeVisible();
+  });
+
+  // --------------------------------------------------------------------------
+  // Decision trace panel (right side, "Traces" tab)
+  // --------------------------------------------------------------------------
+
+  test("decision traces panel loads and shows demo traces", async ({ page }) => {
+    // The /traces endpoint should return at least one trace from the demo
+    // fixture. The panel may be behind a tab on smaller viewports.
+    const tracesTab = page.getByRole("tab", { name: /traces/i }).first();
+    if (await tracesTab.count() > 0) {
+      await tracesTab.click().catch(() => { /* may already be active */ });
+    }
+
+    // Wait for the panel header — it identifies the panel even when empty.
+    await expect(page.getByText(/decision traces/i).first()).toBeVisible({ timeout: 10_000 });
+
+    // Either the empty-state message appears, or at least one trace card.
+    const emptyState = page.getByText(/no decision traces yet/i);
+    const traceCards = page.locator("[role='button']").filter({ hasText: /step/i });
+    const emptyVisible = await emptyState.isVisible().catch(() => false);
+    if (!emptyVisible) {
+      const count = await traceCards.count();
+      expect(count).toBeGreaterThan(0);
+
+      // Click the first trace card and verify the step detail panel opens.
+      await traceCards.first().click();
+      // Detail panel should render thought/action labels.
+      await expect(page.getByText(/outcome/i).first()).toBeVisible({ timeout: 5_000 });
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // Document browser (right side, "Documents" tab)
+  // --------------------------------------------------------------------------
+
+  test("document browser loads and renders a document detail view", async ({ page }) => {
+    const docsTab = page.getByRole("tab", { name: /documents/i }).first();
+    if (await docsTab.count() > 0) {
+      await docsTab.click();
+    }
+
+    await expect(page.getByText(/^documents$/i).first()).toBeVisible({ timeout: 10_000 });
+
+    // Either empty state or a populated list — demo data should populate it.
+    const emptyState = page.getByText(/no documents/i);
+    const emptyVisible = await emptyState.isVisible().catch(() => false);
+    if (!emptyVisible) {
+      // Click the first document card.
+      const firstDoc = page.locator("[role='button']").filter({ hasText: /\w+/ }).first();
+      await firstDoc.click({ trial: false });
+      // ReactMarkdown rendering produces semantic markdown — at least one
+      // paragraph or heading should be visible.
+      await expect(page.locator("p, h1, h2, h3").first()).toBeVisible({ timeout: 5_000 });
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // Regression tests for v0.12.0 / v0.13.0 frontend bug fixes
+  // --------------------------------------------------------------------------
+
+  test("composite keys do not trigger React duplicate-key warnings across renders", async ({ page }) => {
+    // Send a few prompts in sequence. React logs a console.error if entity,
+    // preference, or tool-call badges collide on a non-unique key — pre-v0.13.0
+    // they used `key={i}` (the array index), which would fire here.
+    const keyWarnings: string[] = [];
+    page.on("console", (msg) => {
+      if (msg.type() === "warning" || msg.type() === "error") {
+        const text = msg.text();
+        if (
+          text.includes("Encountered two children with the same key") ||
+          text.includes("Each child in a list should have a unique") ||
+          text.includes("key prop")
+        ) {
+          keyWarnings.push(text);
+        }
+      }
+    });
+
+    const input = page.locator("textarea, input[type='text']").first();
+    if (await input.count() === 0) test.skip(true, "no chat input found");
+
+    for (const prompt of [
+      "Tell me about the data",
+      "What entities exist here?",
+      "Show me a summary of recent activity",
+    ]) {
+      await input.fill(prompt);
+      await page.keyboard.press("Enter");
+      // Allow streaming + tool-call badges to flush before sending the next.
+      await page.waitForTimeout(3000);
+    }
+    expect(keyWarnings).toEqual([]);
+  });
+
+  test("decision trace panel step list renders without runtime errors", async ({ page }) => {
+    const pageErrors: string[] = [];
+    page.on("pageerror", (err) => pageErrors.push(err.message));
+
+    const tracesTab = page.getByRole("tab", { name: /traces/i }).first();
+    if (await tracesTab.count() > 0) {
+      await tracesTab.click().catch(() => { /* may already be active */ });
+    }
+
+    const traceCards = page.locator("[role='button']").filter({ hasText: /step/i });
+    if (await traceCards.count() === 0) {
+      test.skip(true, "no demo traces — fixture may be empty");
+    }
+
+    await traceCards.first().click();
+    await page.waitForTimeout(500);
+    // No uncaught exceptions from rendering the step list.
+    expect(pageErrors).toEqual([]);
+  });
+
+  test("document browser entity badges render without runtime errors", async ({ page }) => {
+    const pageErrors: string[] = [];
+    page.on("pageerror", (err) => pageErrors.push(err.message));
+
+    const docsTab = page.getByRole("tab", { name: /documents/i }).first();
+    if (await docsTab.count() > 0) await docsTab.click();
+
+    const firstDoc = page.locator("[role='button']").filter({ hasText: /\w+/ }).first();
+    if (await firstDoc.count() === 0) {
+      test.skip(true, "no demo documents — fixture may be empty");
+    }
+
+    await firstDoc.click({ trial: false });
+    await page.waitForTimeout(500);
+    expect(pageErrors).toEqual([]);
+  });
+
+  // --------------------------------------------------------------------------
+  // API-level prompt quality checks
+  // --------------------------------------------------------------------------
+
+  test("API: Guest Management prompt 1 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "Show me all platinum guests arriving this week" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Guest Management prompt 2 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "What is the lifetime value of our top 10 repeat guests?" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Guest Management prompt 3 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "Which guests have outstanding service requests?" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Operations prompt 1 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "What is the current room availability by type?" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Operations prompt 2 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "Show me the housekeeping schedule for today" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Operations prompt 3 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "Which services have the lowest satisfaction scores?" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Revenue Intelligence prompt 1 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "What is our RevPAR trend for the last 3 months?" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Revenue Intelligence prompt 2 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "Compare revenue by booking channel" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+
+  test("API: Revenue Intelligence prompt 3 returns quality response", async ({ request }) => {
+    test.setTimeout(CHAT_TIMEOUT);
+
+    const res = await request.post(`${API_URL}/api/chat`, {
+      data: { message: "Which room types generate the highest profit margin?" },
+    });
+    expect(res.ok()).toBeTruthy();
+
+    const body = await res.json();
+
+    // Should have a response string
+    expect(body.response).toBeTruthy();
+    expect(typeof body.response).toBe("string");
+    expect(body.response.length).toBeGreaterThan(50);
+
+    // Should have a session_id
+    expect(body.session_id).toBeTruthy();
+
+    // Response should not be a generic error
+    expect(body.response.toLowerCase()).not.toContain("i apologize");
+    expect(body.response.toLowerCase()).not.toContain("i don't have access");
+  });
+});
