@@ -5,7 +5,7 @@ import {
   Box, Flex, Heading, Text, Textarea, IconButton, VStack, HStack,
   Badge, Button, Spinner, Skeleton, Collapsible, Timeline, Circle,
 } from "@chakra-ui/react";
-import { Send, RotateCcw, ChevronDown, Wrench, Check, Bot, User, Sparkles } from "lucide-react";
+import { Send, RotateCcw, ChevronDown, Wrench, Check, Bot, User, Sparkles, Plane } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { API_BASE, DEMO_SCENARIOS, DOMAIN } from "@/lib/config";
@@ -455,7 +455,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
 
   return (
     <Flex direction="column" h="100%" minH={0}>
-      <HStack px={4} py={3} borderBottom="1px solid" borderColor="gray.200" justifyContent="space-between">
+      <HStack px={4} py={3} borderBottom="1px solid" borderColor="gray.200" justifyContent="space-between" flexShrink={0}>
         <Heading size="sm">Chat</Heading>
         {messages.length > 0 && (
           <Button size="xs" variant="ghost" onClick={startNewConversation}>
@@ -465,46 +465,16 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
         )}
       </HStack>
 
-      {/* Demo scenario suggested questions */}
-      {messages.length === 0 && !loading && (
-        <Flex direction="column" flex={1} justify="center" px={4} py={6}>
-          <VStack gap={4}>
-            <Text fontSize="lg" fontWeight="medium" color="gray.700">
-✈️ How can I help you today?
-            </Text>
-            <HStack gap={1} flexShrink={0} color="gray.500" fontSize="xs" fontWeight="medium">
-              <Sparkles size={14} />
-              <Text>Try these</Text>
-            </HStack>
-            <Flex gap={2} flexWrap="wrap" justify="center" maxW="500px">
-              {allPrompts.map((prompt) => (
-                <Button
-                  key={prompt}
-                  size="xs"
-                  variant="outline"
-                  rounded="full"
-                  px={3}
-                  fontWeight="normal"
-                  whiteSpace="normal"
-                  textAlign="start"
-                  height="auto"
-                  py={1.5}
-                  maxW="320px"
-                  onClick={() => sendMessage(prompt)}
-                  title={prompt}
-                >
-                  {prompt}
-                </Button>
-              ))}
-            </Flex>
-          </VStack>
-        </Flex>
-      )}
-
       {/* Messages */}
-      <VStack flex={1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch"
-        display={messages.length === 0 && !loading ? "none" : "flex"}
-      >
+      <VStack flex={1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch">
+        {messages.length === 0 && !loading && (
+          <Flex flex={1} align="center" justify="center">
+            <VStack gap={2} color="gray.400">
+              <Plane size={32} />
+              <Text fontSize="sm" fontWeight="medium">How can I help you today?</Text>
+            </VStack>
+          </Flex>
+        )}
         {messages.map((msg) => (
           <Box key={msg.id}>
             {/* Completed tool call cards */}
@@ -668,6 +638,38 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
         )}
         <div ref={messagesEndRef} />
       </VStack>
+
+      {/* Suggested questions panel — visible when no messages */}
+      {messages.length === 0 && !loading && (
+        <Box px={4} pt={2} pb={1} borderTop="1px solid" borderColor="gray.200" flexShrink={0}>
+          <HStack gap={1} mb={2} color="gray.400">
+            <Sparkles size={12} />
+            <Text fontSize="xs" fontWeight="medium">Try asking</Text>
+          </HStack>
+          <VStack align="stretch" gap={1.5} overflowY="auto" maxH="200px">
+            {allPrompts.map((prompt) => (
+              <Box
+                key={prompt}
+                px={3}
+                py={2}
+                bg="gray.50"
+                borderWidth="1px"
+                borderColor="gray.200"
+                borderRadius="md"
+                cursor="pointer"
+                fontSize="xs"
+                color="gray.700"
+                lineHeight="1.4"
+                _hover={{ bg: "blue.50", borderColor: "blue.200", color: "blue.700" }}
+                transition="all 0.15s"
+                onClick={() => sendMessage(prompt)}
+              >
+                {prompt}
+              </Box>
+            ))}
+          </VStack>
+        </Box>
+      )}
 
       {/* Input area — Chakra UI Pro inspired bordered container */}
       <Box px={4} py={3} borderTop="1px solid" borderColor="gray.200">
