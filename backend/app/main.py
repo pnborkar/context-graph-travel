@@ -88,8 +88,8 @@ def get_memory_status() -> bool:
     return _memory_available
 
 app = FastAPI(
-    title="Hospitality Context Graph",
-    description="Hotel operations, guest services, room management, and revenue optimization",
+    title="Expedia Context Agent",
+    description="GraphRAG-powered customer service agent for flight disruptions, refunds, and policy resolution",
     version="0.1.0",
     lifespan=lifespan,
 )
@@ -113,14 +113,14 @@ app.include_router(router, prefix="/api")
 
 @app.get("/health")
 async def health():
-    """Health check endpoint with memory backend connectivity status."""
+    """Health check — always returns 200. Connectivity detail is informational."""
     if settings.memory_backend == "nams":
         memory_ok = get_memory_status()
         body = {
             "status": "ok" if memory_ok else "degraded",
             "memory_backend": "nams",
             "nams": memory_ok,
-            "domain": "hospitality",
+            "domain": "expedia-customer-service",
             "version": "0.1.0",
         }
         if not memory_ok:
@@ -136,6 +136,6 @@ async def health():
         "status": "ok" if neo4j_ok else "degraded",
         "memory_backend": "bolt",
         "neo4j": neo4j_ok,
-        "domain": "hospitality",
+        "domain": "expedia-customer-service",
         "version": "0.1.0",
     }
