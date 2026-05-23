@@ -1,7 +1,8 @@
-# Expedia Context Agent
+# Expedia Context Graph
 
 [![Neo4j](https://img.shields.io/badge/Neo4j-AuraDB-blue?logo=neo4j)](https://neo4j.com/cloud/aura/)
 [![Anthropic](https://img.shields.io/badge/Anthropic-Claude-orange)](https://anthropic.com)
+[![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings-green)](https://openai.com)
 
 GraphRAG-powered customer service agent for flight disruptions, refunds, and policy resolution.
 
@@ -88,18 +89,21 @@ make start
 │   │   ├── agent.py      Tool definitions + agentic loop
 │   │   ├── config.py     Settings (pydantic-settings + .env)
 │   │   ├── context_graph_client.py  Neo4j driver + SSE collector
-│   │   ├── memory.py     Agent memory (Neo4j Memory SDK)
+│   │   ├── memory.py     Agent memory (disabled by default; set MEMORY_BACKEND=bolt to enable)
 │   │   └── routes.py     SSE streaming endpoint
 │   └── scripts/
 │       └── generate_data.py
 ├── frontend/             Next.js 15 + Chakra UI v3 + Neo4j NVL
 │   ├── app/page.tsx      3-panel layout (Chat / Graph / Traces)
 │   └── components/
-│       ├── ChatInterface.tsx        SSE streaming chat
+│       ├── ChatInterface.tsx        SSE streaming chat + suggested questions
 │       ├── ContextGraphView.tsx     Live graph (NVL)
-│       └── DecisionTracePanel.tsx   Decision audit trail
+│       ├── DecisionTracePanel.tsx   Decision audit trail
+│       ├── DocumentBrowser.tsx      Policy document browser
+│       └── SchemaDrawer.tsx         About panel, data model, demo scenarios
 ├── rag/
-│   └── graphrag.py       Hybrid vector + graph retrieval
+│   ├── graphrag.py       Hybrid vector + graph retrieval (OpenAI text-embedding-3-small)
+│   └── reembed.py        One-time migration: drops old 384-dim indexes, re-embeds at 1536 dims
 ├── cypher/
 │   └── schema.cypher     Neo4j constraints + vector indexes
 ├── data/
@@ -131,11 +135,12 @@ cp .env.example .env
 
 | Variable | Description |
 |----------|-------------|
-| `NEO4J_URI` | Neo4j connection URI (Aura or bolt://) |
+| `NEO4J_URI` | Neo4j connection URI (Aura: `neo4j+s://` or local: `bolt://`) |
 | `NEO4J_USERNAME` | Neo4j username |
 | `NEO4J_PASSWORD` | Neo4j password |
 | `ANTHROPIC_API_KEY` | Claude API key |
-| `MEMORY_BACKEND` | `bolt` (self-hosted Neo4j) or `nams` (hosted) |
+| `OPENAI_API_KEY` | OpenAI API key — used for `text-embedding-3-small` (1536-dim) vector search |
+| `MEMORY_BACKEND` | `disabled` (default, no extra deps) or `bolt` (self-hosted Neo4j memory) |
 | `DOMAIN_ID` | Domain identifier — set to `expedia-customer-service` |
 | `BACKEND_PORT` | Default: 8000 |
 | `FRONTEND_PORT` | Default: 3000 |
@@ -179,7 +184,13 @@ Complement text embeddings with **FastRP graph embeddings** (structural similari
 - Run `make test-connection` to validate
 
 **GraphRAG policy search fails**
-- The `rag/graphrag.py` retriever uses a synchronous Neo4j driver — credentials are patched at call time from `settings`, so they don't need to be in `os.environ` separately
+- Requires `OPENAI_API_KEY` — embeddings are generated via `text-embedding-3-small` at query time
+- The `rag/graphrag.py` retriever uses a synchronous Neo4j driver — credentials are patched at call time from `settings`
+- If you get index dimension errors, run `python rag/reembed.py` to drop old 384-dim indexes and re-embed all nodes at 1536 dims
+
+**Agent memory not persisting**
+- Default `MEMORY_BACKEND=disabled` skips Neo4j memory entirely — this is intentional for Railway deployments
+- Set `MEMORY_BACKEND=bolt` and provide a Neo4j URI/credentials to enable cross-session memory
 
 **Port conflict**
 - Change `BACKEND_PORT` or `FRONTEND_PORT` in `.env`
