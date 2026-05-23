@@ -157,10 +157,12 @@ async def chat_stream(request: ChatRequest):
         task = asyncio.create_task(run_agent())
         # Emit session_id as first event
         yield f"event: session_id\ndata: {json.dumps({'session_id': session_id})}\n\n"
-        idle_timeout = 120.0  # Max seconds between events
-        overall_timeout = 300.0  # 5 min total max
+        ping_interval = 15.0   # Send keepalive comment every 15s to prevent proxy timeouts
+        idle_timeout = 120.0   # Give up after 120s with no events
+        overall_timeout = 300.0
         loop = asyncio.get_event_loop()
         start_time = loop.time()
+        idle_elapsed = 0.0
         try:
             while True:
                 elapsed = loop.time() - start_time
@@ -168,10 +170,17 @@ async def chat_stream(request: ChatRequest):
                     yield f"event: error\ndata: {json.dumps({'detail': 'Request exceeded maximum duration'})}\n\n"
                     break
                 try:
-                    event = await asyncio.wait_for(event_queue.get(), timeout=idle_timeout)
+                    event = await asyncio.wait_for(event_queue.get(), timeout=ping_interval)
+                    idle_elapsed = 0.0
                 except asyncio.TimeoutError:
-                    yield f"event: error\ndata: {json.dumps({'detail': 'Request timed out'})}\n\n"
-                    break
+                    idle_elapsed += ping_interval
+                    if idle_elapsed >= idle_timeout:
+                        yield f"event: error\ndata: {json.dumps({'detail': 'Request timed out'})}\n\n"
+                        break
+                    # Keepalive comment — ignored by SSE clients but prevents
+                    # Cloudflare / Railway proxies from closing idle connections.
+                    yield ": ping\n\n"
+                    continue
                 event_type = event["event"]
                 event_data = json.dumps(event["data"], default=str)
                 yield f"event: {event_type}\ndata: {event_data}\n\n"
@@ -188,7 +197,11 @@ async def chat_stream(request: ChatRequest):
     return StreamingResponse(
         event_generator(),
         media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+        },
     )
 
 
