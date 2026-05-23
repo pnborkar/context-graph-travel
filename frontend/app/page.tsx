@@ -113,9 +113,9 @@ export default function Home() {
       {/* Header */}
       <Box
         as="header"
-        bg="bg.surface"
+        bg="gray.800"
         borderBottomWidth="1px"
-        borderColor="border.default"
+        borderColor="gray.700"
         py={{ base: 2, md: 3 }}
         px={{ base: 3, md: 6 }}
       >
