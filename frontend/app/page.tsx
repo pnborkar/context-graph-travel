@@ -139,10 +139,10 @@ export default function Home() {
                 </Box>
               </a>
               <Box>
-                <Heading size={{ base: "sm", md: "md" }} color="blue.600">
+                <Heading size={{ base: "sm", md: "md" }} color="blue.300">
                   {DOMAIN.name} Context Graph
                 </Heading>
-                <Text color="gray.500" fontSize="xs" display={{ base: "none", md: "block" }}>
+                <Text color="gray.400" fontSize="xs" display={{ base: "none", md: "block" }}>
                   {DOMAIN.tagline}
                 </Text>
               </Box>
@@ -164,11 +164,11 @@ export default function Home() {
                         : "red.400"
                   }
                 />
-                <Text fontSize="xs" color="gray.500">
+                <Text fontSize="xs" color="gray.400">
                   {backendStatus === "ok" ? "Connected" : backendStatus === "degraded" ? "Degraded" : "Offline"}
                 </Text>
               </HStack>
-              <Button asChild variant="ghost" size="sm">
+              <Button asChild variant="ghost" size="sm" color="gray.300" _hover={{ color: "white", bg: "gray.700" }}>
                 <a href="https://github.com/pnborkar/context-graph-travel" target="_blank" rel="noopener noreferrer">
                   GitHub
                 </a>
@@ -177,11 +177,13 @@ export default function Home() {
                 aria-label="Toggle color mode"
                 variant="ghost"
                 size="sm"
+                color="gray.300"
+                _hover={{ color: "white", bg: "gray.700" }}
                 onClick={toggleColorMode}
               >
                 {colorMode === "light" ? <Moon size={16} /> : <Sun size={16} />}
               </IconButton>
-              <Button variant="outline" size="sm" onClick={() => setSchemaOpen(true)}>
+              <Button variant="outline" size="sm" color="gray.300" borderColor="gray.600" _hover={{ color: "white", bg: "gray.700" }} onClick={() => setSchemaOpen(true)}>
                 About & Schema
               </Button>
             </HStack>
