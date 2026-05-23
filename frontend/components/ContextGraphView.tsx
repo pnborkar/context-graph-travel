@@ -413,9 +413,9 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         zIndex={10}
         px={4}
         py={2}
-        bg="white"
+        bg="bg.surface"
         borderBottom="1px solid"
-        borderColor="gray.200"
+        borderColor="border.default"
         justify="space-between"
         align="center"
       >
@@ -439,47 +439,42 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         )}
       </Flex>
 
-      {/* Legend */}
+      {/* Legend — full-width strip below the header bar */}
       <Flex
         position="absolute"
-        top="52px"
-        left={2}
+        top="48px"
+        left={0}
+        right={0}
         zIndex={10}
-        bg="white"
-        borderRadius="lg"
-        p={3}
-        gap={2}
+        bg="bg.surface"
+        px={3}
+        py={1.5}
+        gap={1.5}
         flexWrap="wrap"
-        maxW="240px"
-        maxH="200px"
-        overflowY="auto"
-        css={{ "&::-webkit-scrollbar": { width: "4px" }, "&::-webkit-scrollbar-thumb": { background: "#CBD5E0", borderRadius: "4px" } }}
-        boxShadow="sm"
-        borderWidth="1px"
-        borderColor="gray.200"
+        borderBottomWidth="1px"
+        borderColor="border.default"
+        align="center"
       >
-        {Object.entries(NODE_COLORS)
-          .map(([label, color]) => (
-            <Badge
-              key={label}
-              size="md"
-              px={3}
-              py={1}
-              borderRadius="full"
-              fontSize="xs"
-              fontWeight="medium"
-              style={{ backgroundColor: color, color: "white" }}
-            >
-              {label}
-            </Badge>
-          ))}
+        {Object.entries(NODE_COLORS).map(([label, color]) => (
+          <Badge
+            key={label}
+            px={2}
+            py={0.5}
+            borderRadius="full"
+            fontSize="10px"
+            fontWeight="medium"
+            style={{ backgroundColor: color, color: "white" }}
+          >
+            {label}
+          </Badge>
+        ))}
       </Flex>
 
       {/* Properties panel */}
       {selectedElement && (
         <Box
           position="absolute"
-          top="52px"
+          top="90px"
           right={2}
           zIndex={10}
           bg="white"
@@ -633,7 +628,7 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
       )}
 
       {/* Graph */}
-      <Box h="100%" w="100%" pt="48px">
+      <Box h="100%" w="100%" pt="90px">
         {nvlData.nodes.length > 0 ? (
           <NvlGraph
             nodes={nvlData.nodes}
