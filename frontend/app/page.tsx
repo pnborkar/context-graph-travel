@@ -17,7 +17,7 @@ import {
   Menu,
   Portal,
 } from "@chakra-ui/react";
-import { Menu as MenuIcon, FileText, Network, MessageSquare, Sun, Moon } from "lucide-react";
+import { Menu as MenuIcon, FileText, Network, MessageSquare, Sun, Moon, Plane } from "lucide-react";
 import dynamic from "next/dynamic";
 import { ChatInterface } from "@/components/ChatInterface";
 import { DecisionTracePanel } from "@/components/DecisionTracePanel";
@@ -139,7 +139,8 @@ export default function Home() {
                 </Box>
               </a>
               <Box>
-                <Heading size={{ base: "sm", md: "md" }} color="blue.300">
+                <Heading size={{ base: "sm", md: "md" }} color="blue.300" display="flex" alignItems="center" gap={2}>
+                  <Plane size={18} />
                   {DOMAIN.name} Context Graph
                 </Heading>
                 <Text color="gray.400" fontSize="xs" display={{ base: "none", md: "block" }}>

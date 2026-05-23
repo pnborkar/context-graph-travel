@@ -420,11 +420,9 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         align="center"
       >
         <Box>
-          <Heading size="sm">Knowledge Graph</Heading>
+          <Heading size="sm">Context Graph</Heading>
           <Text fontSize="xs" color="gray.500">
-            {isSchemaView
-              ? "Schema — double-click a label to explore instances"
-              : "Live query results — double-click a node to expand"}
+            Visualize entities, decisions, and relationships
           </Text>
         </Box>
         {!isSchemaView && (
