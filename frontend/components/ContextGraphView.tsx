@@ -446,12 +446,12 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         left={2}
         zIndex={10}
         bg="white"
-        borderRadius="md"
-        p={2}
+        borderRadius="lg"
+        p={3}
         gap={2}
         flexWrap="wrap"
-        maxW="220px"
-        maxH="180px"
+        maxW="240px"
+        maxH="200px"
         overflowY="auto"
         css={{ "&::-webkit-scrollbar": { width: "4px" }, "&::-webkit-scrollbar-thumb": { background: "#CBD5E0", borderRadius: "4px" } }}
         boxShadow="sm"
@@ -462,7 +462,12 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
           .map(([label, color]) => (
             <Badge
               key={label}
-              size="sm"
+              size="md"
+              px={3}
+              py={1}
+              borderRadius="full"
+              fontSize="xs"
+              fontWeight="medium"
               style={{ backgroundColor: color, color: "white" }}
             >
               {label}
