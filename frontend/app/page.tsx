@@ -148,7 +148,7 @@ export default function Home() {
                 </Text>
               </HStack>
               <Button asChild variant="ghost" size="sm">
-                <a href="https://github.com/neo4j-product-examples/context-graph-travel" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/pnborkar/context-graph-travel" target="_blank" rel="noopener noreferrer">
                   GitHub
                 </a>
               </Button>
@@ -184,7 +184,7 @@ export default function Home() {
                         About & Schema
                       </Menu.Item>
                       <Menu.Item value="github" asChild>
-                        <a href="https://github.com/neo4j-product-examples/context-graph-travel" target="_blank" rel="noopener noreferrer">
+                        <a href="https://github.com/pnborkar/context-graph-travel" target="_blank" rel="noopener noreferrer">
                           GitHub
                         </a>
                       </Menu.Item>

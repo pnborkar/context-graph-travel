@@ -58,8 +58,8 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
               </Drawer.CloseTrigger>
             </Drawer.Header>
 
-            <Drawer.Body py={6}>
-              <VStack gap={6} align="stretch">
+            <Drawer.Body py={8} px={6}>
+              <VStack gap={8} align="stretch">
 
                 {/* Overview */}
                 <Box>
@@ -133,9 +133,9 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                           {scenario.prompts.map((prompt) => (
                             <Box
                               key={prompt}
-                              p={3}
+                              p={4}
                               bg="gray.50"
-                              borderRadius="md"
+                              borderRadius="lg"
                               borderWidth="1px"
                               borderColor="gray.200"
                               cursor="pointer"
@@ -145,10 +145,10 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                                 navigator.clipboard.writeText(prompt).catch(() => {});
                               }}
                             >
-                              <Text fontSize="sm" color="gray.700" lineHeight="short">
+                              <Text fontSize="sm" color="gray.700" lineHeight="tall">
                                 {prompt}
                               </Text>
-                              <Text fontSize="xs" color="gray.400" mt={1}>
+                              <Text fontSize="xs" color="gray.400" mt={2}>
                                 Click to copy
                               </Text>
                             </Box>
@@ -186,7 +186,7 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                       justifyContent="flex-start"
                     >
                       <a
-                        href="https://github.com/neo4j-product-examples/context-graph-travel"
+                        href="https://github.com/pnborkar/context-graph-travel"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
