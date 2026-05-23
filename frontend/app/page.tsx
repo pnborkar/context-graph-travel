@@ -1,10 +1,34 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
-import { Box, Flex, Heading, Text, Tabs, IconButton, HStack, Spinner } from "@chakra-ui/react";
-import { MessageSquare, Network, FileText } from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Container,
+  Grid,
+  GridItem,
+  Button,
+  HStack,
+  IconButton,
+  Tabs,
+  Spinner,
+  Menu,
+  Portal,
+} from "@chakra-ui/react";
+import { Menu as MenuIcon, FileText, Network, MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import { ChatInterface } from "@/components/ChatInterface";
+import { DecisionTracePanel } from "@/components/DecisionTracePanel";
+import { DocumentBrowser } from "@/components/DocumentBrowser";
+import { SchemaDrawer } from "@/components/SchemaDrawer";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { API_BASE, DOMAIN } from "@/lib/config";
+import type { GraphData } from "@/lib/config";
+
+type PanelId = "chat" | "graph" | "details";
+
 const ContextGraphView = dynamic(
   () => import("@/components/ContextGraphView").then((mod) => mod.ContextGraphView),
   {
@@ -14,63 +38,16 @@ const ContextGraphView = dynamic(
         <Spinner size="lg" />
       </Flex>
     ),
-  }
+  },
 );
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { DecisionTracePanel } from "@/components/DecisionTracePanel";
-import { DocumentBrowser } from "@/components/DocumentBrowser";
-import { DOMAIN, API_BASE } from "@/lib/config";
-import type { GraphData } from "@/lib/config";
-
-type PanelId = "chat" | "graph" | "details";
-
-function ResizeHandle({ onDrag }: { onDrag: (delta: number) => void }) {
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      const startX = e.clientX;
-      function onMouseMove(ev: MouseEvent) {
-        onDrag(ev.clientX - startX);
-      }
-      function onMouseUp() {
-        document.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
-        document.body.style.cursor = "";
-        document.body.style.userSelect = "";
-      }
-      document.body.style.cursor = "col-resize";
-      document.body.style.userSelect = "none";
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
-    },
-    [onDrag],
-  );
-
-  return (
-    <Box
-      w="4px"
-      cursor="col-resize"
-      bg="transparent"
-      _hover={{ bg: "blue.200" }}
-      transition="background 0.15s"
-      flexShrink={0}
-      display={{ base: "none", lg: "block" }}
-      onMouseDown={handleMouseDown}
-    />
-  );
-}
 
 export default function Home() {
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [activePanel, setActivePanel] = useState<PanelId>("chat");
   const [backendStatus, setBackendStatus] = useState<"ok" | "degraded" | "offline">("offline");
-  const [leftWidth, setLeftWidth] = useState(400);
-  const [rightWidth, setRightWidth] = useState(350);
-  const leftBaseRef = useRef(400);
-  const rightBaseRef = useRef(350);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
-
   const [askAboutInput, setAskAboutInput] = useState<string | null>(null);
+  const [schemaOpen, setSchemaOpen] = useState(false);
 
   const handleGraphUpdate = useCallback((data: GraphData) => {
     setGraphData(data);
@@ -85,7 +62,6 @@ export default function Home() {
     setActivePanel("chat");
   }, []);
 
-  // Poll backend health every 60 seconds with retry on initial load
   useEffect(() => {
     async function checkHealth(retries = 3, delay = 1000) {
       for (let attempt = 0; attempt < retries; attempt++) {
@@ -98,7 +74,7 @@ export default function Home() {
           return;
         } catch {
           if (attempt < retries - 1) {
-            await new Promise(r => setTimeout(r, delay * (attempt + 1)));
+            await new Promise((r) => setTimeout(r, delay * (attempt + 1)));
           }
         }
       }
@@ -109,163 +85,275 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLeftDrag = useCallback((delta: number) => {
-    setLeftWidth(Math.min(600, Math.max(280, leftBaseRef.current + delta)));
-  }, []);
-
-  const handleRightDrag = useCallback((delta: number) => {
-    setRightWidth(Math.min(600, Math.max(280, rightBaseRef.current - delta)));
-  }, []);
-
-  // Update base refs when drag ends (width stabilizes)
-  useEffect(() => {
-    leftBaseRef.current = leftWidth;
-  }, [leftWidth]);
-  useEffect(() => {
-    rightBaseRef.current = rightWidth;
-  }, [rightWidth]);
-
   return (
-    <Flex direction="column" h="100dvh">
+    <Box minH="100dvh" bg="gray.50">
+      <SchemaDrawer open={schemaOpen} onOpenChange={setSchemaOpen} />
+
       {/* Header */}
-      <Flex bg="gray.900" color="white" px={6} py={3} justify="space-between" align="center">
-        <Box>
-          <Heading size="md">
-✈️ {DOMAIN.name} Context Graph
-          </Heading>
-          <Text fontSize="sm" color="gray.400">
-            {DOMAIN.tagline}
-          </Text>
-        </Box>
-        <HStack gap={2}>
-          <Box
-            w={3}
-            h={3}
-            borderRadius="full"
-            bg={
-              backendStatus === "ok"
-                ? "green.400"
-                : backendStatus === "degraded"
-                  ? "yellow.400"
-                  : "red.400"
-            }
-            title={
-              backendStatus === "ok"
-                ? "Backend connected"
-                : backendStatus === "degraded"
-                  ? "Backend connected (Neo4j unavailable)"
-                  : "Backend offline"
-            }
-          />
-          <Text fontSize="xs" color="gray.500">
-            {backendStatus === "ok"
-              ? "Connected"
-              : backendStatus === "degraded"
-                ? "Degraded"
-                : "Offline"}
-          </Text>
-        </HStack>
-      </Flex>
+      <Box
+        as="header"
+        bg="white"
+        borderBottomWidth="1px"
+        borderColor="gray.200"
+        py={{ base: 2, md: 3 }}
+        px={{ base: 3, md: 6 }}
+      >
+        <Container maxW="container.2xl">
+          <Flex justify="space-between" align="center">
+            {/* Logo + Title */}
+            <Flex align="center" gap={3}>
+              <a href="https://neo4j.com" target="_blank" rel="noopener noreferrer">
+                <Box width={{ base: "32px", md: "38px" }} height={{ base: "32px", md: "38px" }} flexShrink={0}>
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <circle cx="50" cy="50" r="48" fill="#018BFF" />
+                    <g fill="white">
+                      <circle cx="50" cy="30" r="8" />
+                      <circle cx="30" cy="65" r="8" />
+                      <circle cx="70" cy="65" r="8" />
+                      <line x1="50" y1="38" x2="33" y2="58" stroke="white" strokeWidth="3" />
+                      <line x1="50" y1="38" x2="67" y2="58" stroke="white" strokeWidth="3" />
+                      <line x1="38" y1="65" x2="62" y2="65" stroke="white" strokeWidth="3" />
+                    </g>
+                  </svg>
+                </Box>
+              </a>
+              <Box>
+                <Heading size={{ base: "sm", md: "md" }} color="blue.600">
+                  {DOMAIN.name} Context Graph
+                </Heading>
+                <Text color="gray.500" fontSize="xs" display={{ base: "none", md: "block" }}>
+                  {DOMAIN.tagline}
+                </Text>
+              </Box>
+            </Flex>
 
-      {/* Main content - 3 panel layout */}
-      <Flex as="main" flex={1} overflow="hidden">
-        {/* Left panel: Chat */}
-        <Box
-          as="section"
-          aria-label="Chat"
-          w={{ base: "100%", lg: `${leftWidth}px` }}
-          minW={{ lg: "280px" }}
-          overflow="auto"
-          flexShrink={0}
-          display={{ base: activePanel === "chat" ? "block" : "none", lg: "block" }}
+            {/* Desktop nav */}
+            <HStack gap={2} display={{ base: "none", md: "flex" }} align="center">
+              {/* Status dot */}
+              <HStack gap={1.5}>
+                <Box
+                  w={2.5}
+                  h={2.5}
+                  borderRadius="full"
+                  bg={
+                    backendStatus === "ok"
+                      ? "green.400"
+                      : backendStatus === "degraded"
+                        ? "yellow.400"
+                        : "red.400"
+                  }
+                />
+                <Text fontSize="xs" color="gray.500">
+                  {backendStatus === "ok" ? "Connected" : backendStatus === "degraded" ? "Degraded" : "Offline"}
+                </Text>
+              </HStack>
+              <Button asChild variant="ghost" size="sm">
+                <a href="https://github.com/neo4j-product-examples/context-graph-travel" target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => setSchemaOpen(true)}>
+                About & Schema
+              </Button>
+            </HStack>
+
+            {/* Mobile hamburger */}
+            <HStack gap={2} display={{ base: "flex", md: "none" }}>
+              <Box
+                w={2.5}
+                h={2.5}
+                borderRadius="full"
+                bg={
+                  backendStatus === "ok"
+                    ? "green.400"
+                    : backendStatus === "degraded"
+                      ? "yellow.400"
+                      : "red.400"
+                }
+              />
+              <Menu.Root>
+                <Menu.Trigger asChild>
+                  <IconButton variant="ghost" size="sm" aria-label="Menu">
+                    <MenuIcon size={18} />
+                  </IconButton>
+                </Menu.Trigger>
+                <Portal>
+                  <Menu.Positioner>
+                    <Menu.Content>
+                      <Menu.Item value="schema" onClick={() => setSchemaOpen(true)}>
+                        About & Schema
+                      </Menu.Item>
+                      <Menu.Item value="github" asChild>
+                        <a href="https://github.com/neo4j-product-examples/context-graph-travel" target="_blank" rel="noopener noreferrer">
+                          GitHub
+                        </a>
+                      </Menu.Item>
+                    </Menu.Content>
+                  </Menu.Positioner>
+                </Portal>
+              </Menu.Root>
+            </HStack>
+          </Flex>
+        </Container>
+      </Box>
+
+      {/* Main content */}
+      <Container maxW="container.2xl" py={{ base: 3, md: 5 }} px={{ base: 2, md: 6 }}>
+        <Grid
+          templateColumns={{ base: "1fr", lg: "420px 1fr 360px" }}
+          gap={{ base: 3, md: 4 }}
+          h={{ base: "auto", lg: "calc(100dvh - 130px)" }}
         >
-          <ChatInterface
-              onGraphUpdate={handleGraphUpdate}
-              externalInput={askAboutInput}
-              onExternalInputConsumed={() => setAskAboutInput(null)}
-              onSessionChange={handleSessionChange}
-            />
-        </Box>
+          {/* Chat panel */}
+          <GridItem
+            overflow="hidden"
+            display={{ base: activePanel === "chat" ? "flex" : "none", lg: "flex" }}
+            flexDirection="column"
+          >
+            <Box
+              bg="white"
+              borderRadius="xl"
+              borderWidth="1px"
+              borderColor="gray.200"
+              h="100%"
+              display="flex"
+              flexDirection="column"
+              overflow="hidden"
+              shadow="sm"
+            >
+              <Box px={4} py={3} borderBottomWidth="1px" borderColor="gray.100" flexShrink={0}>
+                <Heading size="sm" color="gray.800">AI Assistant</Heading>
+                <Text fontSize="xs" color="gray.500" mt={0.5}>
+                  Ask about customers, refunds, policies, and disruptions
+                </Text>
+              </Box>
+              <Box flex="1" minH={0} overflow="hidden">
+                <ChatInterface
+                  onGraphUpdate={handleGraphUpdate}
+                  externalInput={askAboutInput}
+                  onExternalInputConsumed={() => setAskAboutInput(null)}
+                  onSessionChange={handleSessionChange}
+                />
+              </Box>
+            </Box>
+          </GridItem>
 
-        <ResizeHandle onDrag={handleLeftDrag} />
+          {/* Graph panel */}
+          <GridItem
+            overflow="hidden"
+            display={{ base: activePanel === "graph" ? "flex" : "none", lg: "flex" }}
+            flexDirection="column"
+          >
+            <Box
+              bg="white"
+              borderRadius="xl"
+              borderWidth="1px"
+              borderColor="gray.200"
+              h="100%"
+              display="flex"
+              flexDirection="column"
+              overflow="hidden"
+              shadow="sm"
+            >
+              <Box px={4} py={3} borderBottomWidth="1px" borderColor="gray.100" flexShrink={0}>
+                <Heading size="sm" color="gray.800">Context Graph</Heading>
+                <Text fontSize="xs" color="gray.500" mt={0.5}>
+                  Live graph — nodes and relationships used to answer your question
+                </Text>
+              </Box>
+              <Box flex="1" minH={0}>
+                <ErrorBoundary fallbackMessage="Graph visualization error">
+                  <ContextGraphView
+                    externalGraphData={graphData}
+                    onAskAbout={handleAskAbout}
+                  />
+                </ErrorBoundary>
+              </Box>
+            </Box>
+          </GridItem>
 
-        {/* Center panel: Graph visualization */}
-        <Box
-          as="section"
-          aria-label="Graph visualization"
-          flex={1}
-          bg="gray.50"
-          display={{ base: activePanel === "graph" ? "block" : "none", lg: "block" }}
-        >
-          <ErrorBoundary fallbackMessage="Graph visualization error">
-            <ContextGraphView
-              externalGraphData={graphData}
-              onAskAbout={handleAskAbout}
-            />
-          </ErrorBoundary>
-        </Box>
+          {/* Right panel: Traces + Documents */}
+          <GridItem
+            overflow="hidden"
+            display={{ base: activePanel === "details" ? "flex" : "none", lg: "flex" }}
+            flexDirection="column"
+          >
+            <Box
+              bg="white"
+              borderRadius="xl"
+              borderWidth="1px"
+              borderColor="gray.200"
+              h="100%"
+              display="flex"
+              flexDirection="column"
+              overflow="hidden"
+              shadow="sm"
+            >
+              <Tabs.Root defaultValue="traces" size="sm" display="flex" flexDirection="column" h="100%">
+                <Box borderBottomWidth="1px" borderColor="gray.100" flexShrink={0} px={4} pt={3} pb={0}>
+                  <HStack justify="space-between" mb={2}>
+                    <Heading size="sm" color="gray.800">Decision Traces</Heading>
+                  </HStack>
+                  <Tabs.List gap={1}>
+                    <Tabs.Trigger value="traces" fontSize="xs" px={3}>Traces</Tabs.Trigger>
+                    <Tabs.Trigger value="documents" fontSize="xs" px={3}>Documents</Tabs.Trigger>
+                  </Tabs.List>
+                </Box>
+                <Tabs.Content value="traces" p={0} flex="1" minH={0} overflow="auto">
+                  <DecisionTracePanel sessionId={currentSessionId} />
+                </Tabs.Content>
+                <Tabs.Content value="documents" p={0} flex="1" minH={0} overflow="auto">
+                  <DocumentBrowser />
+                </Tabs.Content>
+              </Tabs.Root>
+            </Box>
+          </GridItem>
+        </Grid>
+      </Container>
 
-        <ResizeHandle onDrag={handleRightDrag} />
-
-        {/* Right panel: Decision traces + Documents */}
-        <Box
-          as="aside"
-          aria-label="Details"
-          w={{ base: "100%", lg: `${rightWidth}px` }}
-          minW={{ lg: "280px" }}
-          overflow="hidden"
-          flexShrink={0}
-          display={{ base: activePanel === "details" ? "block" : "none", lg: "block" }}
-        >
-          <Tabs.Root defaultValue="traces" size="sm">
-            <Tabs.List borderBottom="1px solid" borderColor="gray.200" px={2} gap={1}>
-              <Tabs.Trigger value="traces" px={3}>Traces</Tabs.Trigger>
-              <Tabs.Trigger value="documents" px={3}>Documents</Tabs.Trigger>
-            </Tabs.List>
-            <Tabs.Content value="traces" p={0} h="calc(100dvh - 110px)" overflow="auto">
-              <DecisionTracePanel sessionId={currentSessionId} />
-            </Tabs.Content>
-            <Tabs.Content value="documents" p={0} h="calc(100dvh - 110px)" overflow="auto">
-              <DocumentBrowser />
-            </Tabs.Content>
-          </Tabs.Root>
-        </Box>
-      </Flex>
-
-      {/* Mobile bottom tab bar — hidden on desktop */}
+      {/* Mobile bottom tab bar */}
       <HStack
         display={{ base: "flex", lg: "none" }}
         justify="space-around"
         py={2}
+        px={4}
         borderTop="1px solid"
         borderColor="gray.200"
         bg="white"
+        position="fixed"
+        bottom={0}
+        left={0}
+        right={0}
+        zIndex={10}
       >
         <IconButton
-          aria-label="Chat panel"
+          aria-label="Chat"
           variant={activePanel === "chat" ? "solid" : "ghost"}
+          colorPalette={activePanel === "chat" ? "blue" : "gray"}
           size="sm"
           onClick={() => setActivePanel("chat")}
         >
           <MessageSquare size={18} />
         </IconButton>
         <IconButton
-          aria-label="Graph panel"
+          aria-label="Graph"
           variant={activePanel === "graph" ? "solid" : "ghost"}
+          colorPalette={activePanel === "graph" ? "blue" : "gray"}
           size="sm"
           onClick={() => setActivePanel("graph")}
         >
           <Network size={18} />
         </IconButton>
         <IconButton
-          aria-label="Details panel"
+          aria-label="Details"
           variant={activePanel === "details" ? "solid" : "ghost"}
+          colorPalette={activePanel === "details" ? "blue" : "gray"}
           size="sm"
           onClick={() => setActivePanel("details")}
         >
           <FileText size={18} />
         </IconButton>
       </HStack>
-    </Flex>
+    </Box>
   );
 }
