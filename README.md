@@ -5,6 +5,13 @@
 
 GraphRAG-powered customer service agent for flight disruptions, refunds, and policy resolution.
 
+## Live Demo
+
+**Frontend:** https://context-graph-travel.vercel.app  
+**Backend API:** https://context-graph-travel-production.up.railway.app
+
+---
+
 ## What This Demos
 
 A live AI agent that handles Expedia customer service scenarios using a Neo4j knowledge graph. The key distinction from a standard RAG chatbot: every answer is grounded in **graph traversal** — the agent follows relationships across customers, bookings, carrier agreements, loyalty tiers, weather memos, and policy sections to reach decisions a text search would miss entirely.
