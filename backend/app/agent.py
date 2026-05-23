@@ -512,6 +512,7 @@ async def handle_message_stream(message: str, session_id: str | None = None) -> 
 
     try:
         for _iteration in range(max_iterations):
+            logger.info("Agent iteration %d — calling Anthropic API", _iteration)
             full_text_parts: list[str] = []
             async with client.messages.stream(
                 model="claude-sonnet-4-6",
@@ -530,16 +531,19 @@ async def handle_message_stream(message: str, session_id: str | None = None) -> 
                         full_text_parts.append(event.delta.text)
                 response = await stream.get_final_message()
 
+            logger.info("Anthropic response: stop_reason=%s", response.stop_reason)
             if response.stop_reason == "tool_use":
                 messages.append({"role": "assistant", "content": response.content})
                 tool_results = []
                 for block in response.content:
                     if block.type == "tool_use":
+                        logger.info("Calling tool: %s", block.name)
                         tool_info = TOOL_REGISTRY.get(block.name)
                         if tool_info:
                             try:
                                 result = await tool_info["function"](**block.input)
                             except Exception as tool_err:
+                                logger.error("Tool %s failed: %s", block.name, tool_err)
                                 result = json.dumps({"error": f"Tool error: {tool_err}"})
                         else:
                             result = json.dumps({"error": f"Unknown tool: {block.name}"})
