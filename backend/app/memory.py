@@ -166,6 +166,13 @@ async def connect_memory() -> None:
     global _memory, _client, _error_category, _error_detail
     _error_category = None
     _error_detail = None
+
+    if settings.memory_backend == "disabled":
+        logger.info("Agent memory disabled (MEMORY_BACKEND=disabled)")
+        _memory = None
+        _client = None
+        return
+
     try:
         from neo4j_agent_memory import MemoryClient, MemoryIntegration, SessionStrategy
     except ImportError:

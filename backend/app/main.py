@@ -134,7 +134,7 @@ async def health():
     neo4j_ok = is_connected()
     return {
         "status": "ok" if neo4j_ok else "degraded",
-        "memory_backend": "bolt",
+        "memory_backend": settings.memory_backend,
         "neo4j": neo4j_ok,
         "domain": "expedia-customer-service",
         "version": "0.1.0",
