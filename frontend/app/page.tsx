@@ -243,7 +243,7 @@ export default function Home() {
               overflow="hidden"
               shadow="sm"
             >
-              <Box px={4} py={3} borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0}>
+              <Box px={4} py={3} borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} bg="gray.50" borderTopRadius="xl">
                 <Heading size="sm" color="gray.800">AI Assistant</Heading>
                 <Text fontSize="xs" color="gray.500" mt={0.5}>
                   Ask about customers, refunds, policies, and disruptions
@@ -306,7 +306,7 @@ export default function Home() {
               shadow="sm"
             >
               <Tabs.Root defaultValue="traces" size="sm" display="flex" flexDirection="column" h="100%">
-                <Box borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} px={4} pt={3} pb={0}>
+                <Box borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} px={4} pt={3} pb={0} bg="gray.50" borderTopRadius="xl">
                   <HStack justify="space-between" mb={2}>
                     <Heading size="sm" color="gray.800">Decision Traces</Heading>
                   </HStack>
