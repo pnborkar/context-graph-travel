@@ -222,7 +222,7 @@ export default function Home() {
       {/* Main content */}
       <Container maxW="container.2xl" py={{ base: 3, md: 5 }} px={{ base: 2, md: 6 }}>
         <Grid
-          templateColumns={{ base: "1fr", lg: "420px 1fr 360px" }}
+          templateColumns={{ base: "1fr", lg: "480px 1fr 300px" }}
           gap={{ base: 3, md: 4 }}
           h={{ base: "calc(100dvh - 112px)", lg: "calc(100dvh - 130px)" }}
         >
