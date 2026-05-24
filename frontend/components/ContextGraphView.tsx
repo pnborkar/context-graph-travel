@@ -414,8 +414,6 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         px={4}
         py={2}
         bg="bg.surface"
-        borderBottom="1px solid"
-        borderColor="border.default"
         justify="space-between"
         align="center"
       >
