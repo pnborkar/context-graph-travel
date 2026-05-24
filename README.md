@@ -23,6 +23,22 @@ A live AI agent that handles travel customer service scenarios using a Neo4j kno
 - **Context Graph** — live graph visualization updates as the agent works, showing exactly which nodes and relationships were used
 - **Agent Memory** — conversation context, extracted entities, and detected preferences persist in Neo4j across sessions
 
+## Why Neo4j vs. Neptune
+
+> *Neptune stores a graph. Neo4j is the intelligence layer — vector search, graph algorithms, and agent memory are native, not bolted on.*
+
+| Capability | Neo4j | Neptune |
+|------------|-------|---------|
+| **Hybrid vector + graph search** | Native — `db.index.vector.queryNodes()` runs in Cypher alongside traversal, one query, one connection | Requires Neptune ML via SageMaker — separate pipeline, separate orchestration |
+| **Graph Data Science** (FastRP, Louvain, PageRank, shortest path) | Native GDS library, runs on the same graph | No equivalent — data must be exported out |
+| **Agent Memory as graph** | NAMS writes `Session → Entity → Preference` nodes natively traversable alongside operational data | No equivalent — requires bolting on DynamoDB or a separate vector store |
+| **Single graph principle** | Operational data, RAG knowledge base, agent memory, decision audit trail, and GDS embeddings — one graph, one language, one connection | Requires stitching multiple AWS services (Neptune + SageMaker + DynamoDB) to match the same capability set |
+| **Cypher** | Expressive, readable, pattern-matching native | openCypher subset — no APOC, no GDS, no vector index procedures |
+
+**The compounding advantage:** in this demo, the agent traverses 4–6 hops across customers, bookings, carrier agreements, loyalty tiers, weather waivers, and policy sections — then does a vector similarity search on the result — then writes a Decision node with policy citations — all in one graph, in one transaction, with one driver. On Neptune, each of those capabilities is a different service with a different API.
+
+---
+
 ## Design Philosophy — Audit & Governance First
 
 This project is built around a specific design principle: **every agent decision must be explainable, traceable, and grounded in policy**.
