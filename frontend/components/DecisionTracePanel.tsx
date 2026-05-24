@@ -69,6 +69,7 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   const [traces, setTraces] = useState<DecisionTrace[]>([]);
   const [decisions, setDecisions] = useState<PastDecision[]>([]);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [lastExpanded, setLastExpanded] = useState<string | null>(null);
 
   useEffect(() => {
     setExpandedIds(new Set());
@@ -126,10 +127,22 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   function toggleExpand(id: string) {
     setExpandedIds((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+        setLastExpanded(null);
+      } else {
+        next.add(id);
+        setLastExpanded(id);
+      }
       return next;
     });
   }
+
+  useEffect(() => {
+    if (!lastExpanded) return;
+    const el = document.getElementById(`expanded-${lastExpanded}`);
+    el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [lastExpanded]);
 
   return (
     <Flex direction="column" h="100%">
@@ -186,7 +199,6 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
                   borderRadius="md"
                   border="1px solid"
                   borderColor={isOpen ? "blue.300" : "gray.200"}
-                  overflow="hidden"
                   _hover={{ borderColor: "blue.200" }}
                   transition="border-color 0.15s"
                 >
@@ -218,7 +230,7 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
                     </HStack>
                   </Button>
                   {isOpen && (
-                    <Box px={3} pb={3} pt={1} borderTop="1px solid" borderColor="gray.100" bg="gray.50" maxH="260px" overflowY="auto">
+                    <Box id={`expanded-${trace.id}`} px={3} pb={3} pt={1} borderTop="1px solid" borderColor="gray.100" bg="gray.50" maxH="260px" overflowY="auto">
                       <VStack gap={3} align="stretch">
                         {trace.steps.map((step, i) => (
                           <Box key={`step-${i}`} pl={3} borderLeft="2px solid" borderColor="blue.200">
@@ -278,7 +290,6 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
                   borderRadius="md"
                   border="1px solid"
                   borderColor={isOpen ? "blue.300" : "gray.200"}
-                  overflow="hidden"
                   _hover={{ borderColor: "blue.200" }}
                   transition="border-color 0.15s"
                 >
@@ -311,14 +322,14 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
                         <HStack mt={1.5} gap={2}>
                           {confidence !== null && <ConfidenceBar score={confidence} />}
                           <Text fontSize="10px" color="gray.400">
-                            {new Date(d.made_at).toLocaleDateString()}
+                            {typeof d.made_at === "string" ? new Date(d.made_at).toLocaleDateString() : "—"}
                           </Text>
                         </HStack>
                       </Box>
                     </HStack>
                   </Button>
                   {isOpen && (
-                    <Box px={3} pb={3} pt={1} borderTop="1px solid" borderColor="gray.100" bg="gray.50">
+                    <Box id={`expanded-${d.id}`} px={3} pb={3} pt={1} borderTop="1px solid" borderColor="gray.100" bg="gray.50" maxH="320px" overflowY="auto">
                       {/* Outcome */}
                       <Box mb={2}>
                         <Text fontSize="xs" fontWeight="semibold" color="gray.600" mb={0.5}>Outcome</Text>
