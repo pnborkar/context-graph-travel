@@ -72,6 +72,27 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                   </Text>
                 </Box>
 
+                {/* Why Context Graph + GraphRAG */}
+                <Box>
+                  <Heading size="sm" mb={3} color="gray.800">Why Graph?</Heading>
+                  <VStack align="stretch" gap={2}>
+                    <HStack align="flex-start" gap={2}>
+                      <Text fontSize="sm" color="blue.500" fontWeight="bold" flexShrink={0}>01</Text>
+                      <Text fontSize="sm" color="gray.600">A customer's refund eligibility depends on their loyalty tier, their carrier's agreement, an active weather waiver, and the applicable policy — no single document holds all four. Only a graph connects them.</Text>
+                    </HStack>
+                    <HStack align="flex-start" gap={2}>
+                      <Text fontSize="sm" color="blue.500" fontWeight="bold" flexShrink={0}>02</Text>
+                      <Text fontSize="sm" color="gray.600">Vector search finds relevant text. Graph traversal finds the right answer. GraphRAG combines both — semantic similarity to locate policy sections, graph hops to verify they actually apply.</Text>
+                    </HStack>
+                    <HStack align="flex-start" gap={2}>
+                      <Text fontSize="sm" color="blue.500" fontWeight="bold" flexShrink={0}>03</Text>
+                      <Text fontSize="sm" color="gray.600">Every decision is traceable. The context graph shows exactly which nodes the agent traversed — not a black box, but an auditable path from question to answer.</Text>
+                    </HStack>
+                  </VStack>
+                </Box>
+
+                <Separator />
+
                 {/* Capabilities */}
                 <Box>
                   <Heading size="sm" mb={3} color="gray.800">Capabilities</Heading>
