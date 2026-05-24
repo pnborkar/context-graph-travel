@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import uuid as _uuid
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from starlette.responses import StreamingResponse
+
+logger = logging.getLogger(__name__)
 
 from app.agent import handle_message
 from app.config import settings
@@ -485,6 +488,20 @@ async def list_decisions(limit: int = 50):
     LIMIT $limit
     """
     results = await execute_cypher(cypher, {"limit": limit})
+    logger.info("[decisions] returned %d records", len(results))
+    if results:
+        first = results[0]
+        logger.info(
+            "[decisions] sample — id=%s type=%s outcome_len=%d reasoning_len=%d "
+            "risk_factors=%s cited=%d made_at_type=%s",
+            first.get("id"),
+            first.get("decision_type"),
+            len(first.get("outcome") or ""),
+            len(first.get("reasoning") or ""),
+            first.get("risk_factors"),
+            len(first.get("cited_sections") or []),
+            type(first.get("made_at")).__name__,
+        )
     return {"decisions": results}
 
 
