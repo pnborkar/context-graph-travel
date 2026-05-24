@@ -413,7 +413,7 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         zIndex={10}
         px={4}
         py={2}
-        bg="gray.50"
+        bg="gray.100"
         justify="space-between"
         align="center"
       >
@@ -442,7 +442,7 @@ export function ContextGraphView({ externalGraphData, onAskAbout }: ContextGraph
         left={0}
         right={0}
         zIndex={10}
-        bg="gray.50"
+        bg="gray.100"
         px={3}
         pt={2.5}
         pb={2}

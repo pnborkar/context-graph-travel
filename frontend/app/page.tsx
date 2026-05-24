@@ -243,7 +243,7 @@ export default function Home() {
               overflow="hidden"
               shadow="sm"
             >
-              <Box px={4} py={3} borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} bg="gray.50" borderTopRadius="xl">
+              <Box px={4} py={3} borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} bg="gray.100" borderTopRadius="xl">
                 <Heading size="sm" color="gray.800">AI Assistant</Heading>
                 <Text fontSize="xs" color="gray.500" mt={0.5}>
                   Ask about customers, refunds, policies, and disruptions
