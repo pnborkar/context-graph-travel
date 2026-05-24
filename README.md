@@ -147,6 +147,18 @@ cp .env.example .env
 
 ## Roadmap
 
+### Immediate
+
+**Re-enable Cross-Session Agent Memory (NAMS + OpenAI embeddings)**
+The memory infrastructure is already wired — entities and preferences are extracted per message but discarded at session end. Re-enabling requires:
+- Swap `neo4j-agent-memory[litellm,extraction]` back into `pyproject.toml` (no `sentence-transformers` — use OpenAI via LiteLLM instead)
+- Configure `memory.py` to initialize with `text-embedding-3-small` through LiteLLM
+- Set `MEMORY_BACKEND=bolt` in Railway environment variables
+
+Result: the agent remembers customer context across sessions — prior interactions, stated preferences, and past decisions — all persisted as a subgraph in Neo4j and traversable alongside the live query.
+
+---
+
 ### Agent Memory — Graph-native Persistence
 The agent already extracts entities and preferences per conversation. Next step is making this **visible and queryable** as a first-class graph feature:
 - Dedicated **Memory panel** in the UI showing what the agent has learned about each customer across sessions — past interactions, stated preferences, inferred travel patterns
