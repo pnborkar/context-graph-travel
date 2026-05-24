@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     # LLM provider keys for the agent
     anthropic_api_key: str = ""
     openai_api_key: str = ""
-    domain_id: str = "hospitality"
+    domain_id: str = "travel-customer-service"
     session_strategy: str = "per_conversation"
     backend_port: int = 8000
     frontend_port: int = 3000
