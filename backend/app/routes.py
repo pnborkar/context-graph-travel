@@ -462,15 +462,17 @@ async def list_traces(session_id: str | None = None):
 
 
 @router.get("/decisions")
-async def list_decisions(limit: int = 50):
-    """Return all Decision nodes across all sessions with rich metadata."""
+async def list_decisions(limit: int = 50, session_id: str | None = None):
+    """Return Decision nodes, optionally filtered to a single session."""
     _require_neo4j()
-    cypher = """
+    session_filter = "WHERE sess.id = $session_id" if session_id else ""
+    cypher = f"""
     MATCH (sess:Session)-[:MADE_DECISION]->(d:Decision)
+    {session_filter}
     OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
     OPTIONAL MATCH (d)-[:BASED_ON]->(ps:PolicySection)
     WITH d, c, sess,
-         [x IN collect(DISTINCT {id: ps.id, title: ps.title}) WHERE x.id IS NOT NULL] AS cited_sections
+         [x IN collect(DISTINCT {{id: ps.id, title: ps.title}}) WHERE x.id IS NOT NULL] AS cited_sections
     RETURN
         d.id                AS id,
         d.decision_type     AS decision_type,
@@ -487,7 +489,7 @@ async def list_decisions(limit: int = 50):
     ORDER BY d.made_at DESC
     LIMIT $limit
     """
-    results = await execute_cypher(cypher, {"limit": limit})
+    results = await execute_cypher(cypher, {"limit": limit, "session_id": session_id})
     logger.info("[decisions] returned %d records", len(results))
     if results:
         first = results[0]

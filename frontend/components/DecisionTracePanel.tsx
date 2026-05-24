@@ -70,13 +70,16 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   const [decisions, setDecisions] = useState<PastDecision[]>([]);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [lastExpanded, setLastExpanded] = useState<string | null>(null);
+  const [sessionDecisions, setSessionDecisions] = useState<PastDecision[]>([]);
 
   useEffect(() => {
     setExpandedIds(new Set());
     setTraces([]);
+    setSessionDecisions([]);
     if (!sessionId) return;
     loadTraces();
-    const interval = setInterval(loadTraces, 5000);
+    loadSessionDecisions();
+    const interval = setInterval(() => { loadTraces(); loadSessionDecisions(); }, 5000);
     return () => clearInterval(interval);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
@@ -90,7 +93,6 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view]);
 
-  // Refresh all decisions when a new session completes (new decision recorded)
   useEffect(() => {
     if (view === "all" && sessionId) loadDecisions();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,6 +115,15 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
           }))
         );
       }
+    } catch { /* backend may not be running */ }
+  }
+
+  async function loadSessionDecisions() {
+    if (!sessionId) return;
+    try {
+      const res = await fetch(`${API_BASE}/decisions?session_id=${encodeURIComponent(sessionId)}&limit=10`, { signal: AbortSignal.timeout(10000) });
+      const data = await res.json();
+      if (data.decisions) setSessionDecisions(data.decisions as PastDecision[]);
     } catch { /* backend may not be running */ }
   }
 
@@ -262,6 +273,45 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
                 </Box>
               );
             })
+          )}
+          {/* Decision recorded for this session */}
+          {sessionDecisions.length > 0 && (
+            <Box mt={2}>
+              <HStack gap={1.5} mb={2} px={1}>
+                <ShieldCheck size={13} color="#4A5568" />
+                <Text fontSize="xs" fontWeight="semibold" color="gray.600">Decision Recorded</Text>
+              </HStack>
+              {sessionDecisions.map((d) => {
+                const palette = DECISION_COLORS[d.decision_type] || "gray";
+                const confidence = d.confidence_score ?? null;
+                return (
+                  <Box key={d.id} borderRadius="md" border="1px solid" borderColor="green.200" bg="green.50" px={3} py={2.5}>
+                    <HStack gap={1.5} mb={1} flexWrap="wrap">
+                      <Badge size="sm" colorPalette={palette}>{d.decision_type.replace(/_/g, " ")}</Badge>
+                      {d.customer_name && <Text fontSize="xs" color="gray.700" fontWeight="medium">{d.customer_name}</Text>}
+                      {d.loyalty_tier && <Badge size="sm" variant="outline" colorPalette="purple">{d.loyalty_tier}</Badge>}
+                      {confidence !== null && <ConfidenceBar score={confidence} />}
+                    </HStack>
+                    <Text fontSize="xs" color="gray.800" lineHeight="tall" mt={1}>{d.outcome}</Text>
+                    {d.risk_factors && d.risk_factors.length > 0 && (
+                      <HStack gap={1} mt={1.5} flexWrap="wrap">
+                        {d.risk_factors.map((r) => (
+                          <Badge key={r} size="xs" colorPalette="orange" variant="subtle">{r.replace(/_/g, " ")}</Badge>
+                        ))}
+                      </HStack>
+                    )}
+                    {d.cited_sections && d.cited_sections.length > 0 && (
+                      <HStack gap={1} mt={1} flexWrap="wrap">
+                        <ShieldCheck size={10} color="#718096" />
+                        {d.cited_sections.map((ps) => (
+                          <Text key={ps.id} fontSize="10px" color="blue.600">§ {ps.title || ps.id}</Text>
+                        ))}
+                      </HStack>
+                    )}
+                  </Box>
+                );
+              })}
+            </Box>
           )}
         </VStack>
       )}
