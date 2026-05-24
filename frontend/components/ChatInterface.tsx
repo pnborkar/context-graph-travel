@@ -675,8 +675,9 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
       <Box px={4} py={3} borderTop="1px solid" borderColor="gray.200">
         <Box
           borderWidth="1px"
-          borderColor="gray.200"
+          borderColor="blue.100"
           rounded="lg"
+          bg="blue.50"
           _focusWithin={{ borderColor: "blue.400", boxShadow: "0 0 0 1px var(--chakra-colors-blue-400)" }}
           transition="border-color 0.2s, box-shadow 0.2s"
         >
@@ -686,6 +687,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
             onKeyDown={handleKeyDown}
             placeholder="Ask about a customer refund, policy, or disrupted booking..."
             border="none"
+            bg="transparent"
             _focus={{ boxShadow: "none" }}
             resize="none"
             rows={2}
