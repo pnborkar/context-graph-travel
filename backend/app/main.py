@@ -88,7 +88,7 @@ def get_memory_status() -> bool:
     return _memory_available
 
 app = FastAPI(
-    title="Expedia Context Agent",
+    title="Travel Context Graph",
     description="GraphRAG-powered customer service agent for flight disruptions, refunds, and policy resolution",
     version="0.1.0",
     lifespan=lifespan,
@@ -120,7 +120,7 @@ async def health():
             "status": "ok" if memory_ok else "degraded",
             "memory_backend": "nams",
             "nams": memory_ok,
-            "domain": "expedia-customer-service",
+            "domain": "travel-customer-service",
             "version": "0.1.0",
         }
         if not memory_ok:
@@ -136,6 +136,6 @@ async def health():
         "status": "ok" if neo4j_ok else "degraded",
         "memory_backend": settings.memory_backend,
         "neo4j": neo4j_ok,
-        "domain": "expedia-customer-service",
+        "domain": "travel-customer-service",
         "version": "0.1.0",
     }

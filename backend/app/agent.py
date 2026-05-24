@@ -1,4 +1,4 @@
-"""Expedia Customer Service Agent — Anthropic Tools.
+"""Travel Context Graph — Customer Service Agent (Anthropic Tools).
 
 Tools:
   get_customer          — look up customer profile + loyalty tier
@@ -50,8 +50,8 @@ logger = logging.getLogger(__name__)
 # System prompt
 # ---------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """You are an Expedia Group AI Customer Service Agent powered by a Neo4j knowledge graph.
-You handle flight refunds, cancellations, and travel disruptions for Expedia customers.
+SYSTEM_PROMPT = """You are a Travel AI Customer Service Agent powered by a Neo4j knowledge graph.
+You handle flight refunds, cancellations, and travel disruptions for customers.
 
 DATABASE SCHEMA — use these EXACT property names in any Cypher you write:
 Nodes:

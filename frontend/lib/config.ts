@@ -4,8 +4,8 @@
  */
 
 export const DOMAIN = {
-  id: "expedia-customer-service",
-  name: "Expedia",
+  id: "travel-customer-service",
+  name: "Travel",
   description: "Customer service intelligence for flight disruptions, refunds, and policy resolution",
   tagline: "GraphRAG-powered Customer Service Agent",
 };
@@ -81,7 +81,7 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     name: "Policy Lookup",
     prompts: [
       "Is there an active weather waiver affecting Alaska Airlines flights to Hawaii?",
-      "What is Expedia's refund policy for involuntary cancellations?",
+      "What is the refund policy for involuntary cancellations?",
       "What fee waivers apply to Gold loyalty members?",
       "What are the refund terms under the Alaska Airlines carrier agreement?"
     ]

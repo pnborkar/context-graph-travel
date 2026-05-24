@@ -1,4 +1,4 @@
-# Expedia Context Graph
+# Travel Context Graph
 
 [![Neo4j](https://img.shields.io/badge/Neo4j-AuraDB-blue?style=for-the-badge&logo=neo4j)](https://neo4j.com/cloud/aura/)
 [![Anthropic](https://img.shields.io/badge/Anthropic-Claude-orange?style=for-the-badge)](https://anthropic.com)
@@ -15,7 +15,7 @@ GraphRAG-powered customer service agent for flight disruptions, refunds, and pol
 
 ## What This Demos
 
-A live AI agent that handles Expedia customer service scenarios using a Neo4j knowledge graph. The key distinction from a standard RAG chatbot: every answer is grounded in **graph traversal** — the agent follows relationships across customers, bookings, carrier agreements, loyalty tiers, weather memos, and policy sections to reach decisions a text search would miss entirely.
+A live AI agent that handles travel customer service scenarios using a Neo4j knowledge graph. The key distinction from a standard RAG chatbot: every answer is grounded in **graph traversal** — the agent follows relationships across customers, bookings, carrier agreements, loyalty tiers, weather memos, and policy sections to reach decisions a text search would miss entirely.
 
 **Three capabilities on display:**
 
@@ -52,7 +52,7 @@ Unlike approaches that optimize for reasoning pattern discovery (structural simi
 
 ## Demo Scenarios
 
-![Expedia Context Graph](docs/graph_1.jpg)
+![Travel Context Graph](docs/graph_1.jpg)
 
 ### Disruption & Refunds
 - Process a refund for Sarah Chen on booking EXP-991 — her Maui flight was canceled due to the Pacific storm
@@ -68,7 +68,7 @@ These questions require 4–6 hops across the graph. Naive text search returns p
 
 ### Policy Lookup
 - Is there an active weather waiver affecting Alaska Airlines flights to Hawaii?
-- What is Expedia's refund policy for involuntary cancellations?
+- What is the refund policy for involuntary cancellations?
 - What fee waivers apply to Gold loyalty members?
 - What are the refund terms under the Alaska Airlines carrier agreement?
 
@@ -158,7 +158,7 @@ cp .env.example .env
 | `ANTHROPIC_API_KEY` | Claude API key |
 | `OPENAI_API_KEY` | OpenAI API key — used for `text-embedding-3-small` (1536-dim) vector search |
 | `MEMORY_BACKEND` | `disabled` (default, no extra deps) or `bolt` (self-hosted Neo4j memory) |
-| `DOMAIN_ID` | Domain identifier — set to `expedia-customer-service` |
+| `DOMAIN_ID` | Domain identifier — set to `travel-customer-service` |
 | `BACKEND_PORT` | Default: 8000 |
 | `FRONTEND_PORT` | Default: 3000 |
 

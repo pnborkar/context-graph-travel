@@ -65,7 +65,7 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                 <Box>
                   <Heading size="sm" mb={3} color="gray.800">What This Demos</Heading>
                   <Text color="gray.600" fontSize="sm" lineHeight="tall">
-                    A live AI agent that handles Expedia customer service scenarios using a Neo4j
+                    A live AI agent that handles travel customer service scenarios using a Neo4j
                     knowledge graph. Every answer is grounded in <strong>graph traversal</strong> — the
                     agent follows relationships across customers, bookings, carrier agreements, loyalty
                     tiers, weather memos, and policy sections to reach decisions a text search would miss.
