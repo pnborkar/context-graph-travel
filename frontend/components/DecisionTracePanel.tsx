@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import {
   Box, Heading, Text, VStack, HStack, Badge, Flex, Button,
 } from "@chakra-ui/react";
-import { GitBranch, Brain, Wrench, Eye, ChevronDown, ChevronRight, History, ShieldCheck } from "lucide-react";
+import { GitBranch, Brain, Wrench, Eye, ChevronDown, ChevronRight, History, ShieldCheck, RotateCcw } from "lucide-react";
 import { API_BASE } from "@/lib/config";
 
 interface TraceStep {
@@ -81,8 +81,19 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   }, [sessionId]);
 
   useEffect(() => {
-    if (view === "all") loadDecisions();
+    if (view === "all") {
+      loadDecisions();
+      const interval = setInterval(loadDecisions, 10000);
+      return () => clearInterval(interval);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view]);
+
+  // Refresh all decisions when a new session completes (new decision recorded)
+  useEffect(() => {
+    if (view === "all" && sessionId) loadDecisions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId]);
 
   async function loadTraces() {
     try {
@@ -142,6 +153,11 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
           <History size={12} />
           All Decisions
         </Button>
+        {view === "all" && (
+          <Button size="xs" variant="ghost" colorPalette="gray" onClick={loadDecisions} ml="auto">
+            <RotateCcw size={11} />
+          </Button>
+        )}
       </HStack>
 
       {/* Session traces view */}
