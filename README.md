@@ -1,15 +1,17 @@
 # Expedia Context Graph
 
 [![Neo4j](https://img.shields.io/badge/Neo4j-AuraDB-blue?logo=neo4j)](https://neo4j.com/cloud/aura/)
+[![Neo4j](https://img.shields.io/badge/NEO4J-AuraDB-brightgreen?style=for-the-badge&logo=neo4j&logoColor=white)]()
+
 [![Anthropic](https://img.shields.io/badge/Anthropic-Claude-orange)](https://anthropic.com)
 [![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings-green)](https://openai.com)
+
 
 GraphRAG-powered customer service agent for flight disruptions, refunds, and policy resolution.
 
 ## Live Demo
 
 **Frontend:** https://context-graph-travel.vercel.app  
-**Backend API:** https://context-graph-travel-production.up.railway.app
 
 ---
 
