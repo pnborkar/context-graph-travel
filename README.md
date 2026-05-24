@@ -37,6 +37,8 @@ A live AI agent that handles Expedia customer service scenarios using a Neo4j kn
 
 ## Demo Scenarios
 
+![Expedia Context Graph](docs/graph_1.jpeg)
+
 ### Disruption & Refunds
 - Process a refund for Sarah Chen on booking EXP-991 — her Maui flight was canceled due to the Pacific storm
 - What refund is James Okafor entitled to for his disrupted booking EXP-887?
