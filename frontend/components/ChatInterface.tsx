@@ -675,10 +675,10 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
       <Box px={4} py={3} borderTop="1px solid" borderColor="gray.200">
         <Box
           borderWidth="1px"
-          borderColor="blue.100"
+          borderColor="gray.300"
           rounded="lg"
-          bg="blue.50"
-          _focusWithin={{ borderColor: "blue.400", boxShadow: "0 0 0 1px var(--chakra-colors-blue-400)" }}
+          bg="gray.100"
+          _focusWithin={{ borderColor: "gray.400", boxShadow: "0 0 0 1px var(--chakra-colors-gray-400)" }}
           transition="border-color 0.2s, box-shadow 0.2s"
         >
           <Textarea

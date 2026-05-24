@@ -306,7 +306,7 @@ export default function Home() {
               shadow="sm"
             >
               <Tabs.Root defaultValue="traces" size="sm" display="flex" flexDirection="column" h="100%">
-                <Box borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} px={4} pt={3} pb={0} bg="gray.50" borderTopRadius="xl">
+                <Box borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} px={4} pt={3} pb={0} bg="gray.100" borderTopRadius="xl">
                   <HStack justify="space-between" mb={2}>
                     <Heading size="sm" color="gray.800">Decision Traces</Heading>
                   </HStack>
