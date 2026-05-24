@@ -65,6 +65,13 @@ async def lifespan(app: FastAPI):
             try:
                 from app.vector_client import create_vector_index
                 await create_vector_index()
+                # Decision node vector index for find_precedents similarity search
+                await create_vector_index(
+                    index_name="decision_embeddings",
+                    label="Decision",
+                    property_name="embedding",
+                    dimensions=1536,
+                )
             except Exception as e:
                 logger.warning("Vector index creation failed (non-fatal): %s", e)
 

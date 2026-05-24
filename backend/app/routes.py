@@ -458,6 +458,35 @@ async def list_traces(session_id: str | None = None):
     return {"traces": results}
 
 
+@router.get("/decisions")
+async def list_decisions(limit: int = 50):
+    """Return all Decision nodes across all sessions with rich metadata."""
+    _require_neo4j()
+    cypher = """
+    MATCH (sess:Session)-[:MADE_DECISION]->(d:Decision)
+    OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
+    OPTIONAL MATCH (d)-[:BASED_ON]->(ps:PolicySection)
+    WITH d, c, sess, collect(DISTINCT {id: ps.id, title: ps.title}) AS cited_sections
+    RETURN
+        d.id                AS id,
+        d.decision_type     AS decision_type,
+        d.value             AS outcome,
+        d.reasoning         AS reasoning,
+        d.confidence_score  AS confidence_score,
+        d.risk_factors      AS risk_factors,
+        d.policy_citations  AS policy_citations,
+        d.made_at           AS made_at,
+        sess.id             AS session_id,
+        c.name              AS customer_name,
+        c.loyalty_tier      AS loyalty_tier,
+        cited_sections
+    ORDER BY d.made_at DESC
+    LIMIT $limit
+    """
+    results = await execute_cypher(cypher, {"limit": limit})
+    return {"decisions": results}
+
+
 @router.get("/entities/{name}")
 async def get_entity_detail(name: str):
     """Get full entity detail with all properties and connections."""

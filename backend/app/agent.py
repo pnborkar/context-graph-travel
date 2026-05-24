@@ -100,6 +100,8 @@ MANDATORY: You MUST call record_decision on EVERY request before answering.
 - For policy lookups: decision_type="policy_lookup"
 - For analytics queries: decision_type="analytics_query"
 - The session_id to pass is printed in [CONTEXT] at the start of each message.
+- confidence_score: 0.0–1.0 reflecting how clearly the policy evidence supports the decision (0.95 = explicit policy match, 0.7 = inferred, 0.5 = ambiguous)
+- risk_factors: JSON array of relevant risk strings e.g. '["mixed_payment","international_route","no_weather_waiver"]'
 
 RESPONSE FORMAT — always include:
 - The answer to the customer's question with specific data from the graph
@@ -290,18 +292,43 @@ async def record_decision(
     outcome: str,
     reasoning: str,
     policy_citations: str = "[]",
+    confidence_score: str = "0.8",
+    risk_factors: str = "[]",
 ) -> str:
     """
-    decision_type: refund_authorized | fee_waived | escalate | rebook | denied
+    decision_type: refund_authorized | fee_waived | escalate | rebook | denied | policy_lookup | analytics_query
     policy_citations: JSON array of policy section IDs e.g. '["ps-refund-involuntary","ps-loyalty-fee-waiver"]'
+    confidence_score: 0.0-1.0 — how clearly the policy evidence supports this decision
+    risk_factors: JSON array of risk strings e.g. '["mixed_payment","no_weather_waiver"]'
     """
+    import asyncio
+    import uuid
+
     try:
         citations = json.loads(policy_citations) if policy_citations else []
     except json.JSONDecodeError:
         citations = []
 
-    import uuid
+    try:
+        risk_list = json.loads(risk_factors) if risk_factors else []
+    except json.JSONDecodeError:
+        risk_list = []
+
+    try:
+        confidence = float(confidence_score)
+    except (ValueError, TypeError):
+        confidence = 0.8
+
     decision_id = f"dec-{uuid.uuid4().hex[:8]}"
+
+    # Generate embedding for similarity search
+    embedding = None
+    try:
+        from rag.graphrag import embed as _embed
+        embed_text = f"{decision_type} {outcome} {reasoning[:500]}"
+        embedding = await asyncio.to_thread(_embed, embed_text)
+    except Exception:
+        pass
 
     cypher = """
         MERGE (sess:Session {id: $session_id})
@@ -312,6 +339,8 @@ async def record_decision(
             value: $outcome,
             reasoning: $reasoning,
             policy_citations: $citations,
+            confidence_score: $confidence,
+            risk_factors: $risk_list,
             made_at: datetime()
         })
         CREATE (sess)-[:MADE_DECISION]->(d)
@@ -324,38 +353,79 @@ async def record_decision(
         "outcome": outcome,
         "reasoning": reasoning,
         "citations": citations,
+        "confidence": confidence,
+        "risk_list": risk_list,
     }, tool_name="record_decision")
+
+    # Store embedding on the Decision node
+    if embedding:
+        try:
+            await execute_cypher(
+                "MATCH (d:Decision {id: $id}) CALL db.create.setNodeVectorProperty(d, 'embedding', $embedding)",
+                {"id": decision_id, "embedding": embedding},
+                tool_name="record_decision_embed",
+            )
+        except Exception:
+            pass
 
     # Link to cited policy sections
     for section_id in citations:
-        link_cypher = """
-            MATCH (d:Decision {id: $decision_id})
-            MATCH (ps:PolicySection {id: $section_id})
-            MERGE (d)-[:BASED_ON]->(ps)
-        """
         try:
-            await execute_cypher(link_cypher, {
-                "decision_id": decision_id, "section_id": section_id
-            }, tool_name="record_decision_link")
+            await execute_cypher(
+                """
+                MATCH (d:Decision {id: $decision_id})
+                MATCH (ps:PolicySection {id: $section_id})
+                MERGE (d)-[:BASED_ON]->(ps)
+                """,
+                {"decision_id": decision_id, "section_id": section_id},
+                tool_name="record_decision_link",
+            )
         except Exception:
             pass
 
     return json.dumps({"decision_id": decision_id, "recorded": True})
 
 
-@register_tool("find_precedents", "Find similar past decisions using semantic search — surfaces decisions with the same carrier, disruption type, or tier. Use this to cite consistent policy application.")
+@register_tool("find_precedents", "Find similar past decisions using vector similarity search — surfaces decisions with the same carrier, disruption type, or tier. Use this to cite consistent policy application.")
 async def find_precedents(query: str, limit: str = "3") -> str:
-    cypher = """
-        MATCH (d:Decision)
-        WHERE d.reasoning IS NOT NULL
-        RETURN d.id AS decision_id, d.decision_type AS type,
-               d.value AS outcome, d.reasoning AS reasoning,
-               d.policy_citations AS citations,
-               d.made_at AS decided_at
-        ORDER BY d.made_at DESC
-        LIMIT toInteger($limit)
-    """
-    result = await execute_cypher(cypher, {"limit": limit}, tool_name="find_precedents")
+    import asyncio
+    try:
+        from rag.graphrag import embed as _embed
+        q_embedding = await asyncio.to_thread(_embed, query)
+        cypher = """
+            CALL db.index.vector.queryNodes('decision_embeddings', toInteger($limit), $embedding)
+            YIELD node AS d, score
+            OPTIONAL MATCH (sess:Session)-[:MADE_DECISION]->(d)
+            OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
+            RETURN d.id AS decision_id, d.decision_type AS type,
+                   d.value AS outcome, d.reasoning AS reasoning,
+                   d.policy_citations AS citations,
+                   d.confidence_score AS confidence,
+                   d.risk_factors AS risk_factors,
+                   d.made_at AS decided_at,
+                   c.name AS customer_name,
+                   round(score * 100) / 100 AS similarity
+            ORDER BY score DESC
+        """
+        result = await execute_cypher(cypher, {"limit": limit, "embedding": q_embedding}, tool_name="find_precedents")
+    except Exception:
+        # Fallback to recency scan if index not yet populated
+        cypher = """
+            MATCH (d:Decision)
+            WHERE d.reasoning IS NOT NULL
+            OPTIONAL MATCH (sess:Session)-[:MADE_DECISION]->(d)
+            OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
+            RETURN d.id AS decision_id, d.decision_type AS type,
+                   d.value AS outcome, d.reasoning AS reasoning,
+                   d.policy_citations AS citations,
+                   d.confidence_score AS confidence,
+                   d.risk_factors AS risk_factors,
+                   d.made_at AS decided_at,
+                   c.name AS customer_name
+            ORDER BY d.made_at DESC
+            LIMIT toInteger($limit)
+        """
+        result = await execute_cypher(cypher, {"limit": limit}, tool_name="find_precedents")
     return json.dumps(result, default=str)
 
 
