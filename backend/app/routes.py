@@ -466,7 +466,8 @@ async def list_decisions(limit: int = 50):
     MATCH (sess:Session)-[:MADE_DECISION]->(d:Decision)
     OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
     OPTIONAL MATCH (d)-[:BASED_ON]->(ps:PolicySection)
-    WITH d, c, sess, collect(DISTINCT {id: ps.id, title: ps.title}) AS cited_sections
+    WITH d, c, sess,
+         [x IN collect(DISTINCT {id: ps.id, title: ps.title}) WHERE x.id IS NOT NULL] AS cited_sections
     RETURN
         d.id                AS id,
         d.decision_type     AS decision_type,
@@ -475,7 +476,7 @@ async def list_decisions(limit: int = 50):
         d.confidence_score  AS confidence_score,
         d.risk_factors      AS risk_factors,
         d.policy_citations  AS policy_citations,
-        d.made_at           AS made_at,
+        toString(d.made_at) AS made_at,
         sess.id             AS session_id,
         c.name              AS customer_name,
         c.loyalty_tier      AS loyalty_tier,

@@ -319,13 +319,18 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
                   </Button>
                   {isOpen && (
                     <Box px={3} pb={3} pt={1} borderTop="1px solid" borderColor="gray.100" bg="gray.50">
+                      {/* Outcome */}
+                      <Box mb={2}>
+                        <Text fontSize="xs" fontWeight="semibold" color="gray.600" mb={0.5}>Outcome</Text>
+                        <Text fontSize="xs" color="gray.800" lineHeight="tall">{d.outcome || "—"}</Text>
+                      </Box>
                       {/* Reasoning */}
                       <Box mb={2}>
                         <HStack gap={1} mb={1}>
                           <Brain size={11} color="#718096" />
                           <Text fontSize="xs" fontWeight="semibold" color="gray.600">Reasoning</Text>
                         </HStack>
-                        <Text fontSize="xs" color="gray.700" lineHeight="tall">{d.reasoning}</Text>
+                        <Text fontSize="xs" color="gray.700" lineHeight="tall">{d.reasoning || "No reasoning recorded."}</Text>
                       </Box>
 
                       {/* Risk factors */}
