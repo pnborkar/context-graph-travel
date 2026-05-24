@@ -23,6 +23,21 @@ A live AI agent that handles Expedia customer service scenarios using a Neo4j kn
 - **Context Graph** — live graph visualization updates as the agent works, showing exactly which nodes and relationships were used
 - **Agent Memory** — conversation context, extracted entities, and detected preferences persist in Neo4j across sessions
 
+## Design Philosophy — Audit & Governance First
+
+This project is built around a specific design principle: **every agent decision must be explainable, traceable, and grounded in policy**.
+
+Unlike approaches that optimize for reasoning pattern discovery (structural similarity, causal chains, community detection), this model is built for **customer service compliance** — where the question isn't just "what did the agent decide?" but "which policy section justified it, under which carrier agreement, for which loyalty tier, given which active weather waiver?"
+
+**How this shows up in the graph:**
+
+- `Decision` nodes cite specific `PolicySection` nodes via `:BASED_ON` relationships — not free-text reasoning, but verifiable policy links
+- Every decision is scoped to a `Session` — grouping the full conversation context with the outcome for audit replay
+- The context graph in the UI is not decorative — it is the evidence trail, showing exactly which nodes the agent traversed to reach its answer
+- Multi-hop traversal (4–6 hops) is what connects a customer's loyalty tier, their carrier's agreement, an active weather waiver, and the applicable refund policy — no single document contains all four; only the graph connects them
+
+**The tradeoff:** this model trades decision similarity search and causal chain analysis (better suited for fraud or credit decisioning) for policy traceability and session-scoped audit trails — the right fit for regulated customer service workflows.
+
 ## Graph Data Model
 
 ```
