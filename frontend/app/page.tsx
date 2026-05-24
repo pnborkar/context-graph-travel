@@ -220,7 +220,7 @@ export default function Home() {
       </Box>
 
       {/* Main content */}
-      <Container maxW="container.2xl" py={{ base: 3, md: 5 }} pl={{ base: 2, md: 6 }} pr={{ base: 2, md: 16 }}>
+      <Container maxW="100%" py={{ base: 3, md: 5 }} px={{ base: 2, md: 6 }}>
         <Grid
           templateColumns={{ base: "1fr", lg: "480px 1fr 300px" }}
           gap={{ base: 3, md: 4 }}
