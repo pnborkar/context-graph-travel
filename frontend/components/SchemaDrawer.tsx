@@ -52,7 +52,7 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
         <Drawer.Backdrop />
         <Drawer.Positioner>
           <Drawer.Content>
-            <Drawer.Header borderBottomWidth="1px" borderColor="gray.200">
+            <Drawer.Header px={6} py={5}>
               <Drawer.Title>About Context Graph</Drawer.Title>
               <Drawer.CloseTrigger asChild>
                 <CloseButton size="sm" />
@@ -193,7 +193,7 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                   <VStack align="stretch" gap={2}>
                     <Button
                       asChild
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
                       justifyContent="flex-start"
                     >
@@ -207,7 +207,7 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                     </Button>
                     <Button
                       asChild
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
                       justifyContent="flex-start"
                     >
