@@ -340,14 +340,16 @@ export function DecisionTracePanel({ sessionId, lastQuestion }: { sessionId?: st
             </Box>
           )}
 
-          {/* Similar past decisions (precedents) */}
-          {precedents.length > 0 && (
+          {/* Similar past decisions (precedents) — exclude the current decision */}
+          {precedents.filter((d) => d.id !== currentDecision?.id).length > 0 && (
             <Box mt={2}>
               <HStack gap={1.5} mb={2} px={1}>
                 <History size={13} color="#4A5568" />
                 <Text fontSize="xs" fontWeight="semibold" color="gray.600">Similar Precedents</Text>
               </HStack>
-              {precedents.map((d) => <DecisionCard key={d.id} d={d} showSimilarity />)}
+              {precedents
+                .filter((d) => d.id !== currentDecision?.id)
+                .map((d) => <DecisionCard key={d.id} d={d} showSimilarity />)}
             </Box>
           )}
         </VStack>
