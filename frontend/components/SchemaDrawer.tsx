@@ -52,7 +52,7 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
         <Drawer.Backdrop />
         <Drawer.Positioner>
           <Drawer.Content>
-            <Drawer.Header px={6} py={5}>
+            <Drawer.Header px={6} py={5} borderBottomWidth="1px" borderColor="gray.200">
               <Drawer.Title>About Context Graph</Drawer.Title>
               <Drawer.CloseTrigger asChild>
                 <CloseButton size="sm" />
