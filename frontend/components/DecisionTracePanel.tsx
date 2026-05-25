@@ -64,7 +64,7 @@ function ConfidenceBar({ score }: { score: number }) {
   );
 }
 
-export function DecisionTracePanel({ sessionId }: { sessionId?: string | null }) {
+export function DecisionTracePanel({ sessionId, lastQuestionTime }: { sessionId?: string | null; lastQuestionTime?: Date | null }) {
   const [view, setView] = useState<"session" | "all">("session");
   const [traces, setTraces] = useState<DecisionTrace[]>([]);
   const [decisions, setDecisions] = useState<PastDecision[]>([]);
@@ -121,7 +121,7 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   async function loadSessionDecisions() {
     if (!sessionId) return;
     try {
-      const res = await fetch(`${API_BASE}/decisions?session_id=${encodeURIComponent(sessionId)}&limit=1`, { signal: AbortSignal.timeout(10000) });
+      const res = await fetch(`${API_BASE}/decisions?session_id=${encodeURIComponent(sessionId)}&limit=10`, { signal: AbortSignal.timeout(10000) });
       const data = await res.json();
       if (data.decisions) setSessionDecisions(data.decisions as PastDecision[]);
     } catch { /* backend may not be running */ }
@@ -155,7 +155,11 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
     el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [lastExpanded]);
 
-  const visibleSessionDecisions = sessionDecisions;
+  const visibleSessionDecisions = lastQuestionTime
+    ? sessionDecisions.filter((d) =>
+        typeof d.made_at === "string" && new Date(d.made_at) >= lastQuestionTime
+      )
+    : sessionDecisions;
 
   return (
     <Flex direction="column" h="100%">

@@ -65,6 +65,7 @@ export default function Home() {
   const [activePanel, setActivePanel] = useState<PanelId>("chat");
   const [backendStatus, setBackendStatus] = useState<"ok" | "degraded" | "offline">("offline");
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [lastQuestionTime, setLastQuestionTime] = useState<Date | null>(null);
   const [askAboutInput, setAskAboutInput] = useState<string | null>(null);
   const [schemaOpen, setSchemaOpen] = useState(false);
 
@@ -74,6 +75,7 @@ export default function Home() {
 
   const handleSessionChange = useCallback((sessionId: string) => {
     setCurrentSessionId(sessionId);
+    setLastQuestionTime(new Date());
   }, []);
 
   const handleAskAbout = useCallback((entityName: string) => {
@@ -307,7 +309,7 @@ export default function Home() {
                 <Heading size="sm" color="gray.800">Decision Traces</Heading>
               </Box>
               <Box flex="1" minH={0} overflow="auto">
-                <DecisionTracePanel sessionId={currentSessionId} />
+                <DecisionTracePanel sessionId={currentSessionId} lastQuestionTime={lastQuestionTime} />
               </Box>
             </Box>
           </GridItem>
