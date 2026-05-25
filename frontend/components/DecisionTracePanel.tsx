@@ -99,7 +99,7 @@ function DecisionCard({ d, showSimilarity = false }: { d: PastDecision; showSimi
   );
 }
 
-export function DecisionTracePanel({ sessionId, lastQuestion }: { sessionId?: string | null; lastQuestion?: string }) {
+export function DecisionTracePanel({ sessionId, lastQuestion, currentDecisionId }: { sessionId?: string | null; lastQuestion?: string; currentDecisionId?: string | null }) {
   const [view, setView] = useState<"session" | "all">("session");
   const [traces, setTraces] = useState<DecisionTrace[]>([]);
   const [decisions, setDecisions] = useState<PastDecision[]>([]);
@@ -121,12 +121,18 @@ export function DecisionTracePanel({ sessionId, lastQuestion }: { sessionId?: st
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
-  // Once the agent finishes (lastQuestion set), fetch current decision + precedents
+  // Fetch the exact decision by ID as soon as the SSE event fires
   useEffect(() => {
-    if (!lastQuestion || !sessionId) return;
+    if (!currentDecisionId) return;
     setCurrentDecision(null);
+    loadDecisionById(currentDecisionId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentDecisionId]);
+
+  // Once the agent finishes (lastQuestion set), fetch precedents
+  useEffect(() => {
+    if (!lastQuestion) return;
     setPrecedents([]);
-    loadCurrentDecision();
     loadPrecedents(lastQuestion);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastQuestion]);
@@ -165,12 +171,11 @@ export function DecisionTracePanel({ sessionId, lastQuestion }: { sessionId?: st
     } catch { /* backend may not be running */ }
   }
 
-  async function loadCurrentDecision() {
-    if (!sessionId) return;
+  async function loadDecisionById(id: string) {
     try {
-      const res = await fetch(`${API_BASE}/decisions?session_id=${encodeURIComponent(sessionId)}&limit=1`, { signal: AbortSignal.timeout(10000) });
+      const res = await fetch(`${API_BASE}/decisions/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(10000) });
       const data = await res.json();
-      if (data.decisions?.length) setCurrentDecision(data.decisions[0] as PastDecision);
+      if (data.decision) setCurrentDecision(data.decision as PastDecision);
     } catch { /* backend may not be running */ }
   }
 

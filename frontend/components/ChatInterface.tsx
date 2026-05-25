@@ -46,6 +46,7 @@ interface ChatInterfaceProps {
   onExternalInputConsumed?: () => void;
   onSessionChange?: (sessionId: string) => void;
   onResponseComplete?: (questionText: string) => void;
+  onDecisionRecorded?: (decisionId: string) => void;
 }
 
 const STORAGE_KEY = `ccg-chat-history-${DOMAIN.id}`;
@@ -134,7 +135,7 @@ function loadStoredSessionId(): string | null {
   }
 }
 
-export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputConsumed, onSessionChange, onResponseComplete }: ChatInterfaceProps) {
+export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputConsumed, onSessionChange, onResponseComplete, onDecisionRecorded }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -361,6 +362,10 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
                     ];
                     setStreamingPreferences([...streamingPreferencesRef.current]);
                   }
+                  break;
+
+                case "decision_recorded":
+                  if (data.decision_id) onDecisionRecorded?.(data.decision_id as string);
                   break;
 
                 case "done": {

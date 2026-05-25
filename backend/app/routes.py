@@ -507,6 +507,35 @@ async def list_decisions(limit: int = 50, session_id: str | None = None):
     return {"decisions": results}
 
 
+@router.get("/decisions/{decision_id}")
+async def get_decision(decision_id: str):
+    """Fetch a single Decision node by ID."""
+    _require_neo4j()
+    cypher = """
+    MATCH (d:Decision {id: $decision_id})
+    OPTIONAL MATCH (sess:Session)-[:MADE_DECISION]->(d)
+    OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
+    OPTIONAL MATCH (d)-[:BASED_ON]->(ps:PolicySection)
+    WITH d, c,
+         [x IN collect(DISTINCT {id: ps.id, title: ps.title}) WHERE x.id IS NOT NULL] AS cited_sections
+    RETURN
+        d.id                AS id,
+        d.decision_type     AS decision_type,
+        d.value             AS outcome,
+        d.reasoning         AS reasoning,
+        d.confidence_score  AS confidence_score,
+        d.risk_factors      AS risk_factors,
+        toString(d.made_at) AS made_at,
+        c.name              AS customer_name,
+        c.loyalty_tier      AS loyalty_tier,
+        cited_sections
+    """
+    results = await execute_cypher(cypher, {"decision_id": decision_id}, collect=False)
+    if not results:
+        raise HTTPException(status_code=404, detail="Decision not found")
+    return {"decision": results[0]}
+
+
 @router.get("/decisions/similar")
 async def similar_decisions(q: str, limit: int = 5):
     """Return past decisions semantically similar to query text."""
