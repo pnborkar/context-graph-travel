@@ -98,6 +98,11 @@ export function DecisionTracePanel({ sessionId, lastQuestionTime }: { sessionId?
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
+  // Clear stale session decisions whenever a new question is sent
+  useEffect(() => {
+    if (lastQuestionTime) setSessionDecisions([]);
+  }, [lastQuestionTime]);
+
   async function loadTraces() {
     try {
       const url = sessionId
@@ -155,11 +160,7 @@ export function DecisionTracePanel({ sessionId, lastQuestionTime }: { sessionId?
     el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [lastExpanded]);
 
-  const visibleSessionDecisions = lastQuestionTime
-    ? sessionDecisions.filter((d) =>
-        typeof d.made_at === "string" && new Date(d.made_at) >= lastQuestionTime
-      )
-    : sessionDecisions;
+  const visibleSessionDecisions = sessionDecisions;
 
   return (
     <Flex direction="column" h="100%">
