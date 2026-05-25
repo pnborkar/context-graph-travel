@@ -99,7 +99,7 @@ function DecisionCard({ d, showSimilarity = false }: { d: PastDecision; showSimi
   );
 }
 
-export function DecisionTracePanel({ sessionId, lastQuestion, currentDecisionId }: { sessionId?: string | null; lastQuestion?: string; currentDecisionId?: string | null }) {
+export function DecisionTracePanel({ sessionId, lastQuestion }: { sessionId?: string | null; lastQuestion?: string }) {
   const [view, setView] = useState<"session" | "all">("session");
   const [traces, setTraces] = useState<DecisionTrace[]>([]);
   const [decisions, setDecisions] = useState<PastDecision[]>([]);
@@ -108,7 +108,7 @@ export function DecisionTracePanel({ sessionId, lastQuestion, currentDecisionId 
   const [currentDecision, setCurrentDecision] = useState<PastDecision | null>(null);
   const [precedents, setPrecedents] = useState<PastDecision[]>([]);
 
-  // Refresh traces on a short interval so they appear while agent is processing
+  // Poll traces while agent is processing
   useEffect(() => {
     setExpandedIds(new Set());
     setTraces([]);
@@ -121,18 +121,13 @@ export function DecisionTracePanel({ sessionId, lastQuestion, currentDecisionId 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
-  // Fetch the exact decision by ID as soon as the SSE event fires
+  // After agent finishes (done event → onResponseComplete → lastQuestion),
+  // fetch the current session decision + similar precedents directly from the API
   useEffect(() => {
-    if (!currentDecisionId) return;
+    if (!lastQuestion || !sessionId) return;
     setCurrentDecision(null);
-    loadDecisionById(currentDecisionId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDecisionId]);
-
-  // Once the agent finishes (lastQuestion set), fetch precedents
-  useEffect(() => {
-    if (!lastQuestion) return;
     setPrecedents([]);
+    loadCurrentDecision();
     loadPrecedents(lastQuestion);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastQuestion]);
@@ -171,11 +166,12 @@ export function DecisionTracePanel({ sessionId, lastQuestion, currentDecisionId 
     } catch { /* backend may not be running */ }
   }
 
-  async function loadDecisionById(id: string) {
+  async function loadCurrentDecision() {
+    if (!sessionId) return;
     try {
-      const res = await fetch(`${API_BASE}/decisions/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(10000) });
+      const res = await fetch(`${API_BASE}/decisions?session_id=${encodeURIComponent(sessionId)}&limit=1`, { signal: AbortSignal.timeout(10000) });
       const data = await res.json();
-      if (data.decision) setCurrentDecision(data.decision as PastDecision);
+      if (data.decisions?.length) setCurrentDecision(data.decisions[0] as PastDecision);
     } catch { /* backend may not be running */ }
   }
 
