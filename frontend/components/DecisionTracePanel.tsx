@@ -71,12 +71,14 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [lastExpanded, setLastExpanded] = useState<string | null>(null);
   const [sessionDecisions, setSessionDecisions] = useState<PastDecision[]>([]);
+  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
 
   useEffect(() => {
     setExpandedIds(new Set());
     setTraces([]);
     setSessionDecisions([]);
     if (!sessionId) return;
+    setSessionStartTime(new Date());
     loadTraces();
     loadSessionDecisions();
     const interval = setInterval(() => { loadTraces(); loadSessionDecisions(); }, 5000);
@@ -154,6 +156,12 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
     const el = document.getElementById(`expanded-${lastExpanded}`);
     el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [lastExpanded]);
+
+  const visibleSessionDecisions = sessionDecisions.filter((d) =>
+    !sessionStartTime ||
+    typeof d.made_at !== "string" ||
+    new Date(d.made_at) >= sessionStartTime
+  );
 
   return (
     <Flex direction="column" h="100%">
@@ -274,14 +282,14 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
               );
             })
           )}
-          {/* Decision recorded for this session */}
-          {sessionDecisions.length > 0 && (
+          {/* Decision recorded for this session — filtered to current page load */}
+          {visibleSessionDecisions.length > 0 && (
             <Box mt={2}>
               <HStack gap={1.5} mb={2} px={1}>
                 <ShieldCheck size={13} color="#4A5568" />
                 <Text fontSize="xs" fontWeight="semibold" color="gray.600">Decision Recorded</Text>
               </HStack>
-              {sessionDecisions.map((d) => {
+              {visibleSessionDecisions.map((d) => {
                 const palette = DECISION_COLORS[d.decision_type] || "gray";
                 const confidence = d.confidence_score ?? null;
                 return (
