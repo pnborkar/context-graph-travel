@@ -29,6 +29,7 @@ const DATA_MODEL = `(:Customer)-[:HAS_TIER]->(:LoyaltyTier)-[:GRANTS]->(:Benefit
 (:Booking)-[:DISRUPTED_BY]->(:Event)
 (:Policy)-[:HAS_SECTION]->(:PolicySection)
 (:PolicySection)-[:REFERENCED_BY]->(:PolicySection)
+(:Session)-[:FOR_CUSTOMER]->(:Customer)
 (:Session)-[:MADE_DECISION]->(:Decision)
 (:Decision)-[:BASED_ON]->(:PolicySection)`;
 
@@ -108,6 +109,10 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                     <Box p={3} bg="green.50" borderRadius="lg" borderWidth="1px" borderColor="green.100">
                       <Text fontSize="sm" fontWeight="semibold" color="green.700" mb={1}>Agent Memory</Text>
                       <Text fontSize="sm" color="gray.600">Conversation context, extracted entities, and detected preferences persist in Neo4j</Text>
+                    </Box>
+                    <Box p={3} bg="orange.50" borderRadius="lg" borderWidth="1px" borderColor="orange.100">
+                      <Text fontSize="sm" fontWeight="semibold" color="orange.700" mb={1}>Decision Audit Trail</Text>
+                      <Text fontSize="sm" color="gray.600">Every agent decision is written to Neo4j as a <Code fontSize="xs">Decision</Code> node with confidence score, risk factors, and policy citations. The Session tab shows the current decision + semantically similar past precedents ranked by vector similarity.</Text>
                     </Box>
                   </VStack>
                 </Box>
