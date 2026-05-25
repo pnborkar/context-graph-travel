@@ -191,32 +191,43 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                 <Box>
                   <Heading size="sm" mb={3} color="gray.800">Resources</Heading>
                   <VStack align="stretch" gap={2}>
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      justifyContent="flex-start"
-                    >
-                      <a
-                        href="https://neo4j.com/cloud/aura/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                    <Button asChild variant="ghost" size="sm" justifyContent="flex-start">
+                      <a href="https://neo4j.com/cloud/aura/" target="_blank" rel="noopener noreferrer">
                         Neo4j AuraDB — Free tier available
                       </a>
                     </Button>
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      justifyContent="flex-start"
-                    >
-                      <a
-                        href="https://github.com/pnborkar/context-graph-travel"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                    <Button asChild variant="ghost" size="sm" justifyContent="flex-start">
+                      <a href="https://github.com/pnborkar/context-graph-travel" target="_blank" rel="noopener noreferrer">
                         GitHub — View source code
+                      </a>
+                    </Button>
+                    <Button asChild variant="ghost" size="sm" justifyContent="flex-start">
+                      <a href="https://neo4j.com/blog/agentic-ai/hands-on-with-context-graphs-and-neo4j/" target="_blank" rel="noopener noreferrer">
+                        Neo4j — Hands-on with Context Graphs
+                      </a>
+                    </Button>
+                  </VStack>
+                </Box>
+
+                <Separator />
+
+                {/* Further Reading */}
+                <Box>
+                  <Heading size="sm" mb={3} color="gray.800">Further Reading</Heading>
+                  <VStack align="stretch" gap={2}>
+                    <Button asChild variant="ghost" size="sm" justifyContent="flex-start">
+                      <a href="https://foundationcapital.com/context-graphs-ais-trillion-dollar-opportunity/" target="_blank" rel="noopener noreferrer">
+                        The Original Thesis — Foundation Capital
+                      </a>
+                    </Button>
+                    <Button asChild variant="ghost" size="sm" justifyContent="flex-start">
+                      <a href="https://www.linkedin.com/pulse/context-graphs-capturing-why-age-ai-dharmesh-shah-oyyze" target="_blank" rel="noopener noreferrer">
+                        The Reality Check — Dharmesh Shah, HubSpot CTO
+                      </a>
+                    </Button>
+                    <Button asChild variant="ghost" size="sm" justifyContent="flex-start">
+                      <a href="https://subramanya.ai/2026/01/01/what-are-context-graphs-really/" target="_blank" rel="noopener noreferrer">
+                        The Two Clocks Problem — Subramanya N
                       </a>
                     </Button>
                   </VStack>
