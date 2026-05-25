@@ -470,11 +470,11 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
       {/* Messages */}
       <VStack flex={1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch">
         {messages.length === 0 && !loading && (
-          <Flex flex={1} align="center" justify="center">
-            <VStack gap={2} color="gray.400">
-              <Plane size={32} />
+          <Flex py={4} align="center" justify="center">
+            <HStack gap={2} color="gray.400">
+              <Plane size={16} />
               <Text fontSize="sm" fontWeight="medium">How can I help you today?</Text>
-            </VStack>
+            </HStack>
           </Flex>
         )}
         {messages.map((msg) => (
