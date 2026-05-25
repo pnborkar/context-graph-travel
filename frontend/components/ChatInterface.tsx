@@ -468,7 +468,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
       </HStack>
 
       {/* Messages */}
-      <VStack flex={1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch">
+      <VStack flex={messages.length === 0 && !loading ? 0 : 1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch">
         {messages.length === 0 && !loading && (
           <Flex py={4} align="center" justify="center">
             <HStack gap={2} color="gray.400">
@@ -643,12 +643,12 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
 
       {/* Suggested questions panel — visible when no messages */}
       {messages.length === 0 && !loading && (
-        <Box px={4} pt={2} pb={1} borderTop="1px solid" borderColor="gray.200" flexShrink={0}>
+        <Box px={4} pt={2} pb={1} borderTop="1px solid" borderColor="gray.200" flex={1} minH={0} overflowY="auto">
           <HStack gap={1} mb={2} color="gray.400">
             <Sparkles size={12} />
             <Text fontSize="xs" fontWeight="medium">Try asking</Text>
           </HStack>
-          <VStack align="stretch" gap={1.5} overflowY="auto" maxH="200px">
+          <VStack align="stretch" gap={1.5}>
             {allPrompts.map((prompt) => (
               <Box
                 key={prompt}
