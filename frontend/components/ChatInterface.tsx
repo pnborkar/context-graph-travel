@@ -468,7 +468,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
       </HStack>
 
       {/* Messages */}
-      <VStack flex={messages.length === 0 && !loading ? 0 : 1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch">
+      <VStack flex={messages.length === 0 && !loading ? "0 0 auto" : 1} minH={0} overflow="auto" px={4} py={2} gap={3} align="stretch">
         {messages.length === 0 && !loading && (
           <Flex py={4} align="center" justify="center">
             <HStack gap={2} color="gray.400">
