@@ -507,6 +507,65 @@ async def list_decisions(limit: int = 50, session_id: str | None = None):
     return {"decisions": results}
 
 
+@router.get("/decisions/similar")
+async def similar_decisions(q: str, limit: int = 5):
+    """Return past decisions semantically similar to query text."""
+    _require_neo4j()
+    try:
+        import asyncio
+        from rag.graphrag import embed as _embed
+        q_embedding = await asyncio.to_thread(_embed, q)
+        cypher = """
+        CALL db.index.vector.queryNodes('decision_embeddings', toInteger($limit), $embedding)
+        YIELD node AS d, score
+        OPTIONAL MATCH (sess:Session)-[:MADE_DECISION]->(d)
+        OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
+        OPTIONAL MATCH (d)-[:BASED_ON]->(ps:PolicySection)
+        WITH d, c, score,
+             [x IN collect(DISTINCT {id: ps.id, title: ps.title}) WHERE x.id IS NOT NULL] AS cited_sections
+        RETURN
+            d.id                AS id,
+            d.decision_type     AS decision_type,
+            d.value             AS outcome,
+            d.reasoning         AS reasoning,
+            d.confidence_score  AS confidence_score,
+            d.risk_factors      AS risk_factors,
+            toString(d.made_at) AS made_at,
+            c.name              AS customer_name,
+            c.loyalty_tier      AS loyalty_tier,
+            cited_sections,
+            round(score * 100) / 100 AS similarity
+        ORDER BY score DESC
+        """
+        results = await execute_cypher(cypher, {"limit": limit, "embedding": q_embedding}, collect=False)
+    except Exception:
+        cypher = """
+        MATCH (d:Decision)
+        WHERE d.reasoning IS NOT NULL
+        OPTIONAL MATCH (sess:Session)-[:MADE_DECISION]->(d)
+        OPTIONAL MATCH (sess)-[:FOR_CUSTOMER]->(c:Customer)
+        OPTIONAL MATCH (d)-[:BASED_ON]->(ps:PolicySection)
+        WITH d, c,
+             [x IN collect(DISTINCT {id: ps.id, title: ps.title}) WHERE x.id IS NOT NULL] AS cited_sections
+        RETURN
+            d.id                AS id,
+            d.decision_type     AS decision_type,
+            d.value             AS outcome,
+            d.reasoning         AS reasoning,
+            d.confidence_score  AS confidence_score,
+            d.risk_factors      AS risk_factors,
+            toString(d.made_at) AS made_at,
+            c.name              AS customer_name,
+            c.loyalty_tier      AS loyalty_tier,
+            cited_sections,
+            null                AS similarity
+        ORDER BY d.made_at DESC
+        LIMIT toInteger($limit)
+        """
+        results = await execute_cypher(cypher, {"limit": limit}, collect=False)
+    return {"decisions": results}
+
+
 @router.get("/entities/{name}")
 async def get_entity_detail(name: str):
     """Get full entity detail with all properties and connections."""

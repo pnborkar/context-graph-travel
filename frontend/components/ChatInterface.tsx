@@ -45,6 +45,7 @@ interface ChatInterfaceProps {
   externalInput?: string | null;
   onExternalInputConsumed?: () => void;
   onSessionChange?: (sessionId: string) => void;
+  onResponseComplete?: (questionText: string) => void;
 }
 
 const STORAGE_KEY = `ccg-chat-history-${DOMAIN.id}`;
@@ -133,7 +134,7 @@ function loadStoredSessionId(): string | null {
   }
 }
 
-export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputConsumed, onSessionChange }: ChatInterfaceProps) {
+export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputConsumed, onSessionChange, onResponseComplete }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -363,6 +364,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
                   break;
 
                 case "done": {
+                  onResponseComplete?.(messageText);
                   // Flush any remaining buffered text
                   if (flushTimerRef.current) {
                     clearTimeout(flushTimerRef.current);
