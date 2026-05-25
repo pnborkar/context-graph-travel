@@ -249,6 +249,71 @@ Complement text embeddings with **FastRP graph embeddings** (structural similari
 
 ---
 
+## Changelog
+
+### v0.3 — 2026-05-24 — Decision Audit Trail
+
+**New features**
+- `record_decision` tool now writes `confidence_score` (0–1), `risk_factors` (list), and a 1536-dim OpenAI embedding to every `Decision` node — mandatory on every agent request
+- `find_precedents` upgraded to vector similarity search over `decision_embeddings` index, with recency fallback
+- New `/decisions` API endpoint with optional `?session_id` filter
+- **All Decisions tab** in the right panel — expandable cards showing outcome, full reasoning, confidence bar, risk factor badges, and policy citations for every recorded decision
+- **Session tab** now surfaces a "Decision Recorded" card for the current question — no tab switching required
+- `data/seed_decisions.py` — seeds 8 realistic decisions (refunds, fee waivers, escalations, rebooks) with embeddings
+- `cypher/schema.cypher` updated: `decision_embeddings` vector index, `decision_type` and `decision_made_at` range indexes, `(:Session)-[:FOR_CUSTOMER]->(:Customer)` relationship
+
+**UI polish**
+- Chat panel 480 px, Traces panel 300 px, container `maxW="100%"`
+- Panel headers `bg="gray.100"`, input field `bg="gray.100"` (gray, not blue)
+- Question input field styled gray; suggested questions scroll panel above input
+- "Why Graph?" section added to SchemaDrawer
+
+**Bug fixes**
+- Neo4j `DateTime` objects serialized via `toString()` in Cypher — prevents FastAPI 500 on agent-created decisions
+- `[x IN collect(...) WHERE x.id IS NOT NULL]` filter removes ghost `{id:null}` entries in `cited_sections`
+- Removed `overflow="hidden"` from card boxes — WebKit/Safari clips dynamically added children in flex column layout
+- `scrollIntoView` on card expand — content always jumps into view
+- `made_at` display guard for dict-serialized DateTime values
+
+---
+
+### v0.2 — 2026-05-23 — Travel Rebrand + Layout Redesign
+
+**Renamed** from "Expedia Context Agent" → "Travel Context Graph" (generic, demo-ready branding)
+
+**Embeddings**
+- Switched from `sentence-transformers/all-MiniLM-L6-v2` (384-dim, local) to OpenAI `text-embedding-3-small` (1536-dim) for all vector indexes — policy sections, carrier agreements, weather memos
+- `rag/reembed.py` one-time migration to drop old 384-dim indexes and re-embed at 1536 dims
+
+**UI**
+- Full 3-panel layout redesign: Chat (left) / Context Graph (center) / Decision Traces (right)
+- Dark header (`gray.800`) with Plane icon, blue title, gray tagline
+- Context Graph panel header: "Context Graph — Visualize entities, decisions, and relationships" (static)
+- Suggested questions scrollable panel above chat input
+- Empty chat state: centered Plane icon + "How can I help you today?"
+- "Why Graph?" section added to SchemaDrawer with three principles
+
+**Deployment**
+- `MEMORY_BACKEND=disabled` default — skips `sentence-transformers` and NAMS on Railway cold starts
+- SSE keepalive pings every 5 s — prevents Railway/Cloudflare proxy timeouts
+- Railway health check, port binding, and Dockerfile build context fixes
+- `DOMAIN_ID=travel-customer-service` replaces `expedia-customer-service`
+
+---
+
+### v0.1 — 2026-05-22 — Initial Release
+
+- FastAPI backend with Anthropic Tools agentic loop (ReAct: think → tool → observe)
+- Next.js 15 + Chakra UI v3 frontend, Neo4j NVL graph visualization
+- Neo4j AuraDB — graph data model: Customer, Booking, PartnerAirline, Route, Region, WeatherMemo, Policy, PolicySection, CarrierAgreement, LoyaltyTier, Benefit, Session, Decision
+- GraphRAG hybrid retrieval — vector similarity + multi-hop Cypher traversal (4–6 hops) in one query
+- Agent tools: `get_customer`, `get_booking`, `search_policies`, `get_active_weather`, `find_weather_waivers`, `record_decision`, `find_precedents`, `issue_refund`, `execute_cypher`, `get_schema`
+- NAMS agent memory infrastructure wired (disabled by default)
+- Live graph visualization — context graph updates in real time as the agent traverses nodes
+- Deployed: Vercel (frontend) + Railway (backend)
+
+---
+
 ## Troubleshooting
 
 **Backend can't connect to Neo4j**
