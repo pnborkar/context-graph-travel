@@ -35,6 +35,7 @@ class CypherResultCollector:
         self.tool_calls: list[dict] = []
         self._event_queue: asyncio.Queue | None = None
         self._loop: asyncio.AbstractEventLoop | None = None
+        self.last_decision_id: str | None = None
 
     # -- event queue management ------------------------------------------------
 
@@ -86,7 +87,12 @@ class CypherResultCollector:
 
     def emit_done(self, response_text: str, session_id: str = "") -> None:
         """Emit a done SSE event."""
-        self._push_event("done", {"response": response_text, "session_id": session_id})
+        self._push_event("done", {
+            "response": response_text,
+            "session_id": session_id,
+            "decision_id": self.last_decision_id,
+        })
+        self.last_decision_id = None
 
     def emit_entities_extracted(self, entities: list[dict]) -> None:
         """Emit an entities_extracted SSE event."""

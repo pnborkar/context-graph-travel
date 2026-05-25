@@ -364,11 +364,8 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
                   }
                   break;
 
-                case "decision_recorded":
-                  if (data.decision_id) onDecisionRecorded?.(data.decision_id as string);
-                  break;
-
                 case "done": {
+                  if (data.decision_id) onDecisionRecorded?.(data.decision_id as string);
                   onResponseComplete?.(messageText);
                   // Flush any remaining buffered text
                   if (flushTimerRef.current) {

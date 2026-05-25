@@ -383,11 +383,7 @@ async def record_decision(
         except Exception:
             pass
 
-    # Signal the frontend with the exact decision ID so it can fetch the right record
-    try:
-        get_collector()._push_event("decision_recorded", {"decision_id": decision_id})
-    except Exception:
-        pass
+    get_collector().last_decision_id = decision_id
 
     return json.dumps({"decision_id": decision_id, "recorded": True})
 
