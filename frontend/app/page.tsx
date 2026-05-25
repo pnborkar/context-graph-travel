@@ -66,6 +66,7 @@ export default function Home() {
   const [backendStatus, setBackendStatus] = useState<"ok" | "degraded" | "offline">("offline");
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [lastQuestion, setLastQuestion] = useState<string>("");
+  const [currentDecisionId, setCurrentDecisionId] = useState<string | null>(null);
   const [askAboutInput, setAskAboutInput] = useState<string | null>(null);
   const [schemaOpen, setSchemaOpen] = useState(false);
 
@@ -254,7 +255,7 @@ export default function Home() {
                   externalInput={askAboutInput}
                   onExternalInputConsumed={() => setAskAboutInput(null)}
                   onSessionChange={handleSessionChange}
-                  onResponseComplete={(q) => setLastQuestion(q)}
+                  onResponseComplete={(q, id) => { setLastQuestion(q); setCurrentDecisionId(id ?? null); }}
                 />
               </Box>
             </Box>
@@ -309,7 +310,7 @@ export default function Home() {
                 <Heading size="sm" color="gray.800">Decision Traces</Heading>
               </Box>
               <Box flex="1" minH={0} overflow="auto">
-                <DecisionTracePanel sessionId={currentSessionId} lastQuestion={lastQuestion} />
+                <DecisionTracePanel sessionId={currentSessionId} lastQuestion={lastQuestion} currentDecisionId={currentDecisionId} />
               </Box>
             </Box>
           </GridItem>

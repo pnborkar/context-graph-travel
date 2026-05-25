@@ -45,7 +45,7 @@ interface ChatInterfaceProps {
   externalInput?: string | null;
   onExternalInputConsumed?: () => void;
   onSessionChange?: (sessionId: string) => void;
-  onResponseComplete?: (questionText: string) => void;
+  onResponseComplete?: (questionText: string, decisionId?: string) => void;
 }
 
 const STORAGE_KEY = `ccg-chat-history-${DOMAIN.id}`;
@@ -364,7 +364,7 @@ export function ChatInterface({ onGraphUpdate, externalInput, onExternalInputCon
                   break;
 
                 case "done": {
-                  onResponseComplete?.(messageText);
+                  onResponseComplete?.(messageText, data.decision_id as string | undefined);
                   // Flush any remaining buffered text
                   if (flushTimerRef.current) {
                     clearTimeout(flushTimerRef.current);
