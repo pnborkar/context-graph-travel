@@ -17,10 +17,11 @@ GraphRAG-powered customer service agent for flight disruptions, refunds, and pol
 
 A live AI agent that handles travel customer service scenarios using a Neo4j knowledge graph. The key distinction from a standard RAG chatbot: every answer is grounded in **graph traversal** — the agent follows relationships across customers, bookings, carrier agreements, loyalty tiers, weather memos, and policy sections to reach decisions a text search would miss entirely.
 
-**Three capabilities on display:**
+**Four capabilities on display:**
 
 - **GraphRAG** — hybrid vector + multi-hop graph retrieval across policy knowledge base
 - **Context Graph** — live graph visualization updates as the agent works, showing exactly which nodes and relationships were used
+- **Decision Audit Trail** — every agent decision is written to Neo4j as a `Decision` node with confidence score, risk factors, policy citations, and a 1536-dim embedding for precedent search
 - **Agent Memory** — conversation context, extracted entities, and detected preferences persist in Neo4j across sessions
 
 ## Why Neo4j vs. Neptune
@@ -54,6 +55,31 @@ Unlike approaches that optimize for reasoning pattern discovery (structural simi
 
 **The tradeoff:** this model trades decision similarity search and causal chain analysis (better suited for fraud or credit decisioning) for policy traceability and session-scoped audit trails — the right fit for regulated customer service workflows.
 
+## Decision Audit Trail
+
+Every agent response triggers a call to `record_decision`, which writes a `Decision` node to Neo4j with:
+
+| Property | Description |
+|----------|-------------|
+| `decision_type` | `refund_authorized`, `fee_waived`, `denied`, `escalate`, `rebook`, `policy_lookup`, `analytics_query` |
+| `value` | Full outcome text |
+| `reasoning` | Agent's policy-grounded reasoning chain |
+| `confidence_score` | 0.0–1.0 confidence (shown as a color-coded bar: green ≥85%, yellow ≥65%, red <65%) |
+| `risk_factors` | List of risk signals the agent flagged (e.g. `mixed_payment_booking`, `weather_disruption`) |
+| `policy_citations` | IDs of the `PolicySection` nodes cited |
+| `embedding` | 1536-dim OpenAI embedding of `decision_type + outcome + reasoning` — enables `find_precedents()` vector search |
+| `made_at` | Timestamp |
+
+**UI panels:**
+- **Session tab** — shows the decision recorded for the *current* question: outcome, confidence bar, risk factor badges, and policy citations — alongside the ReAct traces
+- **All Decisions tab** — full historical audit log of every decision ever recorded, expandable with full reasoning
+
+**Seeding sample decisions:**
+```bash
+.venv/bin/python3 data/seed_decisions.py
+```
+Creates 8 realistic decisions (refunds, fee waivers, escalations, rebooks) with embeddings so `find_precedents()` works out of the box.
+
 ## Graph Data Model
 
 ```
@@ -64,6 +90,7 @@ Unlike approaches that optimize for reasoning pattern discovery (structural simi
 (:Booking)-[:DISRUPTED_BY]->(:Event)
 (:Policy)-[:HAS_SECTION]->(:PolicySection)-[:REFERENCED_BY]->(:PolicySection)
 (:Session)-[:MADE_DECISION]->(:Decision)-[:BASED_ON]->(:PolicySection)
+(:Session)-[:FOR_CUSTOMER]->(:Customer)
 ```
 
 ## Demo Scenarios
@@ -123,7 +150,7 @@ make start
 │   │   ├── config.py     Settings (pydantic-settings + .env)
 │   │   ├── context_graph_client.py  Neo4j driver + SSE collector
 │   │   ├── memory.py     Agent memory (disabled by default; set MEMORY_BACKEND=bolt to enable)
-│   │   └── routes.py     SSE streaming endpoint
+│   │   └── routes.py     API endpoints — SSE streaming chat, /traces, /decisions (with ?session_id filter), graph queries
 │   └── scripts/
 │       └── generate_data.py
 ├── frontend/             Next.js 15 + Chakra UI v3 + Neo4j NVL
@@ -131,16 +158,17 @@ make start
 │   └── components/
 │       ├── ChatInterface.tsx        SSE streaming chat + suggested questions
 │       ├── ContextGraphView.tsx     Live graph (NVL)
-│       ├── DecisionTracePanel.tsx   Decision audit trail
+│       ├── DecisionTracePanel.tsx   Session tab (current decision + ReAct traces) + All Decisions audit log
 │       ├── DocumentBrowser.tsx      Policy document browser
 │       └── SchemaDrawer.tsx         About panel, data model, demo scenarios
 ├── rag/
 │   ├── graphrag.py       Hybrid vector + graph retrieval (OpenAI text-embedding-3-small)
 │   └── reembed.py        One-time migration: drops old 384-dim indexes, re-embeds at 1536 dims
 ├── cypher/
-│   └── schema.cypher     Neo4j constraints + vector indexes
+│   └── schema.cypher     Neo4j constraints, range indexes, and vector indexes (policy, carrier, weather, decision)
 ├── data/
-│   └── seed.py           Sample data generator
+│   ├── seed.py           Sample data generator (customers, bookings, policies, routes)
+│   └── seed_decisions.py Seeds 8 realistic Decision nodes with 1536-dim embeddings for precedent search
 ├── .env.example          Configuration template
 └── Makefile              Dev commands
 ```
@@ -154,8 +182,8 @@ make start
 | `search_policies` | GraphRAG hybrid search across policy KB + carrier agreements + weather memos |
 | `get_active_weather` | Weather memos affecting a booking's route (Booking → Route → Region → WeatherMemo) |
 | `find_weather_waivers` | Active waivers by airline or destination — no booking required |
-| `record_decision` | Write a Decision node with policy citations for audit trail |
-| `find_precedents` | Semantic search over past decisions |
+| `record_decision` | Write a `Decision` node with `confidence_score`, `risk_factors`, policy citations, and a 1536-dim embedding — mandatory on every request |
+| `find_precedents` | Vector similarity search over past `Decision` embeddings to surface structurally similar prior cases |
 | `issue_refund` | Mock refund action (demo) |
 | `execute_cypher` | Read-only Cypher escape hatch |
 | `get_schema` | Graph schema lookup |
