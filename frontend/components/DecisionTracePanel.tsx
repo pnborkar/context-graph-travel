@@ -71,14 +71,12 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [lastExpanded, setLastExpanded] = useState<string | null>(null);
   const [sessionDecisions, setSessionDecisions] = useState<PastDecision[]>([]);
-  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
 
   useEffect(() => {
     setExpandedIds(new Set());
     setTraces([]);
     setSessionDecisions([]);
     if (!sessionId) return;
-    setSessionStartTime(new Date());
     loadTraces();
     loadSessionDecisions();
     const interval = setInterval(() => { loadTraces(); loadSessionDecisions(); }, 5000);
@@ -123,7 +121,7 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
   async function loadSessionDecisions() {
     if (!sessionId) return;
     try {
-      const res = await fetch(`${API_BASE}/decisions?session_id=${encodeURIComponent(sessionId)}&limit=10`, { signal: AbortSignal.timeout(10000) });
+      const res = await fetch(`${API_BASE}/decisions?session_id=${encodeURIComponent(sessionId)}&limit=1`, { signal: AbortSignal.timeout(10000) });
       const data = await res.json();
       if (data.decisions) setSessionDecisions(data.decisions as PastDecision[]);
     } catch { /* backend may not be running */ }
@@ -157,11 +155,7 @@ export function DecisionTracePanel({ sessionId }: { sessionId?: string | null })
     el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [lastExpanded]);
 
-  const visibleSessionDecisions = sessionDecisions.filter((d) =>
-    !sessionStartTime ||
-    typeof d.made_at !== "string" ||
-    new Date(d.made_at) >= sessionStartTime
-  );
+  const visibleSessionDecisions = sessionDecisions;
 
   return (
     <Flex direction="column" h="100%">
