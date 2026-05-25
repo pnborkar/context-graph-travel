@@ -12,16 +12,14 @@ import {
   Button,
   HStack,
   IconButton,
-  Tabs,
   Spinner,
   Menu,
   Portal,
 } from "@chakra-ui/react";
-import { Menu as MenuIcon, FileText, Network, MessageSquare, Sun, Moon, Plane } from "lucide-react";
+import { Menu as MenuIcon, Network, MessageSquare, Sun, Moon, Plane, GitBranch } from "lucide-react";
 import dynamic from "next/dynamic";
 import { ChatInterface } from "@/components/ChatInterface";
 import { DecisionTracePanel } from "@/components/DecisionTracePanel";
-import { DocumentBrowser } from "@/components/DocumentBrowser";
 import { SchemaDrawer } from "@/components/SchemaDrawer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { API_BASE, DOMAIN } from "@/lib/config";
@@ -288,7 +286,7 @@ export default function Home() {
             </Box>
           </GridItem>
 
-          {/* Right panel: Traces + Documents */}
+          {/* Right panel: Decision Traces */}
           <GridItem
             overflow="hidden"
             display={{ base: activePanel === "details" ? "flex" : "none", lg: "flex" }}
@@ -305,23 +303,12 @@ export default function Home() {
               overflow="hidden"
               shadow="sm"
             >
-              <Tabs.Root defaultValue="traces" size="sm" display="flex" flexDirection="column" h="100%">
-                <Box borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} px={4} pt={3} pb={0} bg="gray.100" borderTopRadius="xl">
-                  <HStack justify="space-between" mb={2}>
-                    <Heading size="sm" color="gray.800">Decision Traces</Heading>
-                  </HStack>
-                  <Tabs.List gap={1}>
-                    <Tabs.Trigger value="traces" fontSize="xs" px={3}>Traces</Tabs.Trigger>
-                    <Tabs.Trigger value="documents" fontSize="xs" px={3}>Documents</Tabs.Trigger>
-                  </Tabs.List>
-                </Box>
-                <Tabs.Content value="traces" p={0} flex="1" minH={0} overflow="auto">
-                  <DecisionTracePanel sessionId={currentSessionId} />
-                </Tabs.Content>
-                <Tabs.Content value="documents" p={0} flex="1" minH={0} overflow="auto">
-                  <DocumentBrowser />
-                </Tabs.Content>
-              </Tabs.Root>
+              <Box borderBottomWidth="1px" borderColor="border.subtle" flexShrink={0} px={4} py={3} bg="gray.100" borderTopRadius="xl">
+                <Heading size="sm" color="gray.800">Decision Traces</Heading>
+              </Box>
+              <Box flex="1" minH={0} overflow="auto">
+                <DecisionTracePanel sessionId={currentSessionId} />
+              </Box>
             </Box>
           </GridItem>
         </Grid>
@@ -367,7 +354,7 @@ export default function Home() {
           size="sm"
           onClick={() => setActivePanel("details")}
         >
-          <FileText size={18} />
+          <GitBranch size={18} />
         </IconButton>
       </HStack>
     </Box>

@@ -24,7 +24,7 @@ A live AI agent that handles travel customer service scenarios using a Neo4j kno
 - **Decision Audit Trail** — every agent decision is written to Neo4j as a `Decision` node with confidence score, risk factors, policy citations, and a 1536-dim embedding for precedent search
 - **Agent Memory** — conversation context, extracted entities, and detected preferences persist in Neo4j across sessions
 
-## Why Neo4j vs. Neptune
+## Neo4j vs. Neptune
 
 > *Neptune stores a graph. Neo4j is the intelligence layer — vector search, graph algorithms, and agent memory are native, not bolted on.*
 
@@ -278,8 +278,6 @@ Complement text embeddings with **FastRP graph embeddings** (structural similari
 ---
 
 ### v0.2 — 2026-05-23 — Travel Rebrand + Layout Redesign
-
-**Renamed** from "Expedia Context Agent" → "Travel Context Graph" (generic, demo-ready branding)
 
 **Embeddings**
 - Switched from `sentence-transformers/all-MiniLM-L6-v2` (384-dim, local) to OpenAI `text-embedding-3-small` (1536-dim) for all vector indexes — policy sections, carrier agreements, weather memos
