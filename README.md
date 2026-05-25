@@ -71,7 +71,9 @@ Every agent response triggers a call to `record_decision`, which writes a `Decis
 | `made_at` | Timestamp |
 
 **UI panels:**
-- **Session tab** — shows the decision recorded for the *current* question: outcome, confidence bar, risk factor badges, and policy citations — alongside the ReAct traces
+- **Session tab** — two sections per question:
+  - *Decision Recorded* — the exact decision made for the current question (fetched by ID, never stale)
+  - *Similar Precedents* — top 3 semantically similar past decisions from the vector index, each with a `% match` badge
 - **All Decisions tab** — full historical audit log of every decision ever recorded, expandable with full reasoning
 
 **Seeding sample decisions:**
@@ -148,18 +150,17 @@ make start
 │   ├── app/
 │   │   ├── agent.py      Tool definitions + agentic loop
 │   │   ├── config.py     Settings (pydantic-settings + .env)
-│   │   ├── context_graph_client.py  Neo4j driver + SSE collector
+│   │   ├── context_graph_client.py  Neo4j driver + SSE collector (tracks last_decision_id per request)
 │   │   ├── memory.py     Agent memory (disabled by default; set MEMORY_BACKEND=bolt to enable)
-│   │   └── routes.py     API endpoints — SSE streaming chat, /traces, /decisions (with ?session_id filter), graph queries
+│   │   └── routes.py     API endpoints — SSE streaming chat, /traces, /decisions, /decisions/similar (vector search), /decisions/{id}
 │   └── scripts/
 │       └── generate_data.py
 ├── frontend/             Next.js 15 + Chakra UI v3 + Neo4j NVL
 │   ├── app/page.tsx      3-panel layout (Chat / Graph / Traces)
 │   └── components/
-│       ├── ChatInterface.tsx        SSE streaming chat + suggested questions
+│       ├── ChatInterface.tsx        SSE streaming chat + suggested questions; fires onResponseComplete(text, decisionId) on done
 │       ├── ContextGraphView.tsx     Live graph (NVL)
-│       ├── DecisionTracePanel.tsx   Session tab (current decision + ReAct traces) + All Decisions audit log
-│       ├── DocumentBrowser.tsx      Policy document browser
+│       ├── DecisionTracePanel.tsx   Session tab (Decision Recorded + Similar Precedents) + All Decisions audit log
 │       └── SchemaDrawer.tsx         About panel, data model, demo scenarios
 ├── rag/
 │   ├── graphrag.py       Hybrid vector + graph retrieval (OpenAI text-embedding-3-small)
@@ -250,6 +251,27 @@ Complement text embeddings with **FastRP graph embeddings** (structural similari
 ---
 
 ## Changelog
+
+### v0.4 — 2026-05-24 — Decision Panel: Current Decision + Similar Precedents
+
+**Decision panel overhaul**
+- Session tab now shows two sections per question:
+  - *Decision Recorded* — fetched by exact `decision_id` from the SSE `done` event, never stale or misattributed to a different customer
+  - *Similar Precedents* — top 3 past decisions ranked by vector similarity to the question text, each showing a `% match` badge, customer, confidence, risk factors, and policy citations
+- Decisions are scoped to the current question: the panel clears on each new question and repopulates only after the agent finishes (`done` event), eliminating stale results from earlier questions in the same session
+- Removed "Documents" sub-tab from the right panel — replaced with a direct `DecisionTracePanel` render; mobile bottom-bar icon updated to `GitBranch`
+
+**Backend**
+- `collector.last_decision_id` tracks the decision written by `record_decision` per request; `emit_done` includes it in the SSE `done` payload so the frontend can fetch by exact ID
+- `GET /decisions/similar?q=<text>&limit=N` — new endpoint: vector similarity search over `decision_embeddings` index, with recency-based fallback if the index is not yet populated
+- `GET /decisions/{id}` — new endpoint: fetch a single Decision node by ID with full customer, policy citations, and metadata
+- Fixed FastAPI routing conflict: `/decisions/similar` registered before `/{decision_id}` so the static path is not shadowed by the path parameter
+
+**Frontend**
+- `onResponseComplete(questionText, decisionId?)` — ChatInterface fires this on `done` with both the question text (for precedent search) and the decision ID (for exact lookup)
+- `currentDecisionId` flows from `page.tsx` into `DecisionTracePanel` as a prop; traces still poll every 4 s while the agent is processing
+
+---
 
 ### v0.3 — 2026-05-24 — Decision Audit Trail
 
