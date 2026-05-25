@@ -171,7 +171,7 @@ export default function Home() {
               >
                 {colorMode === "light" ? <Moon size={16} /> : <Sun size={16} />}
               </IconButton>
-              <Button variant="outline" size="sm" color="gray.300" borderColor="gray.600" _hover={{ color: "white", bg: "gray.700" }} onClick={() => setSchemaOpen(true)}>
+              <Button variant="ghost" size="sm" color="gray.300" _hover={{ color: "white", bg: "gray.700" }} onClick={() => setSchemaOpen(true)}>
                 About & Schema
               </Button>
             </HStack>
