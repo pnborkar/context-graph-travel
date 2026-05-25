@@ -219,26 +219,30 @@ export function DecisionTracePanel({ sessionId, lastQuestion, currentDecisionId 
       {/* Toggle */}
       <HStack px={4} py={3} borderBottom="1px solid" borderColor="gray.200" gap={2} flexShrink={0}>
         <Button
-          size="sm"
+          size="xs"
+          px={3}
+          py={1.5}
           variant={view === "session" ? "solid" : "ghost"}
           colorPalette={view === "session" ? "blue" : "gray"}
           onClick={() => setView("session")}
         >
-          <GitBranch size={13} />
+          <GitBranch size={12} />
           Session
         </Button>
         <Button
-          size="sm"
+          size="xs"
+          px={3}
+          py={1.5}
           variant={view === "all" ? "solid" : "ghost"}
           colorPalette={view === "all" ? "blue" : "gray"}
           onClick={() => setView("all")}
         >
-          <History size={13} />
+          <History size={12} />
           All Decisions
         </Button>
         {view === "all" && (
-          <Button size="sm" variant="ghost" colorPalette="gray" onClick={loadDecisions} ml="auto">
-            <RotateCcw size={12} />
+          <Button size="xs" variant="ghost" colorPalette="gray" onClick={loadDecisions} ml="auto">
+            <RotateCcw size={11} />
           </Button>
         )}
       </HStack>
