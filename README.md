@@ -5,7 +5,7 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings-green?style=for-the-badge&logo=openai)](https://openai.com)
 
 
-GraphRAG-powered customer service agent for flight disruptions, refunds, and policy resolution.
+A live AI agent that handles travel customer service using a Neo4j knowledge graph. Every answer is grounded in graph traversal across customers, bookings, carrier agreements, loyalty tiers, weather waivers, and policies. Every decision is written back as a traceable node — building institutional memory the agent reasons with on the next question.
 
 ## Live Demo
 
@@ -23,22 +23,6 @@ A live AI agent that handles travel customer service scenarios using a Neo4j kno
 - **Context Graph** — live graph visualization updates as the agent works, showing exactly which nodes and relationships were used
 - **Decision Audit Trail** — every agent decision is written to Neo4j as a `Decision` node with confidence score, risk factors, policy citations, and a 1536-dim embedding for precedent search
 - **Agent Memory** — conversation context, extracted entities, and detected preferences persist in Neo4j across sessions
-
-## Neo4j vs. Neptune
-
-> *Neptune stores a graph. Neo4j is the intelligence layer — vector search, graph algorithms, and agent memory are native, not bolted on.*
-
-| Capability | Neo4j | Neptune |
-|------------|-------|---------|
-| **Hybrid vector + graph search** | Native — [`db.index.vector.queryNodes()`](https://neo4j.com/docs/cypher-manual/current/indexes/semantic-indexes/vector-indexes/) runs in Cypher alongside traversal, one query, one connection | Requires Neptune ML via SageMaker — separate pipeline, separate orchestration |
-| **Graph Data Science** (FastRP, Louvain, PageRank, shortest path) | Native [GDS library](https://neo4j.com/docs/graph-data-science/current/), runs on the same graph | No equivalent — data must be exported out |
-| **Agent Memory as graph** | [NAMS](https://github.com/neo4j-labs/agent-memory) writes `Session → Entity → Preference` nodes natively traversable alongside operational data | No equivalent — requires bolting on DynamoDB or a separate vector store |
-| **Single graph principle** | Operational data, RAG knowledge base, agent memory, decision audit trail, and GDS embeddings — one graph, one language, one connection | Requires stitching multiple AWS services (Neptune + SageMaker + DynamoDB) to match the same capability set |
-| **Cypher** | Expressive, readable, pattern-matching native | openCypher subset — no APOC, no GDS, no vector index procedures |
-
-**The compounding advantage:** in this demo, the agent traverses 4–6 hops across customers, bookings, carrier agreements, loyalty tiers, weather waivers, and policy sections — then does a vector similarity search on the result — then writes a Decision node with policy citations — all in one graph, in one transaction, with one driver. On Neptune, each of those capabilities is a different service with a different API.
-
----
 
 ## Design Philosophy — Audit & Governance First
 
@@ -121,6 +105,24 @@ These questions require 4–6 hops across the graph. Naive text search returns p
 - Show me all Gold and Platinum customers with their disrupted bookings
 - Which customers have points+cash mixed payment bookings affected by the Pacific storm?
 - What past refund decisions have been recorded for storm cancellations?
+
+---
+
+## Neo4j vs. Neptune
+
+> *Neptune stores a graph. Neo4j is the intelligence layer — vector search, graph algorithms, and agent memory are native, not bolted on.*
+
+| Capability | Neo4j | Neptune |
+|------------|-------|---------|
+| **Hybrid vector + graph search** | Native — [`db.index.vector.queryNodes()`](https://neo4j.com/docs/cypher-manual/current/indexes/semantic-indexes/vector-indexes/) runs in Cypher alongside traversal, one query, one connection | Requires Neptune ML via SageMaker — separate pipeline, separate orchestration |
+| **Graph Data Science** (FastRP, Louvain, PageRank, shortest path) | Native [GDS library](https://neo4j.com/docs/graph-data-science/current/), runs on the same graph | No equivalent — data must be exported out |
+| **Agent Memory as graph** | [NAMS](https://github.com/neo4j-labs/agent-memory) writes `Session → Entity → Preference` nodes natively traversable alongside operational data | No equivalent — requires bolting on DynamoDB or a separate vector store |
+| **Single graph principle** | Operational data, RAG knowledge base, agent memory, decision audit trail, and GDS embeddings — one graph, one language, one connection | Requires stitching multiple AWS services (Neptune + SageMaker + DynamoDB) to match the same capability set |
+| **Cypher** | Expressive, readable, pattern-matching native | openCypher subset — no APOC, no GDS, no vector index procedures |
+
+**The compounding advantage:** in this demo, the agent traverses 4–6 hops across customers, bookings, carrier agreements, loyalty tiers, weather waivers, and policy sections — then does a vector similarity search on the result — then writes a Decision node with policy citations — all in one graph, in one transaction, with one driver. On Neptune, each of those capabilities is a different service with a different API.
+
+---
 
 ## Quick Start
 
