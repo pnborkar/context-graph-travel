@@ -15,7 +15,13 @@ A live AI agent that handles travel customer service using a Neo4j knowledge gra
 
 ## What This Demos
 
-A live AI agent that handles travel customer service scenarios using a Neo4j knowledge graph. The key distinction from a standard RAG chatbot: every answer is grounded in **graph traversal** — the agent follows relationships across customers, bookings, carrier agreements, loyalty tiers, weather memos, and policy sections to reach decisions a text search would miss entirely.
+Traditional AI agents answer questions. This demo shows what happens when every answer leaves a trace.
+
+Every refund decision depends on at least four connected facts: the customer's loyalty tier, their carrier's agreement, an active weather waiver, and the applicable policy section. No single document holds all four. Only a graph connects them.
+
+What makes it a *context graph*: every decision the agent makes is written back into Neo4j as a `Decision` node — with confidence score, risk factors, and policy citations. Over time, the graph accumulates institutional memory. When a new question arrives, the agent retrieves not just relevant policy text, but semantically similar past decisions as precedent. The answer isn't just correct — it's explainable, auditable, and grounded in prior reasoning.
+
+This is the shift from AI that retrieves information to AI that reasons with context.
 
 **Four capabilities on display:**
 
