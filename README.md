@@ -93,7 +93,7 @@ Creates 8 realistic decisions (refunds, fee waivers, escalations, rebooks) with 
 - Process a refund for Sarah Chen on booking EXP-991 — her Maui flight was canceled due to the Pacific storm
 - What refund is James Okafor entitled to for his disrupted booking EXP-887?
 
-### Multi-hop GraphRAG
+### GraphRAG
 These questions require 4–6 hops across the graph. Naive text search returns partial answers; the graph connects them correctly.
 
 - Which customers affected by the Pacific storm qualify for the automatic $50 Platinum goodwill credit?
