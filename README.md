@@ -5,7 +5,6 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings-green?style=for-the-badge&logo=openai)](https://openai.com)
 [![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)](https://python.org)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Demo-orange?style=for-the-badge)]()
 
 
