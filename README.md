@@ -3,6 +3,10 @@
 [![Neo4j](https://img.shields.io/badge/Neo4j-AuraDB-blue?style=for-the-badge&logo=neo4j)](https://neo4j.com/cloud/aura/)
 [![Anthropic](https://img.shields.io/badge/Anthropic-Claude-orange?style=for-the-badge)](https://anthropic.com)
 [![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings-green?style=for-the-badge&logo=openai)](https://openai.com)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)](https://python.org)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Demo-orange?style=for-the-badge)]()
 
 
 A live AI agent that handles travel customer service using a Neo4j knowledge graph. Every answer is grounded in graph traversal across customers, bookings, carrier agreements, loyalty tiers, weather waivers, and policies. Every decision is written back as a traceable node — building institutional memory the agent reasons with on the next question.

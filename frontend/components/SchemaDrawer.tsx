@@ -197,7 +197,7 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                       </a>
                     </Button>
                     <Button asChild variant="ghost" size="sm" justifyContent="flex-start">
-                      <a href="https://github.com/pnborkar/context-graph-travel" target="_blank" rel="noopener noreferrer">
+                      <a href="https://github.com/neo4j-field/context-graph-travel" target="_blank" rel="noopener noreferrer">
                         GitHub — View source code
                       </a>
                     </Button>
