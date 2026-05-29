@@ -122,6 +122,9 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                 {/* Graph Data Model */}
                 <Box>
                   <Heading size="sm" mb={3} color="gray.800">Graph Data Model</Heading>
+                  <Box borderRadius="lg" overflow="hidden" borderWidth="1px" borderColor="gray.200" mb={3}>
+                    <img src="/schema.jpg" alt="Graph schema diagram" style={{ width: "100%", display: "block" }} />
+                  </Box>
                   <Code
                     display="block"
                     whiteSpace="pre"
