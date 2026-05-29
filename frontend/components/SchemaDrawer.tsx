@@ -13,7 +13,10 @@ import {
   HStack,
   Separator,
   Code,
+  IconButton,
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { DEMO_SCENARIOS } from "@/lib/config";
 
 interface SchemaDrawerProps {
@@ -41,6 +44,8 @@ const SCENARIO_COLORS: Record<string, string> = {
 };
 
 export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
+  const [zoom, setZoom] = useState(1);
+
   return (
     <Drawer.Root
       open={open}
@@ -122,8 +127,20 @@ export function SchemaDrawer({ open, onOpenChange }: SchemaDrawerProps) {
                 {/* Graph Data Model */}
                 <Box>
                   <Heading size="sm" mb={3} color="gray.800">Graph Data Model</Heading>
-                  <Box borderRadius="lg" overflow="hidden" borderWidth="1px" borderColor="gray.200" mb={3}>
-                    <img src="/schema.jpg" alt="Graph schema diagram" style={{ width: "100%", display: "block" }} />
+                  <Box borderRadius="lg" borderWidth="1px" borderColor="gray.200" mb={3}>
+                    <HStack px={2} py={1} borderBottomWidth="1px" borderColor="gray.200" bg="gray.50" justify="flex-end">
+                      <IconButton aria-label="Zoom out" size="xs" variant="ghost" onClick={() => setZoom(z => Math.max(0.5, z - 0.25))}><ZoomOut size={14} /></IconButton>
+                      <Text fontSize="xs" color="gray.500" minW="36px" textAlign="center">{Math.round(zoom * 100)}%</Text>
+                      <IconButton aria-label="Zoom in" size="xs" variant="ghost" onClick={() => setZoom(z => Math.min(3, z + 0.25))}><ZoomIn size={14} /></IconButton>
+                      <IconButton aria-label="Reset zoom" size="xs" variant="ghost" onClick={() => setZoom(1)}><RotateCcw size={14} /></IconButton>
+                    </HStack>
+                    <Box overflow="auto" maxH="400px">
+                      <img
+                        src="/schema.jpg"
+                        alt="Graph schema diagram"
+                        style={{ width: "100%", display: "block", transform: `scale(${zoom})`, transformOrigin: "top left", transition: "transform 0.15s" }}
+                      />
+                    </Box>
                   </Box>
                   <Code
                     display="block"
